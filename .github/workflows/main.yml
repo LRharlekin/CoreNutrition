@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - main
+      - main
 
-
-env: 
+env:
+  DOTNET_VERSION: "8.0.x"
   AZURE_WEBAPP_NAME: core-nutrition
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: "${{DOTNET_VERSION}}"
 
       - name: Restore
         run: dotnet restore ./CoreNutrition.sln
