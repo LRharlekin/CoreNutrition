@@ -14,8 +14,6 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.Run();
-
 app.MapGet("time/utc", () => Results.Ok(DateTime.UtcNow));
 
 await app.RunAsync();
