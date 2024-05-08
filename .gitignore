@@ -19,9 +19,6 @@ artifacts/
 # Ignore database migrations
 **/Migrations
 
-# Ignore github workflows
-.github/workflows
-
 # Files built by Visual Studio
 *_i.c
 *_p.c
