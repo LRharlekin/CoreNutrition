@@ -17,19 +17,13 @@ You can follow the same topics as your backend project or choose the alternative
 
 ## Table of Contents
 
-- [Fullstack Project](#fullstack-project)
-  - [Table of Contents](#table-of-contents)
-  - [Instruction](#instruction)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-  - [Features](#features)
-    - [Mandatory features](#mandatory-features)
-      - [User Functionalities](#user-functionalities)
-      - [Admin Functionalities](#admin-functionalities)
-    - [Bonus-point](#bonus-point)
-  - [Requirements](#requirements)
-  - [Getting Started](#getting-started)
-  - [Testing](#testing)
+1. [Instruction](#instruction)
+2. [Features](#features)
+   - [Mandatory features](#mandatory-features)
+   - [Extra features](#extra-features)
+3. [Requirements](#requirements)
+4. [Getting Started](#getting-started)
+5. [Testing](#testing)
 
 ## Instruction
 
@@ -60,7 +54,7 @@ Generate a solution file in this repository. All the project layers of backend s
 2. Product Management: Admins should be able to manage all products.
 3. Order Management: Admins should be able to manage all orders.
 
-### Bonus-point
+### Bonus-point 
 
 1. Third party integrations, for example: Google Authentication, Sending Email, Payment gateway, etc.
 2. Extra features, for examples: dynamic pricing algorithms, chatbots, subscription, admin dashboard with analytics, etc.
@@ -72,7 +66,7 @@ Generate a solution file in this repository. All the project layers of backend s
 3. In backend server, unit testing (xunit) should be done, at least for Service(Use case) layer. We recommend to test entities, repositories and controllers as well.
 4. Document with Swagger: Make sure to annotate your API endpoints and generate a Swagger UI for easier testing and documentation.
 5. `README` file should sufficiently describe the project, as well as the deployment, link to frontend github.
-6. Frontend, backend, and database servers need to be available in the live servers.
+6. Frontend, backend, and database servers need to be available in the live servers.  
 
 ## Getting Started
 
