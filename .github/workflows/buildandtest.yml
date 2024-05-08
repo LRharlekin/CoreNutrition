@@ -1,0 +1,31 @@
+name: BuildAndTest
+
+on:
+  push:
+    branches: [ "development" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  DOTNET_VERSION: "8.0.x"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{DOTNET_VERSION}}
+    
+    - name: Restore
+      run: dotnet restore ./CoreNutrition.sln
+      
+    - name: Build
+      run: dotnet build ./CoreNutrition.sln --configuration Release --no-restore
+    
+    - name: Test
+      run: dotnet test ./CoreNutrition.sln --configuration Release --no-restore --no-build --verbosity normal
