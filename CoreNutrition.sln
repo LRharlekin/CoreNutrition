@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Application.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Application", "src\CoreNutrition.Application\CoreNutrition.Application.csproj", "{ECE56848-370F-4ED6-BE74-158741233F4E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Infrastructure", "src\CoreNutrition.Infrastructure\CoreNutrition.Infrastructure.csproj", "{CA187AC5-071E-4111-B78D-4578BBB95610}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Infrastructure.UnitTests", "tests\CoreNutrition.Infrastructure.UnitTests\CoreNutrition.Infrastructure.UnitTests.csproj", "{A7623F11-AA63-4990-B051-AD2F5C542167}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{ECE56848-370F-4ED6-BE74-158741233F4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE56848-370F-4ED6-BE74-158741233F4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECE56848-370F-4ED6-BE74-158741233F4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA187AC5-071E-4111-B78D-4578BBB95610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA187AC5-071E-4111-B78D-4578BBB95610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA187AC5-071E-4111-B78D-4578BBB95610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA187AC5-071E-4111-B78D-4578BBB95610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7623F11-AA63-4990-B051-AD2F5C542167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7623F11-AA63-4990-B051-AD2F5C542167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7623F11-AA63-4990-B051-AD2F5C542167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7623F11-AA63-4990-B051-AD2F5C542167}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9C96E527-8709-4C72-9DD2-B4AB7487B0B8} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
@@ -59,5 +71,7 @@ Global
 		{1ACC9A21-C11F-4ED6-BC21-D0BB5C9A6FF4} = {E6111AF8-C158-4DBA-9C53-39F5749E7631}
 		{656E4930-D1F5-4E7B-B139-841A9B8D004E} = {E6111AF8-C158-4DBA-9C53-39F5749E7631}
 		{ECE56848-370F-4ED6-BE74-158741233F4E} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
+		{CA187AC5-071E-4111-B78D-4578BBB95610} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
+		{A7623F11-AA63-4990-B051-AD2F5C542167} = {E6111AF8-C158-4DBA-9C53-39F5749E7631}
 	EndGlobalSection
 EndGlobal
