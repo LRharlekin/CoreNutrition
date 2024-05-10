@@ -17,6 +17,7 @@ class ProductLine
   "name": "Impact Whey Protein",
   "isPublished": true,
   "categoryId": "00000000-0000-0000-0000-000000000000",
+  "averageRating": 4.2,
   "productIds": [
     "00000000-0000-0000-0000-000000000000",
     "00000000-0000-0000-0000-000000000000",
