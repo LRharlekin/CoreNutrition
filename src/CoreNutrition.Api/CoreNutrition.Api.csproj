@@ -11,4 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CoreNutrition.Domain\CoreNutrition.Domain.csproj" />
+    <ProjectReference Include="..\CoreNutrition.Application\CoreNutrition.Application.csproj" />
+  </ItemGroup>
+
 </Project>
