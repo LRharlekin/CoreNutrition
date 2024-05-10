@@ -1,6 +1,6 @@
-# Domain Aggregate: Shopping Cart
+# Domain Aggregate: Cart
 
-## Shopping Cart C# Class and Behaviors
+## Cart C# Class and Behaviors
 
 ```csharp
 class ShoppingCart
@@ -9,13 +9,13 @@ class ShoppingCart
 }
 ```
 
-## Shopping Cart JSON Object
+## Cart JSON Object
 
 ```json
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "customerId": "00000000-0000-0000-0000-000000000000",
-  "shoppingCartItems": [
+  "cartItems": [
     {
       "id": "00000000-0000-0000-0000-000000000000",
       "productId": "00000000-0000-0000-0000-000000000000",
@@ -27,7 +27,7 @@ class ShoppingCart
       "quantity": 1
     },
     {
-      // more shopping cart items
+      // more cart items
     }
   ],
   "createdAt": "2024-01-22T00:00:00.0000000Z",
