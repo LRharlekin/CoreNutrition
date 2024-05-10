@@ -1,3 +1,48 @@
+Live project can be viewed at:
+https://core-nutrition.azurewebsites.net
+
+Swagger UI:
+https://core-nutrition.azurewebsites.net/swagger/index.html
+
+## DB Schema / ERD
+
+- ERD diagram
+- Eraser comments
+
+## Clean Architecture
+
+### Domain Layer
+
+- strongly typed IDs
+- DDD, Aggregates
+  Lorem ipsum
+
+### Application Layer
+
+Lorem ipsum
+
+### Presentation Layer
+
+Lorem ipsum
+
+### Infrastructure Layer
+
+## Deployment
+
+CI/CD pipeline with gh actions > Azure
+
+Publish:
+
+Build and test:
+
+## Testing
+
+xunit
+Moq
+FluentAssertions
+
+Testing Project structure
+
 # Fullstack Project
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-v.4-green)
@@ -29,7 +74,7 @@ You can follow the same topics as your backend project or choose the alternative
     - [Bonus-point](#bonus-point)
   - [Requirements](#requirements)
   - [Getting Started](#getting-started)
-  - [Testing](#testing)
+  - [Testing](#testing-1)
 
 ## Instruction
 
