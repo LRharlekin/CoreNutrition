@@ -13,9 +13,19 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
 
 ### Domain Layer
 
-- strongly typed IDs
+- Explain rationale for strongly typed IDs, IDs as "value objects"
 - DDD, Aggregates
-  Lorem ipsum
+- Domain Modeling
+- TO DO: Miro Screenshot of Domain Modeling result
+- LINK TO: DomainModels folder in Docs
+- ?(Domain Events: explain storming process, link to docs, result, process modeling in Wiki?)
+  - v=7LFxWgfJEeI
+  - Part 10
+  - Aggregates as transactional boundaries / Part 17 (0:00 - ) / side effects in one transaction (9:30)
+- TO DO: Expand domain model classes with events
+  - Part 17; v=MhoFCy_2-wQ
+- Present and explain Domain proj folder structure
+  - part 13
 
 ### Application Layer
 
@@ -26,6 +36,12 @@ Lorem ipsum
 Lorem ipsum
 
 ### Infrastructure Layer
+
+#### Persistence Highlights
+
+**PublishDomainEventsInterceptor**
+
+- Part 17
 
 ## Deployment
 
