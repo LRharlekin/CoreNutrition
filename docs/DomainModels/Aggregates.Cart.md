@@ -30,7 +30,7 @@ class ShoppingCart
       // more cart items
     }
   ],
-  "createdAt": "2024-01-22T00:00:00.0000000Z",
-  "updatedAt": "2024-01-27T00:00:00.0000000Z"
+  "createdDateTime": "2024-01-22T00:00:00.0000000Z",
+  "updatedDateTime": "2024-01-27T00:00:00.0000000Z"
 }
 ```
