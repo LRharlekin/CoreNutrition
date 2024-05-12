@@ -1,4 +1,4 @@
-using CoreNutrition.Application.Common.Interfaces.Services;
+using CoreNutrition.Domain.Common.Interfaces.Services;
 
 namespace CoreNutrition.Infrastructure.Services;
 
