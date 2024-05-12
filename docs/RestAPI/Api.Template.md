@@ -10,7 +10,7 @@
 ## Register
 
 ```js
-POST / auth / register;
+POST "/auth/register";
 ```
 
 ### Register Request
@@ -26,12 +26,16 @@ POST / auth / register;
 
 ### Register Response
 
+```js
+200 OK
+```
+
 ```json
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "firstName": "Arnold",
   "lastName": "Schwarzenegger",
   "email": "aschwarzenegger@email.fi",
-  "token": "abcdef...1234567890"
+  "token": "aBcDeF...1234567890"
 }
 ```
