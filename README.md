@@ -23,9 +23,14 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
       - [The `IDomainEvent` and `IHasDomainEvent` interfaces](#the-idomainevent-and-ihasdomainevent-interfaces)
   - [Application Layer](#application-layer)
   - [Presentation Layer](#presentation-layer)
+    - [Contracts Project (classlib)](#contracts-project-classlib)
+    - [Api Project (webapi)](#api-project-webapi)
   - [Infrastructure Layer](#infrastructure-layer)
     - [Persistence Highlights](#persistence-highlights)
+- [CQRS: Command Query Responsibility Segregation](#cqrs-command-query-responsibility-segregation)
 - [Comments DevOps \& Deployment](#comments-devops--deployment)
+  - [token secret](#token-secret)
+  - [ci/cd](#cicd)
 - [Testing](#testing)
 - [Fullstack Project](#fullstack-project)
   - [Features](#features)
@@ -149,6 +154,12 @@ Lorem ipsum
 
 Lorem ipsum
 
+### Contracts Project (classlib)
+
+The Contracts project is only referenced by the Api project, and its purpose is "documentation as code". It models the shape of Rest API requests and responses. These objects are then referenced inside the Controllers in the Api, which keeps the controller code concise and human-readable.
+
+### Api Project (webapi)
+
 ## Infrastructure Layer
 
 ### Persistence Highlights
@@ -157,9 +168,23 @@ Lorem ipsum
 
 - Part 17
 
+# CQRS: Command Query Responsibility Segregation
+
+- commands vs. queries
+- use repositories only for commands >> data manipulation on the aggregate
+- queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
+
 # Comments DevOps & Deployment
 
-in development: auth secret / dotnet secrets package
+## token secret
+
+in .Api project in Development env --> JwtSettings:Secret in dotnet secret store
+
+- dotnet user-secrets init
+- dotnet user-secrets set "JwtSettings:Secret" "1-2-3-super-duper-mega-ultra-secret-key"
+- dotnet user-secrets list
+
+## ci/cd
 
 CI/CD pipeline with gh actions > Azure
 
