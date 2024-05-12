@@ -6,16 +6,20 @@ using Microsoft.IdentityModel.Tokens;
 
 using CoreNutrition.Infrastructure.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
+using Microsoft.Extensions.Options;
 
 namespace CoreNutrition.Infrastructure.Authentication
 
 {
   public class JwtTokenGenerator : IJwtTokenGenerator
   {
+    private readonly JwtSettings _jwtSettings;
     private readonly DateTimeProvider _dateTimeProvider;
 
-    public JwtTokenGenerator(DateTimeProvider dateTimeProvider)
+    // TODO options pattern --> easier for unit tests
+    public JwtTokenGenerator(DateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
     {
+      _jwtSettings = jwtOptions.Value;
       _dateTimeProvider = dateTimeProvider;
     }
 
@@ -23,7 +27,7 @@ namespace CoreNutrition.Infrastructure.Authentication
     {
       var signingCredentials = new SigningCredentials(
         new SymmetricSecurityKey(
-          Encoding.UTF8.GetBytes("1-2-3-super-duper-mega-ultra-secret-key")),
+          Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
         SecurityAlgorithms.HmacSha256
       );
 
@@ -36,9 +40,9 @@ namespace CoreNutrition.Infrastructure.Authentication
       };
 
       var token = new JwtSecurityToken(
-        issuer: "CoreNutrition",
-        // audience TODO
-        expires: _dateTimeProvider.UtcNow.AddMinutes(1), // TODO change to 1 hour
+        expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+        issuer: _jwtSettings.Issuer,
+        audience: _jwtSettings.Audience,
         claims: claims,
         signingCredentials: signingCredentials
       );
