@@ -4,46 +4,160 @@ https://core-nutrition.azurewebsites.net
 Swagger UI:
 https://core-nutrition.azurewebsites.net/swagger/index.html
 
-## DB Schema / ERD
+**Table of Contents**
+
+- [DB Schema / ERD](#db-schema--erd)
+- [Clean Architecture](#clean-architecture)
+- [Domain-Driven Design](#domain-driven-design)
+  - [Eventual Consistency; Aggregates as Transactional Boundaries](#eventual-consistency-aggregates-as-transactional-boundaries)
+- [E-Commerce Project Architecture](#e-commerce-project-architecture)
+  - [Domain Layer](#domain-layer)
+    - [Rationale for strongly typed IDs as value objects](#rationale-for-strongly-typed-ids-as-value-objects)
+      - [Benefits of strongly typed IDs](#benefits-of-strongly-typed-ids)
+      - [Benefits of defining strongly typed IDs as value objects](#benefits-of-defining-strongly-typed-ids-as-value-objects)
+    - [DDD base classes and interfaces](#ddd-base-classes-and-interfaces)
+      - [The `ValueObject` base class](#the-valueobject-base-class)
+      - [The `Entity` base class](#the-entity-base-class)
+      - [The `AggregateRoot` base class](#the-aggregateroot-base-class)
+      - [The `AggregateRootId` and `EntityId` base classes](#the-aggregaterootid-and-entityid-base-classes)
+      - [The `IDomainEvent` and `IHasDomainEvent` interfaces](#the-idomainevent-and-ihasdomainevent-interfaces)
+  - [Application Layer](#application-layer)
+  - [Presentation Layer](#presentation-layer)
+  - [Infrastructure Layer](#infrastructure-layer)
+    - [Persistence Highlights](#persistence-highlights)
+- [Deployment](#deployment)
+- [Testing](#testing)
+- [Fullstack Project](#fullstack-project)
+  - [Features](#features)
+    - [Mandatory features](#mandatory-features)
+      - [User Functionalities](#user-functionalities)
+      - [Admin Functionalities](#admin-functionalities)
+    - [Bonus-point](#bonus-point)
+  - [Requirements](#requirements)
+  - [Getting Started](#getting-started)
+  - [Testing](#testing-1)
+
+# DB Schema / ERD
 
 - ERD diagram
 - Eraser comments
 
-## Clean Architecture
+# Clean Architecture
 
-### Domain Layer
+# Domain-Driven Design
 
+## Eventual Consistency; Aggregates as Transactional Boundaries
+
+Ideally, each command updates a single aggregate in a single transaction.
+
+Then, in an _"eventual consistent"_ manner, the other aggregates are updated via domain events.
+
+# E-Commerce Project Architecture
+
+## Domain Layer
+
+### Rationale for strongly typed IDs as value objects
+
+The chosen approach of using _strongly typed IDs_ for _entities_ in the domain model, and also _defining those IDs as value objects_ provides several benefits in the context of DDD:
+
+#### Benefits of strongly typed IDs
+
+- **Type safety** prevents accidental mixing of different but similar types of IDs.
+  E.g., if IDs of two different entities were expected as arguments by a method, a type annotation of `(Guid idOfEntityA, Guid idOfEntityB)` would not prevent the potential mistake of IDs being passed in the wrong order.
+- **Semantic meaning**: Code becomes more expressive and self-documenting.
+- **Maintainability**: If the requirements for IDs change in the future, these updates won't modify the entity itself.
+- **Separation of concerns**: The entity can focus on its core responsiblities and behavior, while the ID encapsulates the logic and rules specific to identifying the entity.
+
+#### Benefits of defining strongly typed IDs as value objects
+
+- **Encapsulation and validation**: By encapsulating IDs within a value object, validation rules and invariants specific to that ID type are easier to enforce.
+- **Equality and comparison**: The `ValueObject` base class provides a consistent implementation of equality and comparison operators (`==`, `!=`, `GetHashCode`, `Equals`).
+- **Immutability**: By inheriting from `ValueObject`, strongly typed IDs are immutable by default. This aligns with DDD, where value objects and entity IDs should be immutable to maintain a consistent state and avoid unintended side effects.
+- **Testability**: By encapsulating ID logic in a separate value object, unit tests for the ID's behavior can easily be written without involving the entire entity.
+
+### DDD base classes and interfaces
+
+To maintain the integrity of the domain model in a Domain-Driven Design (DDD) context, to promote consistency of implementation and to reduce boilerplate code, the following base classes and interfaces have been implemented:
+
+#### The `ValueObject` base class
+
+[TODO: LINK to source code](www.example.com)
+
+According to DDD principles, _value objects_ are immutable objects that represent a conceptual whole, and are distinguished by their value rather than their identity.
+
+By implementing the `GetEqualityComponents()` method of the abstract `ValueObject`class, derived value object classes can define their criteria for equality based on their specific properties and fields.
+
+The `ValueObject` class then implements the `Equals(T other)` method from the `IEquatable<T>` interface to define its own equality comparison logic:
+It checks that the provided object is not null, is of the same type as the current instance, and then compares the equality components of both objects using the `SequenceEqual()` method.
+
+The `Equals()` method is then used internally by the overloaded `==` and `!=` operators.
+
+#### The `Entity` base class
+
+[TODO: LINK to source code](www.example.com)
+According to DDD principles, _entities_ are mutable objects and their (in)equality comparison is based only on their unique `id` value, regardless of their other properties.
+
+#### The `AggregateRoot` base class
+
+[TODO: LINK to source code](www.example.com)
+The `AggregateRoot<TId, TIdType>` class extends the `Entity<TId>` and represents an aggregate root, which is the primary entity in a domain model.
+
+#### The `AggregateRootId` and `EntityId` base classes
+
+[TODO: LINK to source code](www.example.com)
+
+Why separate definition of AggregateRootId vs. EntityId ???
+
+The `EntityId<TId>` class is an abstract base class for strongly-typed identities representing the unique identifier of an entity. It extends the abstract `ValueObject` class.
+
+The `AggregateRootId<TId>` class extends `EntityId<TId>` (and thereby also `ValueObject`) and represents the unique identifier of an aggregate root.
+
+In the `AggregateRootId<TId>` class, `base(value)` is used in the constructor to initialize the `Value` property in the `EntityId<TId>` class.
+
+`AggregateRootId<TId>` needs to initialize the `Value` property which is defined in its base class `EntityId<TId>`, so it calls the base class constructor to do this.
+
+#### The `IDomainEvent` and `IHasDomainEvent` interfaces
+
+[TODO: LINK to source code](www.example.com)
+
+- 12, 13, 16, 17
 - Explain rationale for strongly typed IDs, IDs as "value objects"
 - DDD, Aggregates
+
 - Domain Modeling
 - TO DO: Miro Screenshot of Domain Modeling result
 - LINK TO: DomainModels folder in Docs
+
 - ?(Domain Events: explain storming process, link to docs, result, process modeling in Wiki?)
+
   - v=7LFxWgfJEeI
   - Part 10
   - Aggregates as transactional boundaries / Part 17 (0:00 - ) / side effects in one transaction (9:30)
+
 - TO DO: Expand domain model classes with events
+
   - Part 17; v=MhoFCy_2-wQ
+
 - Present and explain Domain proj folder structure
-  - part 13
+  - part 13 2-3:30
 
-### Application Layer
-
-Lorem ipsum
-
-### Presentation Layer
+## Application Layer
 
 Lorem ipsum
 
-### Infrastructure Layer
+## Presentation Layer
 
-#### Persistence Highlights
+Lorem ipsum
+
+## Infrastructure Layer
+
+### Persistence Highlights
 
 **PublishDomainEventsInterceptor**
 
 - Part 17
 
-## Deployment
+# Deployment
 
 CI/CD pipeline with gh actions > Azure
 
@@ -51,7 +165,7 @@ Publish:
 
 Build and test:
 
-## Testing
+# Testing
 
 xunit
 Moq
@@ -73,36 +187,6 @@ This project involves creating a Fullstack project with React and Redux in the f
 
 - Frontend: SASS, TypeScript, React, Redux Toolkit
 - Backend: ASP.NET Core, Entity Framework Core, PostgreSQL
-
-You can follow the same topics as your backend project or choose the alternative one, between E-commerce and Library. You can reuse the previous frontend project, with necessary modification to fit your backend server.
-
-## Table of Contents
-
-- [Fullstack Project](#fullstack-project)
-  - [Table of Contents](#table-of-contents)
-  - [Instruction](#instruction)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-  - [Features](#features)
-    - [Mandatory features](#mandatory-features)
-      - [User Functionalities](#user-functionalities)
-      - [Admin Functionalities](#admin-functionalities)
-    - [Bonus-point](#bonus-point)
-  - [Requirements](#requirements)
-  - [Getting Started](#getting-started)
-  - [Testing](#testing-1)
-
-## Instruction
-
-This repository should be used only for backend server. The frontend server should be done in a separate repository [here](https://github.com/Integrify-Finland/fs17-Frontend-project). You can modify your previous frontend project and instructors will check the submissions (pull requests) in the frontend project repository. The modified frontend server need to be connected with this backend server to make a whole fullstack project.
-
-### Frontend
-
-If you only modify the previoud frontend project, you can work on the same repository and there is no need to open new pull request. However, you can get back to your previous pull request and remove all the labels. In case you want to make new project from scratch, you can fork and clone the original repository and open new pullrequest for your new frontend.
-
-### Backend
-
-Generate a solution file in this repository. All the project layers of backend server should be added into this solution.
 
 ## Features
 

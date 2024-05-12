@@ -1,14 +1,14 @@
+using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Domain.Common.Models;
+
+using ErrorOr;
 
 namespace CoreNutrition.Domain.CustomerAggregate;
 
 public sealed class CustomerId : AggregateRootId<Guid>
 {
-  public override Guid Value { get; protected set; }
-
-  private CustomerId(Guid value)
+  private CustomerId(Guid value) : base(value)
   {
-    Value = value;
   }
 
   public static CustomerId CreateUnique()
@@ -16,18 +16,15 @@ public sealed class CustomerId : AggregateRootId<Guid>
     return new CustomerId(Guid.NewGuid());
   }
 
-  public static CustomerId Create(Guid customerId)
+  public static CustomerId Create(Guid value)
   {
-    return new CustomerId(customerId);
+    return new CustomerId(value);
   }
 
-  public override IEnumerable<object> GetEqualityComponents()
+  public static ErrorOr<CustomerId> Create(string value)
   {
-    yield return Value;
-  }
-
-  private CustomerId()
-  {
-    // Required by EF
+    return Guid.TryParse(value, out var guid)
+      ? (ErrorOr<CustomerId>)Errors.Customer.InvalidCustomerId
+      : (ErrorOr<CustomerId>)new CustomerId(guid);
   }
 }
