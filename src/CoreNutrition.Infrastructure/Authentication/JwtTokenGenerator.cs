@@ -1,12 +1,11 @@
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-// using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-using CoreNutrition.Infrastructure.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
-using Microsoft.Extensions.Options;
+using CoreNutrition.Application.Common.Interfaces.Services;
 
 namespace CoreNutrition.Infrastructure.Authentication
 
@@ -14,10 +13,10 @@ namespace CoreNutrition.Infrastructure.Authentication
   public class JwtTokenGenerator : IJwtTokenGenerator
   {
     private readonly JwtSettings _jwtSettings;
-    private readonly DateTimeProvider _dateTimeProvider;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     // TODO options pattern --> easier for unit tests
-    public JwtTokenGenerator(DateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
+    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
     {
       _jwtSettings = jwtOptions.Value;
       _dateTimeProvider = dateTimeProvider;
