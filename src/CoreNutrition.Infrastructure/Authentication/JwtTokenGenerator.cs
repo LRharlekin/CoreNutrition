@@ -34,8 +34,8 @@ namespace CoreNutrition.Infrastructure.Authentication
       {
         new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
         new Claim(JwtRegisteredClaimNames.GivenName, firstName),
-        new Claim(JwtRegisteredClaimNames.FamilyName, lastName)
-        ,new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        new Claim(JwtRegisteredClaimNames.FamilyName, lastName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       };
 
       var token = new JwtSecurityToken(

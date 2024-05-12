@@ -12,7 +12,7 @@ public static class DependencyInjection
 {
   public static IServiceCollection AddFromInfrastructure(
     this IServiceCollection services,
-    ConfigurationManager configuration
+    IConfiguration configuration
   )
   {
     services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
