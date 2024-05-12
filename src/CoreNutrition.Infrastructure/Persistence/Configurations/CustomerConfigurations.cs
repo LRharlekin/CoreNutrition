@@ -1,15 +1,15 @@
-using CoreNutrition.Domain.UserAggregate;
+using CoreNutrition.Domain.CustomerAggregate;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CoreNutrition.Infrastructure.Persistence.Configurations;
 
-public class UserConfigurations : IEntityTypeConfiguration<User>
+public class CustomerConfigurations : IEntityTypeConfiguration<Customer>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Customer> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable("Customers");
 
         builder.HasKey(u => u.Id);
 
@@ -17,7 +17,7 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
             .ValueGeneratedNever()
             .HasConversion(
                 id => id.Value,
-                value => UserId.Create(value));
+                value => CustomerId.Create(value));
 
         builder.Property(u => u.Email);
 
