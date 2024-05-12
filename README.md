@@ -25,7 +25,7 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Presentation Layer](#presentation-layer)
   - [Infrastructure Layer](#infrastructure-layer)
     - [Persistence Highlights](#persistence-highlights)
-- [Deployment](#deployment)
+- [Comments DevOps \& Deployment](#comments-devops--deployment)
 - [Testing](#testing)
 - [Fullstack Project](#fullstack-project)
   - [Features](#features)
@@ -157,7 +157,9 @@ Lorem ipsum
 
 - Part 17
 
-# Deployment
+# Comments DevOps & Deployment
+
+in development: auth secret / dotnet secrets package
 
 CI/CD pipeline with gh actions > Azure
 
