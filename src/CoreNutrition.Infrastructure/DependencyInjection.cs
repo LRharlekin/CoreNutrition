@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using CoreNutrition.Infrastructure.Authentication;
 using CoreNutrition.Infrastructure.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
-using CoreNutrition.Application.Common.Interfaces.Services;
+using CoreNutrition.Domain.Common.Interfaces.Services;
 
 namespace CoreNutrition.Infrastructure;
 
