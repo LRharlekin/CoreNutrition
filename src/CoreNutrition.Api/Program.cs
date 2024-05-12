@@ -1,17 +1,18 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
+using CoreNutrition.Application;
+
 var builder = WebApplication.CreateBuilder(args);
 
 {
-  builder.Services.AddEndpointsApiExplorer();
-
-  builder.Services.AddSwaggerGen();
-
-  builder.Services.AddControllers();
-
+  builder.Services.AddFromApplication();
   // builder.Services.AddAuthentication();
   // builder.Services.AddAuthorization();
+  builder.Services.AddControllers();
+  builder.Services.AddEndpointsApiExplorer();
+  builder.Services.AddSwaggerGen();
+
 }
 
 var app = builder.Build();
@@ -31,6 +32,5 @@ var app = builder.Build();
   app.UseHttpsRedirection();
   app.MapControllers();
   app.MapGet("/", () => "Hello World!");
+  await app.RunAsync();
 }
-
-await app.RunAsync();
