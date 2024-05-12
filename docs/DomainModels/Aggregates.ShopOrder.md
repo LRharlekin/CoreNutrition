@@ -20,6 +20,7 @@ class ShopOrder
     "lastName": "Schwarzenegger",
     "email": "a.schwarzenegger@email.fi"
   },
+  "orderDateTime": "2024-01-01T00:00:00.0000000Z",
   "addresses": [
     {
       "customerAddressId": "00000000-0000-0000-0000-000000000000",
@@ -79,6 +80,7 @@ class ShopOrder
   "shippingMethod": {
     "id": "00000000-0000-0000-0000-000000000000",
     "name": "DHL", // Fedex Express, Posti
+    "expectedDaysToDeliver": [3, 5],
     "price": {
       "amount": 4.99,
       "currencyCode": "EUR", // ISO 4217 Currency Codes
@@ -103,8 +105,7 @@ class ShopOrder
     "currencyCode": "EUR", // ISO 4217 Currency Codes
     "currency": "Euro"
   },
-  "orderDateTime": "2024-01-01T00:00:00.0000000Z",
-  "createdAt": "2024-01-01T00:00:00.0000000Z",
-  "updatedAt": "2024-01-01T00:00:00.0000000Z"
+  "createdDateTime": "2024-01-01T00:00:00.0000000Z",
+  "updatedDateTime": "2024-01-01T00:00:00.0000000Z"
 }
 ```

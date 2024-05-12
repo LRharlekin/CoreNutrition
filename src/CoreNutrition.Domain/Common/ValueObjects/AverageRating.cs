@@ -21,7 +21,7 @@ public sealed class AverageRating : ValueObject
   }
 
 
-  /* TODO: Trigger with ReviewCreated domain event */
+  /* TODO: Trigger with ReviewCreated / ReviewRemoved domain events */
   // public void AddNewRating(Rating rating)
   // {
   //   Value = ((Value * NumRatings) + rating.Value) / ++NumRatings;
