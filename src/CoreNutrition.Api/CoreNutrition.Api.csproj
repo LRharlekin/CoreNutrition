@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoreNutrition.Domain\CoreNutrition.Domain.csproj" />
     <ProjectReference Include="..\CoreNutrition.Application\CoreNutrition.Application.csproj" />
+    <ProjectReference Include="..\CoreNutrition.Contracts\CoreNutrition.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
