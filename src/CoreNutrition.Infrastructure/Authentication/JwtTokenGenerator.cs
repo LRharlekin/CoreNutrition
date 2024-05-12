@@ -4,7 +4,7 @@ using System.Text;
 // using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-
+using CoreNutrition.Infrastructure.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 
 namespace CoreNutrition.Infrastructure.Authentication
@@ -12,6 +12,13 @@ namespace CoreNutrition.Infrastructure.Authentication
 {
   public class JwtTokenGenerator : IJwtTokenGenerator
   {
+    private readonly DateTimeProvider _dateTimeProvider;
+
+    public JwtTokenGenerator(DateTimeProvider dateTimeProvider)
+    {
+      _dateTimeProvider = dateTimeProvider;
+    }
+
     public string GenerateToken(Guid userId, string firstName, string lastName)
     {
       var signingCredentials = new SigningCredentials(
@@ -31,7 +38,7 @@ namespace CoreNutrition.Infrastructure.Authentication
       var token = new JwtSecurityToken(
         issuer: "CoreNutrition",
         // audience TODO
-        // expires: TODO,
+        expires: _dateTimeProvider.UtcNow.AddMinutes(1), // TODO change to 1 hour
         claims: claims,
         signingCredentials: signingCredentials
       );
