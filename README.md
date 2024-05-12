@@ -173,6 +173,7 @@ The Contracts project is only referenced by the Api project, and its purpose is 
 - commands vs. queries
 - use repositories only for commands >> data manipulation on the aggregate
 - queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
+- performance optimization on query side / query caching / ISP
 
 # Comments DevOps & Deployment
 
