@@ -1,4 +1,3 @@
-// TODO: using Domain Errors namespace
 using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Domain.Common.Models;
 
@@ -8,16 +7,13 @@ namespace CoreNutrition.Domain.DiscountCodeAggregate;
 
 public sealed class DiscountCodeId : AggregateRootId<Guid>
 {
-  public override Guid Value { get; protected set; }
-
-  private DiscountCodeId(Guid value)
+  private DiscountCodeId(Guid value) : base(value)
   {
-    Value = value;
   }
 
   public static DiscountCodeId CreateUnique()
   {
-    return new(Guid.NewGuid());
+    return new DiscountCodeId(Guid.NewGuid());
   }
 
   public static DiscountCodeId Create(Guid value)
@@ -31,16 +27,4 @@ public sealed class DiscountCodeId : AggregateRootId<Guid>
       ? (ErrorOr<DiscountCodeId>)Errors.DiscountCode.InvalidDiscountCodeId
       : (ErrorOr<DiscountCodeId>)new DiscountCodeId(guid);
   }
-
-  public override IEnumerable<object> GetEqualityComponents()
-  {
-    yield return Value;
-  }
-
-#pragma warning disable CS8618
-  public DiscountCodeId()
-  {
-    // Required by EF
-  }
-#pragma warning disable CS8618
 }
