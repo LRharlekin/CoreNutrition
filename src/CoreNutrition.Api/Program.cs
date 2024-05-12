@@ -2,11 +2,14 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 using CoreNutrition.Application;
+using CoreNutrition.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 {
-  builder.Services.AddFromApplication();
+  builder.Services
+    .AddFromApplication()
+    .AddFromInfrastructure();
   // builder.Services.AddAuthentication();
   // builder.Services.AddAuthorization();
   builder.Services.AddControllers();
