@@ -1,22 +1,39 @@
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+using CoreNutrition.Application;
+using CoreNutrition.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+{
+  builder.Services
+    .AddFromApplication()
+    .AddFromInfrastructure(builder.Configuration);
+  // builder.Services.AddAuthentication();
+  // builder.Services.AddAuthorization();
+  builder.Services.AddControllers();
+  builder.Services.AddEndpointsApiExplorer();
+  builder.Services.AddSwaggerGen();
 
-// builder.Services.AddAuthentication();
-// builder.Services.AddAuthorization();
+}
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-app.UseSwagger();
-app.UseSwaggerUI();
-// }
+{
+  // Configure the HTTP request pipeline.
+  // if (app.Environment.IsDevelopment())
+  // {
+  app.UseSwagger();
+  app.UseSwaggerUI(options =>
+  {
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+  });
+  // }
 
-app.UseHttpsRedirection();
-
-app.MapGet("time/utc", () => Results.Ok(DateTime.UtcNow));
-
-await app.RunAsync();
+  app.UsePathBase("/api/v1");
+  app.UseHttpsRedirection();
+  app.MapControllers();
+  app.MapGet("/", () => "Hello World!");
+  await app.RunAsync();
+}

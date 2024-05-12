@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Infrastructure.UnitTests", "tests\CoreNutrition.Infrastructure.UnitTests\CoreNutrition.Infrastructure.UnitTests.csproj", "{A7623F11-AA63-4990-B051-AD2F5C542167}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNutrition.Contracts", "src\CoreNutrition.Contracts\CoreNutrition.Contracts.csproj", "{7472D25C-6F95-48EE-886E-B9C9A02FAC11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{A7623F11-AA63-4990-B051-AD2F5C542167}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7623F11-AA63-4990-B051-AD2F5C542167}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7623F11-AA63-4990-B051-AD2F5C542167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7472D25C-6F95-48EE-886E-B9C9A02FAC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7472D25C-6F95-48EE-886E-B9C9A02FAC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7472D25C-6F95-48EE-886E-B9C9A02FAC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7472D25C-6F95-48EE-886E-B9C9A02FAC11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9C96E527-8709-4C72-9DD2-B4AB7487B0B8} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
@@ -73,5 +79,6 @@ Global
 		{ECE56848-370F-4ED6-BE74-158741233F4E} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
 		{CA187AC5-071E-4111-B78D-4578BBB95610} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
 		{A7623F11-AA63-4990-B051-AD2F5C542167} = {E6111AF8-C158-4DBA-9C53-39F5749E7631}
+		{7472D25C-6F95-48EE-886E-B9C9A02FAC11} = {1AACFD2E-E3DB-4C3C-B919-8D138C42D1F3}
 	EndGlobalSection
 EndGlobal
