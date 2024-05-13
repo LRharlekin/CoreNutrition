@@ -212,26 +212,26 @@ The Result Pattern allows a structured approach to granular custom error handlin
 
 ### `ErrorsController`
 
-Registering as the very first middleware a `.UseExceptionHandler("/error")` encapsulates all following middleware in a try-catch-like pattern that re-routes and re-executes any request that throws an exception.
+A `.UseExceptionHandler("/error")` middleware, registered as the first middleware, encapsulates subsequent middleware in a try-catch-like pattern that reroutes and re-executes any request that throws an exception.
 
-Subsequently, the failing request resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
+Failing requests are directed to a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
 
-To achieve this separation, all controllers (_**except**_ the `ErrorsController`) are implemented so that their `Problems()` method accepts a list of custom errors (instead of receiving .NET's `ProblemDetails`), and then maps these custom error details to a meaningful `IActionResult` response.
+API controllers (meaning all controllers _except_ the `ErrorsController`) implement a `Problems()` method accepting a list of custom errors, mapping them to an `IActionResult` response.
 
 ### Custom implementation of `ProblemDetailsFactory`
 
-A custom implementation of the .NET `ProblemDetailsFactory` overrides the methods that create `ProblemDetails` and `ValidationProblemDetails` objects, which provide a consistent and customizable way of handling and reporting errors in the CoreNutrition.Api.
+A custom `ProblemDetailsFactory` overrides methods creating `ProblemDetails` and `ValidationProblemDetails` objects for consistent and customizable error handling in CoreNutrition.Api.
 
 ### Domain errors, external vs. internal "language", and Clean Architecture
 
 ![Static Badge](https://img.shields.io/badge/ErrorOr-v.2.0.1-black)
-Located in the Core/Domain Layer, all custom `DomainErrors` can be referenced and properly handled by any other component in the architecture.
+Located in the Core/Domain Layer, all custom `DomainErrors` can be referenced and properly handled by any other component across the architecture.
 
 The custom domain errors are implemented using the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package.
 
-Error types and descriptions are defined using the internal business logic and terminology of the CoreNutrition application and business case. This internal error logic is only translated into HTTP status codes in the outermost layer.
+Error types and descriptions are defined using the internal business logic and terminology. This internal error logic is only translated into HTTP status codes in the outermost layer.
 
-So, wherever an exception might occur, error handling is not confined to the limits of speaking in the "language of HTTP status codes". Instead, the application can handle errors in a more expressive language of its internal error logic. Changes to how errors are communicated to clients (such as switching to a different protocol, e.g. GraphQL, gRPC, WebSockets) can be made without impacting the underlying error handling logic of the application, conforming with the _Dependency Rule_ and other important principles of _Clean Architecture_.
+This way, error handling is not confined to the limits of speaking in the "language of HTTP status codes". Instead, the application can handle errors in the expressive language of its internal error logic. This flexibility aligns with _Clean Architecture_ principles: Changes to how errors are communicated to clients (such as switching to a different protocol, e.g. GraphQL, gRPC, WebSockets) can be made without impacting the underlying error handling logic.
 
 # Comments DevOps & Deployment
 
