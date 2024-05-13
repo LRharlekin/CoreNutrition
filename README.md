@@ -163,7 +163,11 @@ Lorem ipsum
 
 ### Contracts Project (classlib)
 
-The Contracts project is only referenced by the Api project, and its purpose is "documentation as code". It models the shape of Rest API requests and responses. These objects are then referenced inside the Controllers in the Api, which keeps the controller code concise and human-readable.
+The Contracts project is only referenced by the Api project, and its purpose is "documentation as code".
+It models the shape of Rest API requests and responses which are referenced by the API Controllers...
+
+- ...to map incoming requests to their corresponding commands and queries in the Application Layer, as well as...
+- ...to map returned results back to the appropriate response objects.
 
 ### Api Project (webapi)
 
