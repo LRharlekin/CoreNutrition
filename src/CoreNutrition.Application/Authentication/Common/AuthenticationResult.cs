@@ -1,6 +1,6 @@
 using CoreNutrition.Domain.UserAggregate;
 
-namespace CoreNutrition.Application.Services.Authentication.Common;
+namespace CoreNutrition.Application.Authentication.Common;
 
 public record AuthenticationResult(
   User User,

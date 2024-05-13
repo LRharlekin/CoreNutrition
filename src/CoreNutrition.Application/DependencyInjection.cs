@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using CoreNutrition.Application.Services.Authentication.Commands;
-using CoreNutrition.Application.Services.Authentication.Queries;
+using MediatR;
+using System.Reflection;
+
 
 namespace CoreNutrition.Application;
 
@@ -8,8 +9,15 @@ public static class DependencyInjection
 {
   public static IServiceCollection AddFromApplication(this IServiceCollection services)
   {
-    services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
-    services.AddScoped<IAuthenticationQueryService, AuthenticationQueryService>();
+    // services.AddMediatR(typeof(DependencyInjection).Assembly);
+    // services.AddMediatR(config => config.AsScoped(), new Assembly[] { typeof(DependencyInjection).Assembly });
+    services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
+    // services.AddMediatR(typeof(DependencyInjection).Assembly);
+
     return services;
   }
 }
+
+
+
+
