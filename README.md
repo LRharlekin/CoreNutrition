@@ -28,6 +28,7 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Infrastructure Layer](#infrastructure-layer)
     - [Persistence Highlights](#persistence-highlights)
 - [CQRS: Command Query Responsibility Segregation](#cqrs-command-query-responsibility-segregation)
+- [Exception Handling](#exception-handling)
 - [Comments DevOps \& Deployment](#comments-devops--deployment)
   - [token secret](#token-secret)
   - [ci/cd](#cicd)
@@ -175,7 +176,24 @@ The Contracts project is only referenced by the Api project, and its purpose is 
 - queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
 - performance optimization on query side / query caching / ISP
 
+# Exception Handling
+
 # Comments DevOps & Deployment
+
+exception handler will
+
+- catch exception
+- log it
+- re-routes request to "/error" endpoint
+- re-execute request
+
+(request will not be re-executed if response already started)
+
+- custom problem details factory
+
+content-type:application/problem+json
+type: link to RFC specificationo?
+traceId:
 
 ## token secret
 
