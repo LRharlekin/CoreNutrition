@@ -1,13 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 
+using ErrorOr;
+
 using CoreNutrition.Contracts.Authentication;
+using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Application.Services.Authentication;
 
 namespace CoreNutrition.Api.Controllers;
 
+// Typical Controller Logic: Map > Logic > Map
+// map request to internal service models, 
+// logic (e.g. persist in db), 
+// map returned object to response contract
+
 [ApiController]
 [Route("auth")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : ApiControllerBase
+// ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
 {
   private readonly IAuthenticationService _authenticationService;
 
@@ -19,41 +28,54 @@ public class AuthenticationController : ControllerBase
   [HttpPost("register")]
   public IActionResult Register(RegisterRequest request)
   {
-    Console.WriteLine($"First name: {request.FirstName}");
-    Console.WriteLine($"Last name: {request.LastName}");
-    Console.WriteLine($"Email: {request.Email}");
-    Console.WriteLine($"Password: {request.Password}");
-
-
-    var authResult = _authenticationService.Register(
+    ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
       request.FirstName,
       request.LastName,
       request.Email,
       request.Password);
 
-    var response = new AuthenticationResponse(
-      authResult.Id,
-      authResult.FirstName,
-      authResult.LastName,
-      authResult.Email,
-      authResult.Token);
+    // TODO: Save user to database
 
-    return Ok(response);
+    return authResult.Match(
+    // return authResult.MatchFirst(
+      authResult => Ok(MapAuthResult(authResult)),
+      errors => Problem(errors)
+      // firstError => Problem(
+      //   statusCode: StatusCodes.Status409Conflict,
+      //   title: firstError.Description
+      // )
+      );
   }
 
   [HttpPost("login")]
   public IActionResult Login(LoginRequest request)
   {
-    var authResult = _authenticationService.Login(
+    // multiple expected custom errors: 
+    ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(
       request.Email,
       request.Password);
 
-    var response = new AuthenticationResponse(
-      authResult.Id,
-      authResult.FirstName,
-      authResult.LastName,
-      authResult.Email,
+    // handle invalid credentials
+    if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
+    {
+      return Problem(
+        statusCode: StatusCodes.Status401Unauthorized,
+        title: authResult.FirstError.Description);
+    }
+
+    return authResult.Match(
+      authResult => Ok(MapAuthResult(authResult)),
+      errors => Problem(errors)
+      );
+  }
+
+  private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
+  {
+    return new AuthenticationResponse(
+      authResult.User.Id,
+      authResult.User.FirstName,
+      authResult.User.LastName,
+      authResult.User.Email,
       authResult.Token);
-    return Ok(response);
   }
 }

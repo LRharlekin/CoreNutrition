@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
+using CoreNutrition.Domain.UserAggregate;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 using CoreNutrition.Domain.Common.Interfaces.Services;
 
@@ -22,7 +23,7 @@ namespace CoreNutrition.Infrastructure.Authentication
       _dateTimeProvider = dateTimeProvider;
     }
 
-    public string GenerateToken(Guid userId, string firstName, string lastName)
+    public string GenerateToken(User user)
     {
       var signingCredentials = new SigningCredentials(
         new SymmetricSecurityKey(
@@ -32,9 +33,9 @@ namespace CoreNutrition.Infrastructure.Authentication
 
       var claims = new[]
       {
-        new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-        new Claim(JwtRegisteredClaimNames.GivenName, firstName),
-        new Claim(JwtRegisteredClaimNames.FamilyName, lastName),
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+        new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       };
 
