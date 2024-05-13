@@ -28,9 +28,13 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Infrastructure Layer](#infrastructure-layer)
     - [Persistence Highlights](#persistence-highlights)
 - [CQRS: Command Query Responsibility Segregation](#cqrs-command-query-responsibility-segregation)
-- [Exception Handling](#exception-handling)
-  - [Exception Handling vs. Error Handling](#exception-handling-vs-error-handling)
+- [Global Error Handling](#global-error-handling)
+  - [Objectives](#objectives)
+  - [Exception Handling vs. Result Pattern](#exception-handling-vs-result-pattern)
   - [Implementation](#implementation)
+    - [`ErrorsController`](#errorscontroller)
+    - [Custom implementation of `ProblemDetailsFactory`](#custom-implementation-of-problemdetailsfactory)
+    - [Domain errors, external vs. internal "language", and Clean Architecture](#domain-errors-external-vs-internal-language-and-clean-architecture)
 - [Comments DevOps \& Deployment](#comments-devops--deployment)
   - [token secret](#token-secret)
   - [ci/cd](#cicd)
@@ -178,92 +182,56 @@ The Contracts project is only referenced by the Api project, and its purpose is 
 - queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
 - performance optimization on query side / query caching / ISP
 
-# Exception Handling
+# Global Error Handling
 
-goals
+## Objectives
 
-- privacy/security (responses and logging)
-- performance
-- monitoring: clear distinction between expected and unexpected exceptions
-- maintainability / scalability:
-  - track error flow? exceptions dontt only occur in controller, every component downstream needs to be able to handle and return meaningful error repsonse
-  - new errors occur as scope and complexity of system grows, new features are added, etc.
-- support for returning list of errors >> result pattern instead of binary decision: result object = discriminated union that either returns expected result or list of errors
+Given the context of a customer facing ecommerce shop, a Global Exception Handling solution should accomodate the following considerations:
 
-## Exception Handling vs. Error Handling
+- **Privacy/Security**: Ensure responses and logging mechanisms do not divulge sensitive information.
+- **Monitoring**: Clearly distinguish between expected and unexpected exceptions for effective system monitoring.
+- **Performance**: Besides slowing each individual request-response cycle that throws an exception, the computational expense associated with throwing exceptions in C# at scale needs to be taken into account (ballooning `StackTrace` objects, nested `InnerException`s putting pressure on heap and garbage collector).
+- **Maintainability/Scalability**:
+  - Comprehensive flow control: Exceptions can occur at various points beyond just controllers, necessitating robust handling throughout the system.
+  - Anticipate the emergence of new types of errors as the system evolves, accommodating changes in scope and complexity.
 
-exceptions = complicated are just go-to statements
-performance: throwing exceptions = expensive
-security: avoid passing exception details, stack trace, and information that allows to deduct how backend is implemented
+## Exception Handling vs. Result Pattern
+
+In the Result Pattern, instead of throwing exceptions to signal errors, methods return a result object that encapsulates both the successful result and any potential errors that occurred.
+
+This is in contrast to a binary Success/Failure signalling of a thrown exception.
+
+The Result Pattern allows a structured approach to granular custom error handling, and it can furthermore...
+
+- **...ensure privacy and security by** allowing controlled disclosure of errors.
+- **...aid in monitoring by** distinguishing between expected and unexpected exceptions (Exceptions actually become _exceptional_ again!).
+- **...address performance concerns by** avoiding the overhead and mitigating the risk of ballooning resource consumption associated with exception-based approaches.
+- **...facilitate comprehensive flow control, scalability, and maintainability, and accommodate evolving system requirements by** meaningfully conveying error hierarchies. and clearly discerning between technology specific exceptions, domain exceptions and domain logic.
 
 ## Implementation
 
-![Static Badge](https://img.shields.io/badge/ErrorOr-v.2.0.1-black)
+### `ErrorsController`
 
 Registering as the very first middleware a `.UseExceptionHandler("/error")` encapsulates all following middleware in a try-catch-like pattern that re-routes and re-executes any request that throws an exception.
 
-Subsequently, a failing request resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
+Subsequently, the failing request resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
 
 To achieve this separation, all controllers (_**except**_ the `ErrorsController`) are implemented so that their `Problems()` method accepts a list of custom errors (instead of receiving .NET's `ProblemDetails`), and then maps these custom error details to a meaningful `IActionResult` response.
 
-The `CoreNutritionProblemDetailsFactory` is responsible for creating `ProblemDetails` and `ValidationProblemDetails` objects, which are used to provide detailed error information in an HTTP response.
-Http status code only set at outermost layer following CA.
-Entire error handling system speaks an expressive “internal language” of system.
-It doesn’t have to “speak http”.
+### Custom implementation of `ProblemDetailsFactory`
 
-Custom error handling is implemented with help of the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package, which...
+A custom implementation of the .NET `ProblemDetailsFactory` overrides the methods that create `ProblemDetails` and `ValidationProblemDetails` objects, which provide a consistent and customizable way of handling and reporting errors in the CoreNutrition.Api.
 
-error object:
+### Domain errors, external vs. internal "language", and Clean Architecture
 
-```csharp
-public struct Error : IEquatable<Error>
-(
-  public string Code { get; }
-  public string Description { get; }
-  public ErrorType Type { get; } // enum of methods: Failure(), Unexpected(), Validation(), Conflict(), NotFound()
-)
-```
+![Static Badge](https://img.shields.io/badge/ErrorOr-v.2.0.1-black)
+Located in the Core/Domain Layer, all custom `DomainErrors` can be referenced and properly handled by any other component in the architecture.
 
-Defining a domain error:
+The custom domain errors are implemented using the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package.
 
-```csharp
-// ../src/Domain/Common/Errors/Errors.User.cs
-public static partial class Errors
-{
-  public static class User
-  {
-    public static Error DuplicateEmail()
-    {
-      Error.Conflict(
-        code: "User.DuplicateEmail",
-        description: "This email is already in use."
-      );
-    }
-  }
-}
-```
+Error types and descriptions are defined using the internal business logic and terminology of the CoreNutrition application and business case. This internal error logic is only translated into HTTP status codes in the outermost layer.
 
-results pattern + domain errors
-domain errors can be centrally maintained, and because in Domain, referenced, understood and properly handled by any component in the entire system.
-
-This implementation allows for any single component to return a (success) response, a single meaningful error, a list of meaningful errors, all while keeping the component code very concise.
-
-Validation errors: 17:00 v=FXP3PQ03fa0
-
-error handler will
-
-- catch exception
-- log it
-- re-routes request to "/error" endpoint
-- re-execute request
-
-(request will not be re-executed if response already started)
-
-- custom problem details factory
-
-content-type:application/problem+json
-type: link to RFC specificationo?
-traceId:
+So, wherever an exception might occur, error handling is not confined to the limits of speaking in the "language of HTTP status codes". Instead, the application can handle errors in a more expressive language of its internal error logic. Changes to how errors are communicated to clients (such as switching to a different protocol, e.g. GraphQL, gRPC, WebSockets) can be made without impacting the underlying error handling logic of the application, conforming with the _Dependency Rule_ and other important principles of _Clean Architecture_.
 
 # Comments DevOps & Deployment
 

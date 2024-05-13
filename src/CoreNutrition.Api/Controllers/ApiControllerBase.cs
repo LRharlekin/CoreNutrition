@@ -11,6 +11,9 @@ public class ApiControllerBase : ControllerBase
 {
   protected IActionResult Problem(List<Error> errors)
   {
+    /* 
+    HttpContext.Items gets/sets a key-value collection that can be used to share data between middleware within the scope of this request.
+    */
     HttpContext.Items[HttpContextItemKeys.Errors] = errors;
 
     var firstError = errors[0];
