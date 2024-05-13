@@ -29,6 +29,8 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
     - [Persistence Highlights](#persistence-highlights)
 - [CQRS: Command Query Responsibility Segregation](#cqrs-command-query-responsibility-segregation)
 - [Exception Handling](#exception-handling)
+  - [Exception Handling vs. Error Handling](#exception-handling-vs-error-handling)
+  - [Implementation](#implementation)
 - [Comments DevOps \& Deployment](#comments-devops--deployment)
   - [token secret](#token-secret)
   - [ci/cd](#cicd)
@@ -178,9 +180,36 @@ The Contracts project is only referenced by the Api project, and its purpose is 
 
 # Exception Handling
 
-# Comments DevOps & Deployment
+goals
 
-exception handler will
+- privacy/security (responses and logging)
+- performance
+- monitoring: clear distinction between expected and unexpected exceptions
+- maintainability / scalability:
+  - track error flow? exceptions dontt only occur in controller, every component downstream needs to be able to handle and return meaningful error repsonse
+  - new errors occur as scope and complexity of system grows, new features are added, etc.
+- support for returning list of errors >> result pattern instead of binary decision: result object = discriminated union that either returns expected result or list of errors
+
+## Exception Handling vs. Error Handling
+
+exceptions = complicated are just go-to statements
+performance: throwing exceptions = expensive
+security: avoid passing exception details, stack trace, and information that allows to deduct how backend is implemented
+
+## Implementation
+
+![Static Badge](https://img.shields.io/badge/ErrorOr-v.2.0.1-black)
+
+Registering as the very first middleware a `.UseExceptionHandler("/error")` encapsulates all following middleware in a "try-catch"-like pattern that re-routes and re-executes any request that throws an exception.
+Subsequently, the request that threw the exception resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom error defined in the backend system - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
+Custom error handling is implemented with help of the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package, which...
+
+results pattern + domain errors
+domain errors can be centrally maintained, and because in Domain, referenced, understood and properly handled by any component in the entire system.
+
+Validation errors: 17:00 v=FXP3PQ03fa0
+
+error handler will
 
 - catch exception
 - log it
@@ -194,6 +223,8 @@ exception handler will
 content-type:application/problem+json
 type: link to RFC specificationo?
 traceId:
+
+# Comments DevOps & Deployment
 
 ## token secret
 

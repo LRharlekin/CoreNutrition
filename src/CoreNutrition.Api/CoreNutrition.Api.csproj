@@ -8,15 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" /> -->
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CoreNutrition.Domain\CoreNutrition.Domain.csproj" />
     <ProjectReference Include="..\CoreNutrition.Application\CoreNutrition.Application.csproj" />
     <ProjectReference Include="..\CoreNutrition.Contracts\CoreNutrition.Contracts.csproj" />
     <ProjectReference Include="..\CoreNutrition.Infrastructure\CoreNutrition.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" /> -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
 </Project>
