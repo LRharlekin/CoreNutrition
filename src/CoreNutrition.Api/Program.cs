@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -13,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
   // builder.Services.AddAuthentication();
   // builder.Services.AddAuthorization();
   builder.Services.AddControllers();
+  builder.Services.AddSingleton<ProblemDetailsFactory, CoreNutritionProblemDetailsFactory>();
+
   builder.Services.AddEndpointsApiExplorer();
   builder.Services.AddSwaggerGen();
 

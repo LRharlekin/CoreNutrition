@@ -204,6 +204,36 @@ Registering as the very first middleware a `.UseExceptionHandler("/error")` enca
 Subsequently, the request that threw the exception resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom error defined in the backend system - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
 Custom error handling is implemented with help of the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package, which...
 
+error object:
+
+```csharp
+public struct Error : IEquatable<Error>
+(
+  public string Code { get; }
+  public string Description { get; }
+  public ErrorType Type { get; } // enum of methods: Failure(), Unexpected(), Validation(), Conflict(), NotFound()
+)
+```
+
+Defining a domain error:
+
+```csharp
+// ../src/Domain/Common/Errors/Errors.User.cs
+public static partial class Errors
+{
+  public static class User
+  {
+    public static Error DuplicateEmail()
+    {
+      Error.Conflict(
+        code: "User.DuplicateEmail",
+        description: "This email is already in use."
+      );
+    }
+  }
+}
+```
+
 results pattern + domain errors
 domain errors can be centrally maintained, and because in Domain, referenced, understood and properly handled by any component in the entire system.
 

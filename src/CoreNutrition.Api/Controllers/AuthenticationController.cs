@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
+using ErrorOr;
+
 using CoreNutrition.Contracts.Authentication;
 using CoreNutrition.Application.Services.Authentication;
 
@@ -12,7 +14,7 @@ namespace CoreNutrition.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : ApiControllerBase
 // ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
 {
   private readonly IAuthenticationService _authenticationService;
@@ -25,7 +27,7 @@ public class AuthenticationController : ControllerBase
   [HttpPost("register")]
   public IActionResult Register(RegisterRequest request)
   {
-    AuthenticationResult authenticationResult = _authenticationService.Register(
+    ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
       request.FirstName,
       request.LastName,
       request.Email,
@@ -33,33 +35,22 @@ public class AuthenticationController : ControllerBase
 
     // TODO: Save user to database
 
-    var response = new AuthenticationResponse(
-      authenticationResult.User.Id,
-      authenticationResult.User.FirstName,
-      authenticationResult.User.LastName,
-      authenticationResult.User.Email,
-      authenticationResult.Token);
-
-    // return Ok(response);
-
-    /* 
-    ControllerBase.CreatedAtAction(
-      String actionNamme, // The name of the action to use for generating the URL --> nameof(Register)
-      Object routeValues, // The route data to use for generating the URL in the response's Location header --> new { id = user.Id}
-      Object value); // The content value to format in the entity body --> response
-    */
-
-    return CreatedAtAction(
-      actionName: nameof(Register),
-      routeValues: new { id = authenticationResult.User.Id },
-      value: response
-    );
+    return authResult.Match(
+    // return authResult.MatchFirst(
+      authResult => Ok(MapAuthResult(authResult)),
+      errors => Problem(errors)
+      // firstError => Problem(
+      //   statusCode: StatusCodes.Status409Conflict,
+      //   title: firstError.Description
+      // )
+      );
   }
 
   [HttpPost("login")]
   public IActionResult Login(LoginRequest request)
   {
-    var authResult = _authenticationService.Login(
+    // multiple expected custom errors: 
+    ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(
       request.Email,
       request.Password);
 
@@ -70,5 +61,15 @@ public class AuthenticationController : ControllerBase
       authResult.User.Email,
       authResult.Token);
     return Ok(response);
+  }
+
+  private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
+  {
+    return new AuthenticationResponse(
+      authResult.User.Id,
+      authResult.User.FirstName,
+      authResult.User.LastName,
+      authResult.User.Email,
+      authResult.Token);
   }
 }

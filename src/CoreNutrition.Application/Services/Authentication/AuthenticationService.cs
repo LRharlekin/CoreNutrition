@@ -1,6 +1,9 @@
 using CoreNutrition.Application.Common.Interfaces.Authentication;
+using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 using CoreNutrition.Domain.UserAggregate;
+
+using ErrorOr;
 
 namespace CoreNutrition.Application.Services.Authentication;
 
@@ -14,12 +17,13 @@ public class AuthenticationService : IAuthenticationService
     _jwtTokenGenerator = jwtTokenGenerator;
     _userRepository = userRepository;
   }
-  public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+  public ErrorOr<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
   {
     // 1. Validate the user doesn't exist yet
     if (_userRepository.GetUserByEmail(email) is not null)
     {
-      throw new Exception("User already exists");
+      // throw new Exception("User already exists");
+      return Errors.User.DuplicateEmail;
     }
     // 2. create user (with hashed password) & persist to DB
     User user = new User
@@ -40,7 +44,7 @@ public class AuthenticationService : IAuthenticationService
       token);
   }
 
-  public AuthenticationResult Login(string email, string password)
+  public ErrorOr<AuthenticationResult> Login(string email, string password)
   {
     // 1. Validate the user exists
     var user = _userRepository.GetUserByEmail(email);
