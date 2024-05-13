@@ -4,7 +4,9 @@ using ErrorOr;
 
 using CoreNutrition.Contracts.Authentication;
 using CoreNutrition.Domain.Common.DomainErrors;
-using CoreNutrition.Application.Services.Authentication;
+using CoreNutrition.Application.Services.Authentication.Common;
+using CoreNutrition.Application.Services.Authentication.Commands;
+using CoreNutrition.Application.Services.Authentication.Queries;
 
 namespace CoreNutrition.Api.Controllers;
 
@@ -18,17 +20,21 @@ namespace CoreNutrition.Api.Controllers;
 public class AuthenticationController : ApiControllerBase
 // ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
 {
-  private readonly IAuthenticationService _authenticationService;
+  private readonly IAuthenticationCommandService _authenticationCommandService;
+  private readonly IAuthenticationQueryService _authenticationQueryService;
 
-  public AuthenticationController(IAuthenticationService authenticationService)
+  public AuthenticationController(
+    IAuthenticationCommandService authenticationCommandService,
+    IAuthenticationQueryService authenticationQueryService)
   {
-    _authenticationService = authenticationService;
+    _authenticationCommandService = authenticationCommandService;
+    _authenticationQueryService = authenticationQueryService;
   }
 
   [HttpPost("register")]
   public IActionResult Register(RegisterRequest request)
   {
-    ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
+    ErrorOr<AuthenticationResult> authResult = _authenticationCommandService.Register(
       request.FirstName,
       request.LastName,
       request.Email,
@@ -51,7 +57,7 @@ public class AuthenticationController : ApiControllerBase
   public IActionResult Login(LoginRequest request)
   {
     // multiple expected custom errors: 
-    ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(
+    ErrorOr<AuthenticationResult> authResult = _authenticationQueryService.Login(
       request.Email,
       request.Password);
 
