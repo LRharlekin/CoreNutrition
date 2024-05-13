@@ -23,16 +23,15 @@ public class AuthenticationService : IAuthenticationService
     if (_userRepository.GetUserByEmail(email) is not null)
     {
       // throw new Exception("User already exists");
-      return Errors.User.DuplicateEmail;
+      // return Errors.User.DuplicateEmail;
+      return new[] { Errors.User.DuplicateEmail };
     }
     // 2. create user (with hashed password) & persist to DB
-    User user = new User
-    {
-      FirstName = firstName,
-      LastName = lastName,
-      Email = email,
-      Password = password
-    };
+    User user = new User(
+      firstName,
+      lastName,
+      email,
+      password);
 
     _userRepository.Add(user);
 
@@ -47,17 +46,15 @@ public class AuthenticationService : IAuthenticationService
   public ErrorOr<AuthenticationResult> Login(string email, string password)
   {
     // 1. Validate the user exists
-    var user = _userRepository.GetUserByEmail(email);
-
-    if (user is null)
+    if (_userRepository.GetUserByEmail(email) is not User user)
     {
-      throw new Exception("Invalid credentials");
+      return Errors.Authentication.InvalidCredentials;
     }
 
     // 2. Validate the password is correct
     if (user.Password != password)
     {
-      throw new Exception("Invalid credentials");
+      return Errors.Authentication.InvalidCredentials;
     }
 
     // 3. Create JWT token

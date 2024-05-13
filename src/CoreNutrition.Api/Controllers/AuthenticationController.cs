@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ErrorOr;
 
 using CoreNutrition.Contracts.Authentication;
+using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Application.Services.Authentication;
 
 namespace CoreNutrition.Api.Controllers;
@@ -54,13 +55,18 @@ public class AuthenticationController : ApiControllerBase
       request.Email,
       request.Password);
 
-    var response = new AuthenticationResponse(
-      authResult.User.Id,
-      authResult.User.FirstName,
-      authResult.User.LastName,
-      authResult.User.Email,
-      authResult.Token);
-    return Ok(response);
+    // handle invalid credentials
+    if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
+    {
+      return Problem(
+        statusCode: StatusCodes.Status401Unauthorized,
+        title: authResult.FirstError.Description);
+    }
+
+    return authResult.Match(
+      authResult => Ok(MapAuthResult(authResult)),
+      errors => Problem(errors)
+      );
   }
 
   private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)

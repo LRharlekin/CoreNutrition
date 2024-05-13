@@ -200,8 +200,17 @@ security: avoid passing exception details, stack trace, and information that all
 
 ![Static Badge](https://img.shields.io/badge/ErrorOr-v.2.0.1-black)
 
-Registering as the very first middleware a `.UseExceptionHandler("/error")` encapsulates all following middleware in a "try-catch"-like pattern that re-routes and re-executes any request that throws an exception.
-Subsequently, the request that threw the exception resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom error defined in the backend system - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
+Registering as the very first middleware a `.UseExceptionHandler("/error")` encapsulates all following middleware in a try-catch-like pattern that re-routes and re-executes any request that throws an exception.
+
+Subsequently, a failing request resets in a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
+
+To achieve this separation, all controllers (_**except**_ the `ErrorsController`) are implemented so that their `Problems()` method accepts a list of custom errors (instead of receiving .NET's `ProblemDetails`), and then maps these custom error details to a meaningful `IActionResult` response.
+
+The `CoreNutritionProblemDetailsFactory` is responsible for creating `ProblemDetails` and `ValidationProblemDetails` objects, which are used to provide detailed error information in an HTTP response.
+Http status code only set at outermost layer following CA.
+Entire error handling system speaks an expressive “internal language” of system.
+It doesn’t have to “speak http”.
+
 Custom error handling is implemented with help of the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package, which...
 
 error object:
@@ -236,6 +245,8 @@ public static partial class Errors
 
 results pattern + domain errors
 domain errors can be centrally maintained, and because in Domain, referenced, understood and properly handled by any component in the entire system.
+
+This implementation allows for any single component to return a (success) response, a single meaningful error, a list of meaningful errors, all while keeping the component code very concise.
 
 Validation errors: 17:00 v=FXP3PQ03fa0
 

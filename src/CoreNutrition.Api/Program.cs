@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
+using CoreNutrition.Api.Common.Errors;
 using CoreNutrition.Application;
 using CoreNutrition.Infrastructure;
 

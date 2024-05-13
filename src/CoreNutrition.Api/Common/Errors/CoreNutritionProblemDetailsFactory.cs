@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 using ErrorOr;
 
-// using CoreNutrition.Api.Common.Http;
+using CoreNutrition.Api.Common.Http;
 
 namespace CoreNutrition.Api.Common.Errors;
 
