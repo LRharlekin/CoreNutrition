@@ -216,7 +216,7 @@ A `.UseExceptionHandler("/error")` middleware, registered as the first middlewar
 
 Failing requests are directed to a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
 
-API controllers (all controllers _**except**_ the `ErrorsController`) implement a `Problems()` method accepting a list of custom errors, mapping them to an `IActionResult` response.
+API controllers (meaning all controllers _except_ the `ErrorsController`) implement a `Problems()` method accepting a list of custom errors, mapping them to an `IActionResult` response.
 
 ### Custom implementation of `ProblemDetailsFactory`
 

@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 
 using ErrorOr;
+using MediatR;
 
 using CoreNutrition.Contracts.Authentication;
 using CoreNutrition.Domain.Common.DomainErrors;
-using CoreNutrition.Application.Services.Authentication;
+using CoreNutrition.Application.Authentication.Common;
+using CoreNutrition.Application.Authentication.Commands.Register;
+using CoreNutrition.Application.Authentication.Queries.Login;
 
 namespace CoreNutrition.Api.Controllers;
 
@@ -18,21 +21,23 @@ namespace CoreNutrition.Api.Controllers;
 public class AuthenticationController : ApiControllerBase
 // ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
 {
-  private readonly IAuthenticationService _authenticationService;
+  private readonly ISender _mediator;
 
-  public AuthenticationController(IAuthenticationService authenticationService)
+  public AuthenticationController(ISender mediator)
   {
-    _authenticationService = authenticationService;
+    _mediator = mediator;
   }
 
   [HttpPost("register")]
-  public IActionResult Register(RegisterRequest request)
+  public async Task<IActionResult> Register(RegisterRequest request)
   {
-    ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
+    var command = new RegisterCommand(
       request.FirstName,
       request.LastName,
       request.Email,
       request.Password);
+
+    ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
     // TODO: Save user to database
 
@@ -48,12 +53,14 @@ public class AuthenticationController : ApiControllerBase
   }
 
   [HttpPost("login")]
-  public IActionResult Login(LoginRequest request)
+  public async Task<IActionResult> Login(LoginRequest request)
   {
-    // multiple expected custom errors: 
-    ErrorOr<AuthenticationResult> authResult = _authenticationService.Login(
+    var query = new LoginQuery(
       request.Email,
       request.Password);
+
+    // multiple expected custom errors: 
+    ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
 
     // handle invalid credentials
     if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
