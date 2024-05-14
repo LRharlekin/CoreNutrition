@@ -39,6 +39,9 @@ var app = builder.Build();
 
   app.UsePathBase("/api/v1");
   app.UseHttpsRedirection();
+
+  app.UseAuthentication();
+
   app.MapControllers();
   app.MapGet("/", () => "Hello World!");
   await app.RunAsync();
