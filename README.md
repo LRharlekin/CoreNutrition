@@ -68,6 +68,8 @@ Then, in an _"eventual consistent"_ manner, the other aggregates are updated via
 
 ## Domain Layer
 
+- Persistence Ignorance
+
 ### Rationale for strongly typed IDs as value objects
 
 The chosen approach of using _strongly typed IDs_ for _entities_ in the domain model, and also _defining those IDs as value objects_ provides several benefits in the context of DDD:
