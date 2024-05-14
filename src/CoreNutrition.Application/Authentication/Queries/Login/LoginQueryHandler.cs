@@ -27,6 +27,8 @@ public class LoginQueryHandler :
     LoginQuery query,
     CancellationToken cancellationToken)
   {
+    await Task.CompletedTask; // TODO delete later
+
     // 1. Validate the user exists
     if (_userRepository.GetUserByEmail(query.Email) is not User user)
     {

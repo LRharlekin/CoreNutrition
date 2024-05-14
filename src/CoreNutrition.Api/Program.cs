@@ -3,19 +3,21 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 using CoreNutrition.Api.Common.Errors;
+using CoreNutrition.Api.Common.Mapping;
 using CoreNutrition.Application;
 using CoreNutrition.Infrastructure;
+using CoreNutrition.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 {
   builder.Services
+    .AddFromPresentation()
     .AddFromApplication()
     .AddFromInfrastructure(builder.Configuration);
+
   // builder.Services.AddAuthentication();
   // builder.Services.AddAuthorization();
-  builder.Services.AddControllers();
-  builder.Services.AddSingleton<ProblemDetailsFactory, CoreNutritionProblemDetailsFactory>();
 
   builder.Services.AddEndpointsApiExplorer();
   builder.Services.AddSwaggerGen();

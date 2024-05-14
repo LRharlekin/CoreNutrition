@@ -1,6 +1,9 @@
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using System.Reflection;
+using FluentValidation;
+
+using CoreNutrition.Application.Common.Behaviors;
 
 
 namespace CoreNutrition.Application;
@@ -9,10 +12,11 @@ public static class DependencyInjection
 {
   public static IServiceCollection AddFromApplication(this IServiceCollection services)
   {
-    // services.AddMediatR(typeof(DependencyInjection).Assembly);
-    // services.AddMediatR(config => config.AsScoped(), new Assembly[] { typeof(DependencyInjection).Assembly });
     services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
-    // services.AddMediatR(typeof(DependencyInjection).Assembly);
+    services.AddScoped(
+      typeof(IPipelineBehavior<,>),
+      typeof(ValidationBehavior<,>));
+    services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
     return services;
   }

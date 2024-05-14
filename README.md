@@ -163,7 +163,11 @@ Lorem ipsum
 
 ### Contracts Project (classlib)
 
-The Contracts project is only referenced by the Api project, and its purpose is "documentation as code". It models the shape of Rest API requests and responses. These objects are then referenced inside the Controllers in the Api, which keeps the controller code concise and human-readable.
+The Contracts project is only referenced by the Api project, and its purpose is "documentation as code".
+It models the shape of Rest API requests and responses which are referenced by the API Controllers...
+
+- ...to map incoming requests to their corresponding commands and queries in the Application Layer, as well as...
+- ...to map returned results back to the appropriate response objects.
 
 ### Api Project (webapi)
 
@@ -181,6 +185,12 @@ The Contracts project is only referenced by the Api project, and its purpose is 
 - use repositories only for commands >> data manipulation on the aggregate
 - queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
 - performance optimization on query side / query caching / ISP
+
+Request lifecycle:
+Controllers, routes > Contracts (request model) > Mapsterr to map requests to commands/queries > MediatR to call CommandHandlers/QueryHandlers >
+
+Reqsponse lifecycle:
+HTTP response < Contracxts (response) model < Mapster to map result to response < MediatR...???
 
 # Global Error Handling
 
