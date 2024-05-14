@@ -269,6 +269,8 @@ FluentAssertions
 
 Testing Project structure
 
+Testing Validation Pipeline behavior: 8/23:00
+
 # Fullstack Project
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-v.4-green)
