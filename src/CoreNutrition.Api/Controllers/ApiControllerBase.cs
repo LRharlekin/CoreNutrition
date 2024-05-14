@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using ErrorOr;
 
 using CoreNutrition.Api.Common.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CoreNutrition.Api.Controllers;
 
 [ApiController]
+[Authorize]
 public class ApiControllerBase : ControllerBase
 {
   protected IActionResult ResolveProblems(List<Error> errors)

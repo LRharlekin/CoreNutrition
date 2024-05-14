@@ -11,8 +11,7 @@ using CoreNutrition.Domain.Common.Interfaces.Services;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 using CoreNutrition.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.DataProtection;
+// using Microsoft.AspNetCore.DataProtection;
 
 namespace CoreNutrition.Infrastructure;
 
