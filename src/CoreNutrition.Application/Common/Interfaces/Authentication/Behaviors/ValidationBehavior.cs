@@ -1,33 +1,44 @@
-using MediatR;
 using ErrorOr;
-
-using CoreNutrition.Application.Authentication.Commands.Register;
-using CoreNutrition.Application.Authentication.Common;
+using FluentValidation;
+using MediatR;
 
 namespace CoreNutrition.Application.Common.Behaviors;
-/* 
-public class ValidateRegisterCommandBehavior<TRequest, TResponse> 
-  : IPipelineBehavior<TRequest, TResponse> // TRequest = mediator request we want to send through the pipeline, TResponse = the response we want to get back
-  where TRequest : IRequest<TResponse>
-*/
-public class ValidateRegisterCommandBehavior : IPipelineBehavior<RegisterCommand, ErrorOr<AuthenticationResult>>
-    where RegisterCommand : IRequest<TResponse>
+
+public class ValidationBehavior<TRequest, TResponse> :
+    IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse> // requests come from mediator
+        where TResponse : IErrorOr // result object with success and/or error(s)
 {
-  public async Task<ErrorOr<AuthenticationResult>> Handle(
-    RegisterCommand request, // investigate, log, validate, etc. before calling the handler delegate
-    RequestHandlerDelegate<ErrorOr<AuthenticationResult>> next, // will eventually invoke the command handler
-    CancellationToken cancellationToken
-  )
+  private readonly IValidator<TRequest>? _validator; // 0 or 1 validator, might need to change to accept multiple?
+
+  public ValidationBehavior(IValidator<TRequest>? validator = null) // 0 or 1 validator, might need to change to accept multiple?
   {
-    // runs before the handler
+    _validator = validator;
+  }
 
+  public async Task<TResponse> Handle(
+      TRequest request,
+      RequestHandlerDelegate<TResponse> next, // 0 or 1 validator, if multiple: iterate through multiple here before calling delegate
+      CancellationToken cancellationToken)
+  {
+    if (_validator is null)
+    {
+      return await next();
+    }
 
+    var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
-    // pass RegisterCommand to RegisterCommandHandler
-    var result = await next();
+    if (validationResult.IsValid)
+    {
+      return await next();
+    }
 
-    // runs after the pipeline handler before return result
+    var errors = validationResult.Errors
+        .ConvertAll(validationFailure => Error.Validation(
+            validationFailure.PropertyName,
+            validationFailure.ErrorMessage));
 
-    return result;
+    // dynamic cast at runtime to TResponse, which is ErrorOr<T>
+    return (dynamic)errors;
   }
 }
