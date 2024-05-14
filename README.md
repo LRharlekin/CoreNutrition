@@ -186,6 +186,12 @@ It models the shape of Rest API requests and responses which are referenced by t
 - queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
 - performance optimization on query side / query caching / ISP
 
+Request lifecycle:
+Controllers, routes > Contracts (request model) > Mapsterr to map requests to commands/queries > MediatR to call CommandHandlers/QueryHandlers >
+
+Reqsponse lifecycle:
+HTTP response < Contracxts (response) model < Mapster to map result to response < MediatR...???
+
 # Global Error Handling
 
 ## Objectives
