@@ -45,9 +45,10 @@ public class RegisterCommandHandler :
 
     _userRepository.Add(user);
 
-    // 3. create JWT token 
+    // 3. generate JWT token 
     var token = _jwtTokenGenerator.GenerateToken(user);
 
+    // 4. Return token
     return new AuthenticationResult(
       user,
       token);

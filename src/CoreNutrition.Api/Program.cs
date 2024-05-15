@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Filters;
 
 using CoreNutrition.Api.Common.Errors;
 using CoreNutrition.Api.Common.Mapping;
@@ -20,7 +21,20 @@ var builder = WebApplication.CreateBuilder(args);
   // builder.Services.AddAuthorization();
 
   builder.Services.AddEndpointsApiExplorer();
-  builder.Services.AddSwaggerGen();
+  // builder.Services.AddSwaggerGen();
+  builder.Services.AddSwaggerGen(options =>
+  // configs for enable Authorization: header when using SwaggerUI
+    {
+      options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+      {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+      });
+
+      options.OperationFilter<SecurityRequirementsOperationFilter>();
+    }
+  );
 
 }
 
