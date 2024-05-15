@@ -20,7 +20,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   public bool IsPublished { get; private set; }
   public CategoryId CategoryId { get; private set; }
   public AverageRating AverageRating { get; private set; }
-  // public ProductLineInfo ProductLineInfo { get; private set; }
+  public ProductLineInfo ProductLineInfo { get; private set; }
   public NutritionFacts NutritionFacts { get; private set; }
 
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
@@ -37,7 +37,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     bool isPublished,
     CategoryId categoryId,
     AverageRating averageRating,
-    // ProductLineInfo productLineInfo,
+    ProductLineInfo productLineInfo,
     NutritionFacts nutritionFacts,
     DateTime createdDateTime,
     List<ProductId>? productIds,
@@ -50,7 +50,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     IsPublished = isPublished;
     CategoryId = categoryId;
     AverageRating = averageRating;
-    // ProductLineInfo = productLineInfo;
+    ProductLineInfo = productLineInfo;
     NutritionFacts = nutritionFacts;
     CreatedDateTime = createdDateTime;
     UpdatedDateTime = createdDateTime;
@@ -65,7 +65,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     bool isPublished,
     CategoryId categoryId,
     AverageRating averageRating,
-    // ProductLineInfo productLineInfo,
+    ProductLineInfo productLineInfo,
     NutritionFacts nutritionFacts,
     List<ProductId>? productIds = null,
     List<ProductLineSizeId>? productLineSizeIds = null,
@@ -79,7 +79,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
       isPublished,
       categoryId,
       averageRating,
-      // productLineInfo,
+      productLineInfo,
       nutritionFacts,
       DateTime.UtcNow,
       productIds ?? new List<ProductId>(),
