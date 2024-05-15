@@ -52,6 +52,8 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
 # DB Schema / ERD
 
 - ERD diagram
+  ![Entity Relationship Diagram for the relational database of an ecommerce store](./docs/ERD.jpg)
+
 - Eraser comments
 
 # Clean Architecture
@@ -67,6 +69,8 @@ Then, in an _"eventual consistent"_ manner, the other aggregates are updated via
 # E-Commerce Project Architecture
 
 ## Domain Layer
+
+- Persistence Ignorance
 
 ### Rationale for strongly typed IDs as value objects
 
