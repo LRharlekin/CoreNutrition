@@ -12,6 +12,6 @@ public static partial class Errors
 
         public static Error NotFound => Error.NotFound(
             code: "ProductLineSize.NotFound",
-            description: "Product Line with given ID does not exist");
+            description: "Product Line Size with given ID does not exist");
     }
 }

@@ -7,7 +7,7 @@ namespace CoreNutrition.Domain.CategoryAggregate;
 
 public sealed class Category : AggregateRoot<CategoryId, Guid>
 {
-  private readonly List<ProductLineId> _productLineIds = new();
+  private List<ProductLineId> _productLineIds = new();
 
   public string Name { get; private set; }
   public string Description { get; private set; }
@@ -22,13 +22,16 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
     CategoryId categoryId,
     string name,
     string description,
-    string categoryImageUrl
+    string categoryImageUrl,
+    DateTime createdDateTime
     )
     : base(categoryId)
   {
     Name = name;
     Description = description;
     CategoryImageUrl = categoryImageUrl;
+    CreatedDateTime = createdDateTime;
+    UpdatedDateTime = createdDateTime;
   }
 
   public static Category Create(
@@ -41,7 +44,8 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
       CategoryId.CreateUnique(),
       name,
       description,
-      categoryImageUrl);
+      categoryImageUrl,
+      DateTime.UtcNow);
 
     category.AddDomainEvent(new CategoryCreated(category));
 
@@ -52,6 +56,7 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
   public void AddProductLineId(ProductLineId productLineId)
   {
     _productLineIds.Add(productLineId);
+    // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
   }
 
   #pragma warning disable CS8618
