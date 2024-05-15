@@ -27,8 +27,7 @@ public sealed class ProductLineId : AggregateRootId<Guid>
   {
     if (!Guid.TryParse(value, out var guid))
     {
-      // TODO
-      // return Errors.ProductLine.InvalidProductLineId;
+      return Errors.ProductLine.InvalidProductLineId;
     }
 
     return new ProductLineId(guid);

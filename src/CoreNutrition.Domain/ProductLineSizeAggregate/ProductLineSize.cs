@@ -1,4 +1,5 @@
 using CoreNutrition.Domain.Common.Models;
+using CoreNutrition.Domain.Common.ValueObjects;
 using CoreNutrition.Domain.ProductLineSizeAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineSizeAggregate.Events;
 
