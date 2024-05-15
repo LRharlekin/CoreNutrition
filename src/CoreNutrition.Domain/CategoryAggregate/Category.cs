@@ -48,8 +48,8 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
   }
 
   // TODO: invoked by ProductLineCreated, ProductLineUpdated, ProductLineDeleted
-  // public void AddProductLineId(ProductLineId productLineId)
-  // {
-  //   _productLineIds.Add(productLineId);
-  // }
+  public void AddProductLineId(ProductLineId productLineId)
+  {
+    _productLineIds.Add(productLineId);
+  }
 }
