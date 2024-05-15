@@ -18,16 +18,10 @@ class ProductLine
   "isPublished": true,
   "categoryId": "00000000-0000-0000-0000-000000000000",
   "averageRating": 4.2,
-  "productIds": [
-    "00000000-0000-0000-0000-000000000000",
-    "00000000-0000-0000-0000-000000000000",
-    "00000000-0000-0000-0000-000000000000",
-    "00000000-0000-0000-0000-000000000000"
-  ],
   "descriptionShort": "One of our purest protein powders",
   "descriptionLong": "Experience supreme quality with Impact Whey Isolate, a protein powder renowned for being one of the purest around.
   With an extra round of meticulous filtering, Impact Whey Isolate takes protein purity to a whole new level. That means a higher protein content, less sugar, and zero fat.*. It’s as pure as it gets. It’s your go-to everyday protein shake packed with 23g of protein per serving*, delivering a fast protein boost, when you need it most.",
-  "productBenefits": [
+  "productLineBenefits": [
     "90% protein content per serving",
     "Low in fat and carbohydrates",
     "Contributes to the growth and maintenance of muscle mass"
@@ -47,6 +41,24 @@ class ProductLine
     "SaltPer100Grams": 0.46
   },
   "createdDateTime": "2024-01-01T00:00:00.0000000Z",
-  "updatedDateTime": "2024-01-01T00:00:00.0000000Z"
+  "updatedDateTime": "2024-01-01T00:00:00.0000000Z",
+  "productIds": [
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "productLineFlavourIds": [
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "productLineSizeIds": [
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000",
+    "00000000-0000-0000-0000-000000000000"
+  ],
 }
 ```

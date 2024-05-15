@@ -15,7 +15,7 @@ class ProductLineSize
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "productLineId": "00000000-0000-0000-0000-000000000000",
-  "size": {
+  "sizeId": {
     "id": "00000000-0000-0000-0000-000000000000",
     "name": "1 Bar (60g)",
     "unitWeightInGrams": 60,
@@ -25,8 +25,7 @@ class ProductLineSize
   },
   "recommendedRetailPrice": {
     "amount": 2.99,
-    "currencyCode": "EUR",
-    "currency": "Euro"
+    "currencyCode": "EUR"
   },
   "createdDateTime": "2024-01-01T00:00:00.0000000Z",
   "updatedDateTime": "2024-01-01T00:00:00.0000000Z"
