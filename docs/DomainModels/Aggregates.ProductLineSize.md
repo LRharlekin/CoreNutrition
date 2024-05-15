@@ -25,8 +25,7 @@ class ProductLineSize
   },
   "recommendedRetailPrice": {
     "amount": 2.99,
-    "currencyCode": "EUR",
-    "currency": "Euro"
+    "currencyCode": "EUR"
   },
   "createdDateTime": "2024-01-01T00:00:00.0000000Z",
   "updatedDateTime": "2024-01-01T00:00:00.0000000Z"

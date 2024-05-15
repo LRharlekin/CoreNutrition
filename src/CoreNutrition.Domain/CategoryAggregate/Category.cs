@@ -36,6 +36,7 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
     string description,
     string categoryImageUrl)
   {
+    // TODO: enforce invariants
     var category = new Category(
       CategoryId.CreateUnique(),
       name,
@@ -52,4 +53,10 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
   {
     _productLineIds.Add(productLineId);
   }
+
+  #pragma warning disable CS8618
+  private Category()
+  {
+  }
+  #pragma warning disable CS8618
 }
