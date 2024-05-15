@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using ErrorOr;
 using MediatR;
@@ -19,6 +20,7 @@ namespace CoreNutrition.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
+[AllowAnonymous]
 public class AuthenticationController : ApiControllerBase
 // ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
 {
