@@ -12,7 +12,6 @@ namespace CoreNutrition.Api.Controllers;
 public class ProductsController : ApiControllerBase
 {
   [HttpGet]
-  [Authorize]
   public IActionResult ListProducts()
   {
     return Ok(Array.Empty<string>());

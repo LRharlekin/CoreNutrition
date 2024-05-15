@@ -2,14 +2,14 @@ using CoreNutrition.Domain.Common.Interfaces;
 
 namespace CoreNutrition.Domain.Common.Models;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>> //, IHasDomainEvent
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
   where TId : ValueObject
 {
-  // private readonly List<IDomainEvent> _domainEvents = new();
+  private readonly List<IDomainEvent> _domainEvents = new();
 
   public TId Id { get; protected set; }
 
-  // public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+  public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
   protected Entity(TId id)
   {
@@ -41,15 +41,15 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> //, IHasDomainEvent
     return Id.GetHashCode();
   }
 
-  // public void AddDomainEvent(IDomainEvent domainEvent)
-  // {
-  //   _domainEvents.Add(domainEvent);
-  // }
+  public void AddDomainEvent(IDomainEvent domainEvent)
+  {
+    _domainEvents.Add(domainEvent);
+  }
 
-  // public void ClearDomainEvents()
-  // {
-  // _domainEvents.Clear();
-  // }
+  public void ClearDomainEvents()
+  {
+    _domainEvents.Clear();
+  }
 
 #pragma warning disable CS8618
   protected Entity()
