@@ -6,6 +6,7 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
 
 **Table of Contents**
 
+- [Documentation as Code](#documentation-as-code)
 - [DB Schema / ERD](#db-schema--erd)
 - [Clean Architecture](#clean-architecture)
 - [Domain-Driven Design](#domain-driven-design)
@@ -48,6 +49,23 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Requirements](#requirements)
   - [Getting Started](#getting-started)
   - [Testing](#testing-1)
+
+# Documentation as Code
+
+Self-documenting
+
+- [ApiRoutes.cs](./src/CoreNutrition.Api/Contracts/ApiRoutes.cs)
+- [Models for HTTP Request and HTTP Response objects](./src/CoreNutrition.Contracts)
+- DDD Domain Model
+  - The Core/Domain project gives an [overview](./src/CoreNutrition.Domain/) of how the Aggregate Root Entities are defined and model the business domain
+  - Within each Aggregate directory, the model for the aggregate root entity itself, as well as folders for `/Entities`, `ValueObjects`, `Events` that are contained within that aggregate give further orientation of how the business case has been modeled into the application's architecture
+  - _Example:_ A quick look at the [ProductLineAggregate folder](./src/CoreNutrition.Domain/ProductLineAggregate/) reveals that...
+    - ...it contains several value objects that are specific to this aggregate only (e.g. [`NutritionFacts` and `ProductLineInfo`](./src/CoreNutrition.Domain/ProductLineAggregate/ValueObjects/))
+    - ...manipulation of the Aggregate Root Entity may raise [several Domain Events](./src/CoreNutrition.Domain/ProductLineAggregate/Events/)
+    - ...and a closer look at the code that models the root entity (--> [ProductLine.cs](./src/CoreNutrition.Domain/ProductLineAggregate/ProductLine.cs)) indicates that
+      - ...a Product Line contains several more value objects that are commonly shared by other aggregates, such as `CurrencyAmount` and `AverageRating`.
+      - and that a Product Line has relations with several other aggregates, such as `Category`, `ProductLineSize`, `ProductLineFlavour`, and `Product`.
+- [Domain Errors](./src/CoreNutrition.Domain/Common/DomainErrors/)
 
 # DB Schema / ERD
 
