@@ -30,15 +30,9 @@ internal sealed class PasswordHasher : IPasswordHasher, IPasswordHashChecker, ID
 
   public bool HashesMatch(string passwordHash, string providedPassword)
   {
-    if (passwordHash is null)
-    {
-      throw new ArgumentNullException(nameof(passwordHash));
-    }
+    ArgumentNullException.ThrowIfNull(passwordHash);
 
-    if (providedPassword is null)
-    {
-      throw new ArgumentNullException(nameof(providedPassword));
-    }
+    ArgumentNullException.ThrowIfNull(providedPassword);
 
     byte[] decodedHashedPassword = Convert.FromBase64String(passwordHash);
 

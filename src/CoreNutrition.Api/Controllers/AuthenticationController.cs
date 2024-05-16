@@ -22,7 +22,6 @@ namespace CoreNutrition.Api.Controllers;
 // map returned object to response contract
 
 public sealed class AuthenticationController : ApiControllerBase
-// ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
 {
   private readonly ISender _mediator;
   private readonly IMapper _mapper;
@@ -67,17 +66,4 @@ public sealed class AuthenticationController : ApiControllerBase
       errors => ResolveProblems(errors)
       );
   }
-
-  // private void CreatePasswordHash(
-  //   string password,
-  //   out byte[] passwordHash,
-  //   out byte[] passwordSalt
-  // )
-  // {
-  //   using (var hmac = new HMACSHA512())
-  //   {
-  //     passwordSalt = hmac.Key;
-  //     passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-  //   }
-  // }
 }
