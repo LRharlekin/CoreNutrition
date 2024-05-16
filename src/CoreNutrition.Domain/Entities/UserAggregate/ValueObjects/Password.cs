@@ -8,7 +8,7 @@ using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.Common.DomainErrors;
 
 
-namespace EventReminder.Domain.Common.ValueObjects;
+namespace CoreNutrition.Domain.UserAggregate.ValueObjects;
 
 public sealed class Password : ValueObject
 {
@@ -27,31 +27,31 @@ public sealed class Password : ValueObject
 
   public static implicit operator string(Password password) => password?.Value ?? string.Empty;
 
-  public static ErrorOr<Password> CreateNew(string passwordString)
+  public static ErrorOr<Password> CreateNew(string password)
   {
     // perform validation on all conditions before returning an ErrorOr object that contains all errors than apply
     List<Error> errors = [];
-    if (string.IsNullOrWhiteSpace(passwordString))
+    if (string.IsNullOrWhiteSpace(password))
     {
       errors.Add(Errors.Password.NullOrEmpty);
     }
-    if (passwordString.Length < MinPasswordLength)
+    if (password.Length < MinPasswordLength)
     {
       errors.Add(Errors.Password.TooShort);
     }
-    if (!passwordString.Any(IsLower))
+    if (!password.Any(IsLower))
     {
       errors.Add(Errors.Password.MissingLowercaseLetter);
     }
-    if (!passwordString.Any(IsUpper))
+    if (!password.Any(IsUpper))
     {
       errors.Add(Errors.Password.MissingUppercaseLetter);
     }
-    if (!passwordString.Any(IsDigit))
+    if (!password.Any(IsDigit))
     {
       errors.Add(Errors.Password.MissingDigit);
     }
-    if (!passwordString.Any(IsNonAlphaNumeric))
+    if (!password.Any(IsNonAlphaNumeric))
     {
       errors.Add(Errors.Password.MissingNonAlphaNumeric);
     }
@@ -60,7 +60,7 @@ public sealed class Password : ValueObject
       return errors;
     }
 
-    return new Password(passwordString);
+    return new Password(password);
   }
 
   public override IEnumerable<object> GetEqualityComponents()

@@ -8,7 +8,7 @@ using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.Common.DomainErrors;
 
 
-namespace EventReminder.Domain.Common.ValueObjects;
+namespace CoreNutrition.Domain.UserAggregate.ValueObjects;
 
 public sealed class Email : ValueObject
 {
@@ -28,22 +28,22 @@ public sealed class Email : ValueObject
 
   public static implicit operator string(Email email) => email.Value;
 
-  public static ErrorOr<Email> CreateNew(string emailString)
+  public static ErrorOr<Email> CreateNew(string email)
   {
-    if (string.IsNullOrWhiteSpace(emailString))
+    if (string.IsNullOrWhiteSpace(email))
     {
       return Errors.Email.NullOrEmpty;
     }
-    if (emailString.Length > MaxLength)
+    if (email.Length > MaxLength)
     {
       return Errors.Email.LongerThanAllowed;
     }
-    if (!EmailFormatRegex.Value.IsMatch(emailString))
+    if (!EmailFormatRegex.Value.IsMatch(email))
     {
       return Errors.Email.InvalidFormat;
     }
 
-    return new Email(emailString);
+    return new Email(email);
   }
   public override IEnumerable<object> GetEqualityComponents()
   {
