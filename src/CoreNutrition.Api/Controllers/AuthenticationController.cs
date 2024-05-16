@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
 
 using ErrorOr;
 using MediatR;
@@ -33,9 +34,16 @@ public class AuthenticationController : ApiControllerBase
     _mapper = mapper;
   }
 
+  // public static User user = new User();
+
   [HttpPost("register")]
   public async Task<IActionResult> Register(RegisterRequest request)
   {
+    // CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+    // request.PasswordHash = passwordHash;
+    // request.PasswordSalt = passwordSalt;
+    // request.Password = null;
 
     var command = _mapper.Map<RegisterCommand>(request);
 
@@ -65,5 +73,18 @@ public class AuthenticationController : ApiControllerBase
       authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
       errors => ResolveProblems(errors)
       );
+  }
+
+  private void CreatePasswordHash(
+    string password,
+    out byte[] passwordHash,
+    out byte[] passwordSalt
+  )
+  {
+    using (var hmac = new HMACSHA512())
+    {
+      passwordSalt = hmac.Key;
+      passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+    }
   }
 }

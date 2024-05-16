@@ -43,16 +43,16 @@ public sealed class NutritionFacts : ValueObject
     decimal saltPer100Grams)
   {
     // Validate macros
-    if (!IsValidMacro(caloriesPer100Grams) ||
-      !IsValidMacro(fatPer100Grams) ||
+    if (!IsValidMacro(fatPer100Grams) ||
       !IsValidMacro(carbohydratesPer100Grams) ||
-      !IsValidMacro(proteinPer100Grams))
-    return Errors.ProductLine.InvalidNutritionFacts;
-  
+      !IsValidMacro(proteinPer100Grams) ||
+      !IsValidMacro(saltPer100Grams))
+      return Errors.ProductLine.InvalidNutritionFacts;
+
     // Validate derived nutrients
     if (!IsValidOfWhichMacro(saturatedFatPer100Grams, fatPer100Grams) ||
       !IsValidOfWhichMacro(sugarPer100Grams, carbohydratesPer100Grams))
-    return Errors.ProductLine.InvalidNutritionFacts;
+      return Errors.ProductLine.InvalidNutritionFacts;
 
     return new NutritionFacts(
       caloriesPer100Grams,
