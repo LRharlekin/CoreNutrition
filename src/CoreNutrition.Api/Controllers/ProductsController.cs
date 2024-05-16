@@ -5,11 +5,13 @@ using ErrorOr;
 using MediatR;
 using MapsterMapper;
 
+using CoreNutrition.Api.Infrastructure;
+using CoreNutrition.Api.Contracts;
+
 namespace CoreNutrition.Api.Controllers;
 
-[Route("[controller]")]
 [AllowAnonymous]
-public class ProductsController : ApiControllerBase
+public sealed class ProductsController : ApiControllerBase
 {
   [HttpGet]
   public IActionResult ListProducts()
