@@ -7,6 +7,8 @@ public class User
   public string LastName { get; } = null!;
   public string Email { get; } = null!;
   public string Password { get; } = null!;
+  // public byte[] PasswordHash { get; set; } = null!;
+  // public byte[] PasswordSalt { get; set; } = null!;
 
   public User(
     string firstName,

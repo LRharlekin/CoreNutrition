@@ -11,7 +11,7 @@ using CoreNutrition.Domain.Common.Interfaces.Services;
 namespace CoreNutrition.Infrastructure.Authentication
 
 {
-  public class JwtTokenGenerator : IJwtTokenGenerator
+  public sealed class JwtTokenGenerator : IJwtTokenGenerator
   {
     private readonly JwtSettings _jwtSettings;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -34,10 +34,17 @@ namespace CoreNutrition.Infrastructure.Authentication
       var claims = new[]
       {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        // new Claim(JwtRegisteredClaimNames.Email, user.Email),
         new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
         new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+        // claim for role "Admin"
+        // new Claim(ClaimTypes.Role, "Admin"),
+
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       };
+
+      Console.WriteLine($"issuer {_jwtSettings.Issuer}");
+      Console.WriteLine($"audience {_jwtSettings.Audience}");
 
       var token = new JwtSecurityToken(
         expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
