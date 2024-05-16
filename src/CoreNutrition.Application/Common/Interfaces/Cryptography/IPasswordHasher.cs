@@ -1,5 +1,8 @@
-public interface PasswordHasher
+using CoreNutrition.Domain.UserAggregate.ValueObjects;
+
+namespace CoreNutrition.Application.Common.Interfaces.Cryptography;
+
+public interface IPasswordHasher
 {
-  string HashPassword(string password);
-  bool VerifyHashedPassword(string hashedPassword, string providedPassword);
+  string HashPassword(Password password);
 }
