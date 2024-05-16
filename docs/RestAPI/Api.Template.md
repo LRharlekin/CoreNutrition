@@ -3,17 +3,21 @@
 **Table of Contents**
 
 - [Auth API Endpoints Documentation](#auth-api-endpoints-documentation)
-  - [Register](#register)
-    - [Register Request](#register-request)
-    - [Register Response](#register-response)
+  - [Write Models / Commands](#write-models--commands)
+    - [Register](#register)
+      - [Register Request](#register-request)
+      - [Register Response](#register-response)
+  - [Read Models / Queries](#read-models--queries)
 
-## Register
+## Write Models / Commands
+
+### Register
 
 ```js
 POST "/auth/register";
 ```
 
-### Register Request
+#### Register Request
 
 ```json
 {
@@ -24,7 +28,7 @@ POST "/auth/register";
 }
 ```
 
-### Register Response
+#### Register Response
 
 ```js
 200 OK
@@ -39,3 +43,5 @@ POST "/auth/register";
   "token": "aBcDeF...1234567890"
 }
 ```
+
+## Read Models / Queries

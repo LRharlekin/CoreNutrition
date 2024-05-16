@@ -34,7 +34,7 @@ namespace CoreNutrition.Infrastructure.Authentication
       var claims = new[]
       {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        // new Claim(JwtRegisteredClaimNames.Email, user.Email),
         new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
         new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
         // claim for role "Admin"
@@ -42,6 +42,9 @@ namespace CoreNutrition.Infrastructure.Authentication
 
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       };
+
+      Console.WriteLine($"issuer {_jwtSettings.Issuer}");
+      Console.WriteLine($"audience {_jwtSettings.Audience}");
 
       var token = new JwtSecurityToken(
         expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
