@@ -6,7 +6,7 @@ using ErrorOr;
 
 using CoreNutrition.Api.Common.Http;
 
-namespace CoreNutrition.Api.Controllers;
+namespace CoreNutrition.Api.Infrastructure;
 
 [ApiController]
 [Authorize]

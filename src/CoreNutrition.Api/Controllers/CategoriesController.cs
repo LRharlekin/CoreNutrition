@@ -5,12 +5,13 @@ using ErrorOr;
 using MediatR;
 using MapsterMapper;
 
+using CoreNutrition.Api.Infrastructure;
+using CoreNutrition.Api.Contracts;
 using CoreNutrition.Contracts.Category;
 
 namespace CoreNutrition.Api.Controllers;
 
-[Route("[controller]")]
-public class CategoriesController : ApiControllerBase
+public sealed class CategoriesController : ApiControllerBase
 {
   [HttpPost]
   // [Authorize(Roles = "admin")]
