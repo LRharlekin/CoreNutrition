@@ -23,6 +23,8 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
       - [The `AggregateRootId` and `EntityId` base classes](#the-aggregaterootid-and-entityid-base-classes)
       - [The `IDomainEvent` and `IHasDomainEvent` interfaces](#the-idomainevent-and-ihasdomainevent-interfaces)
   - [Application Layer](#application-layer)
+    - [Authorization 🛂](#authorization-)
+      - [Authorization Implementation](#authorization-implementation)
   - [Presentation Layer](#presentation-layer)
     - [Contracts Project (classlib)](#contracts-project-classlib)
     - [Api Project (webapi)](#api-project-webapi)
@@ -179,6 +181,30 @@ In the `AggregateRootId<TId>` class, `base(value)` is used in the constructor to
 ## Application Layer
 
 Lorem ipsum
+
+### Authorization 🛂
+
+This project supports role based authorization. The decision to apply specific authorization requirements on the commands and queries in the Application Layer (instead of on the controllers and endpoints in the Presentation Layer) aligns with Clean Architecture principles:
+
+- The authorization logic is key to the application's use cases and business logic and thereby the responsibility of the Application Layer.
+- It should be kept independent of the Presentation Layer as well as any infrastructure-specific concerns (e.g. like validating the [current user in an HTTP context](./src/CoreNutrition.Infrastructure/Security/CurrentUserProvider/)).
+
+This design choice also has the following benefits:
+
+1. **Separation of Concerns:** Controllers are responsible for handling the HTTP requests and responses, while the Application Layer is responsible for the business logic and authorization requirements.
+1. **Reusability:** The authorization requirements defined on the commands and queries can be reused across multiple controllers or even other parts of the application. This promotes code reuse and consistency in the application's security model.
+1. **Testability:** With the authorization logic encapsulated in the Application Layer, it becomes easier to write unit tests for the commands and queries without having to worry about the web-specific aspects of the application.
+1. **Flexibility:** If authorization requirements change, only attributes on commands and queries need to be updated, without having to modify the controller code. This makes the application more maintainable and adaptable to changing security requirements.
+
+In contrast, if the authorization logic were applied directly on the controller endpoints, the authorization logic would be tightly coupled to the Presentation Layer, making the application harder to test and maintain in the long run.
+
+#### Authorization Implementation
+
+Commands and Queries are decorated with the `[Authorize]` attribute and implement the `IAuthorizeableAction` interface.
+
+This `IAuthorizeableAction` interface [see code]() hooks the incoming request into an additional `AuthorizationBehavior` step in the [request pipeline](./src/CoreNutrition.Application/Common/Behaviors/) (implemented with MediatR).
+
+The `AuthorizationService` ([see code](./src/CoreNutrition.Infrastructure/Security/AuthorizationService.cs)) subsequently validates the current user's token claims against any required roles and permissions.
 
 ## Presentation Layer
 

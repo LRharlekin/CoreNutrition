@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
-using CoreNutrition.Infrastructure.Authentication;
+using CoreNutrition.Infrastructure.Security.TokenGenerator;
 using CoreNutrition.Application.Common.Interfaces.Cryptography;
 using CoreNutrition.Infrastructure.Cryptography;
 using CoreNutrition.Infrastructure.Services;
@@ -14,7 +14,6 @@ using CoreNutrition.Domain.Common.Interfaces.Services;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 using CoreNutrition.Infrastructure.Persistence;
 using Microsoft.IdentityModel.Tokens;
-// using Microsoft.AspNetCore.DataProtection;
 
 namespace CoreNutrition.Infrastructure;
 
@@ -22,13 +21,11 @@ public static class DependencyInjection
 {
   public static IServiceCollection AddFromInfrastructure(
     this IServiceCollection services,
-    IConfiguration configuration
+    ConfigurationManager configuration
   )
   {
-
     services.AddAuth(configuration);
     services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
     services.AddScoped<IUserRepository, UserRepository>();
 
     return services;
@@ -36,18 +33,13 @@ public static class DependencyInjection
 
   public static IServiceCollection AddAuth(
     this IServiceCollection services,
-    IConfiguration configuration
+    ConfigurationManager configuration
   )
   {
-    var jwtSettings = new JwtSettings();
+    var jwtSettings = new JwtSettings(); // class
     configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
     services.AddSingleton(Options.Create(jwtSettings));
-
-
-
-
-    // services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
     services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
     // .AddAuthentication() --> returns auth builder, which internally maps between AuthenticationScheme and corresponding authentication handler
@@ -56,17 +48,15 @@ public static class DependencyInjection
       .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
       {
         ValidateIssuer = true,
-        // ValidateAudience = false,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings.Issuer,
-        // ValidIssuer = configuration["JwtSettings:Issuer"],
         ValidAudience = jwtSettings.Audience,
-        // ValidAudience = configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-          Encoding.UTF8.GetBytes(jwtSettings.Secret)
-        // Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"])
+        Encoding.UTF8.GetBytes(jwtSettings.Secret)
+        // ValidIssuer = configuration["JwtSettings:Issuer"],
+        // ValidAudience = configuration["JwtSettings:Audience"],
         )
       });
 

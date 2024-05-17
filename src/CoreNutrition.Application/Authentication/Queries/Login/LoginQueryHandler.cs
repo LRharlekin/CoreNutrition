@@ -75,7 +75,7 @@ internal sealed class LoginQueryHandler :
       return Errors.Authentication.InvalidCredentials;
     }
 
-    // 4. genearte and return JWT token 
+    // 4. generate and return JWT token 
     var token = _jwtTokenGenerator.GenerateToken(user);
 
     return new AuthenticationResult(
