@@ -5,6 +5,8 @@ using CoreNutrition.Application.Authentication.Queries.Login;
 using CoreNutrition.Application.Authentication.Common;
 using CoreNutrition.Contracts.Authentication;
 
+// disambiguation
+
 namespace CoreNutrition.Api.Common.Mapping;
 
 public class AuthenticationMappingConfig : IRegister
@@ -15,6 +17,7 @@ public class AuthenticationMappingConfig : IRegister
     config.NewConfig<LoginRequest, LoginQuery>();
     config.NewConfig<AuthenticationResult, AuthenticationResponse>()
       .Map(dest => dest.Token, (src) => src.Token)
-      .Map(dest => dest, (src) => src.User);
+      .Map(dest => dest.Id, (src) => src.User.Id.Value.ToString())
+      .Map(dest => dest, src => src.User);
   }
 }

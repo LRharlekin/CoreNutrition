@@ -6,6 +6,7 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
 
 **Table of Contents**
 
+- [Self-Documenting Code](#self-documenting-code)
 - [DB Schema / ERD](#db-schema--erd)
 - [Clean Architecture](#clean-architecture)
 - [Domain-Driven Design](#domain-driven-design)
@@ -48,6 +49,24 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Requirements](#requirements)
   - [Getting Started](#getting-started)
   - [Testing](#testing-1)
+
+# Self-Documenting Code
+
+More detailed sections on each of the following topics can be found further down the page of this README, but if you want to jump straight into reviewing the code, here are some pointers:
+
+- **DDD Domain Model**
+  - The `Entities` folder in the domain layer gives an [overview](./src/CoreNutrition.Domain/Entities/) of how the Aggregate Root Entities are defining and modeling the business domain
+  - Within each Aggregate directory, the model for the aggregate root entity itself, as well as folders for `/Entities`, `ValueObjects`, `Events` that are contained within that aggregate give further orientation of how the business case has been modeled into the application's architecture
+  - _Example:_ A quick look at the [ProductLineAggregate folder](./src/CoreNutrition.Domain/ProductLineAggregate/) reveals that...
+    - ...it contains several value objects that are specific to this aggregate only (e.g. [`NutritionFacts` and `ProductLineInfo`](./src/CoreNutrition.Domain/ProductLineAggregate/ValueObjects/))
+    - ...manipulation of the Aggregate Root Entity may raise [several Domain Events](./src/CoreNutrition.Domain/ProductLineAggregate/Events/)
+    - ...and a closer look at the code that models the root entity (--> [ProductLine.cs](./src/CoreNutrition.Domain/ProductLineAggregate/ProductLine.cs)) indicates that
+      - ...a Product Line contains several more value objects that are commonly shared by other aggregates, such as `CurrencyAmount` and `AverageRating`.
+      - and that a Product Line has relations with several other aggregates, such as `Category`, `ProductLineSize`, `ProductLineFlavour`, and `Product`.
+- The [Domain Errors](./src/CoreNutrition.Domain/Common/DomainErrors/) folder and the [ErrorsController] give a good overview of how **Global Exception/Error Handling** was implemented.
+- A thorough overview of the implemented **Rest API** can be gained by looking at the contracts defined in
+  - [ApiRoutes.cs](./src/CoreNutrition.Api/Contracts/ApiRoutes.cs)
+  - The `CoreNutrition.Contracts` project, which is a class library containing [Models for all HTTP Request and HTTP Response objects](./src/CoreNutrition.Contracts)
 
 # DB Schema / ERD
 
