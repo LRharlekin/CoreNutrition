@@ -5,8 +5,6 @@ using CoreNutrition.Application.Authentication.Queries.Login;
 using CoreNutrition.Application.Authentication.Common;
 using CoreNutrition.Contracts.Authentication;
 
-// disambiguation
-
 namespace CoreNutrition.Api.Common.Mapping;
 
 public class AuthenticationMappingConfig : IRegister
