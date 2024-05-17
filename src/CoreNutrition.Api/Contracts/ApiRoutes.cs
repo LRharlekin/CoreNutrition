@@ -150,7 +150,6 @@ public static class ApiRoutes
     public const string GetById = "orders/{shopOrderId:guid}";
     public const string GetByCustomer = "orders/{userId:guid}";
     public const string Cancel = "orders/{shopOrderId:guid}/cancel";
-
   }
 
   // Contains the addresses routes.
