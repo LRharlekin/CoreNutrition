@@ -4,5 +4,5 @@ namespace CoreNutrition.Infrastructure.Security.CurrentUserProvider;
 
 public interface ICurrentUserProvider
 {
-  ErrorOr<CurrentUser> GetCurrentUser();
+  CurrentUser GetCurrentUser();
 }

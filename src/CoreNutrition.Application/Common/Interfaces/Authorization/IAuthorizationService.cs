@@ -1,14 +1,13 @@
-using CoreNutrition.Application.Common.Security.Request;
+using CoreNutrition.Application.Common.Security;
 
 using ErrorOr;
 
-namespace CoreNutrition.Application.Common.Security;
+namespace CoreNutrition.Application.Common.Interfaces.Authorization;
 
 public interface IAuthorizationService
 {
   ErrorOr<Success> AuthorizeCurrentUser<T>(
       IAuthorizeableRequest<T> request,
-      List<string> requiredRoles,
-      List<string> requiredPermissions,
-      List<string> requiredPolicies);
+      // List<string> requiredPermissions,
+      List<string> requiredRoles);
 }
