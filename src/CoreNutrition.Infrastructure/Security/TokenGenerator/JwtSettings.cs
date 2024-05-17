@@ -1,4 +1,4 @@
-namespace CoreNutrition.Infrastructure.Authentication;
+namespace CoreNutrition.Infrastructure.Security.TokenGenerator;
 
 public class JwtSettings
 {
