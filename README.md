@@ -6,13 +6,18 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
 
 **Table of Contents**
 
-- [Self-Documenting Code](#self-documenting-code)
-- [DB Schema / ERD](#db-schema--erd)
-- [Clean Architecture](#clean-architecture)
-- [Domain-Driven Design](#domain-driven-design)
-  - [Eventual Consistency; Aggregates as Transactional Boundaries](#eventual-consistency-aggregates-as-transactional-boundaries)
-- [E-Commerce Project Architecture](#e-commerce-project-architecture)
+- [Domain Overview 🌎](#domain-overview-)
+- [Use Cases / Features 💪](#use-cases--features-)
+- [Getting Started 🏁](#getting-started-)
+  - [Interact with Live Project](#interact-with-live-project)
+  - [Swagger UI](#swagger-ui)
+  - [Clone Project and Run Locally](#clone-project-and-run-locally)
+- [DB Schema / ERD 🌎](#db-schema--erd-)
+- [Project Architecture](#project-architecture)
+  - [CA, DDD, CQRS... what does it all mean?](#ca-ddd-cqrs-what-does-it-all-mean)
+  - [Folder Structure 🗂](#folder-structure-)
   - [Domain Layer](#domain-layer)
+    - [Self-Documenting Code](#self-documenting-code)
     - [Rationale for strongly typed IDs as value objects](#rationale-for-strongly-typed-ids-as-value-objects)
       - [Benefits of strongly typed IDs](#benefits-of-strongly-typed-ids)
       - [Benefits of defining strongly typed IDs as value objects](#benefits-of-defining-strongly-typed-ids-as-value-objects)
@@ -23,21 +28,20 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
       - [The `AggregateRootId` and `EntityId` base classes](#the-aggregaterootid-and-entityid-base-classes)
       - [The `IDomainEvent` and `IHasDomainEvent` interfaces](#the-idomainevent-and-ihasdomainevent-interfaces)
   - [Application Layer](#application-layer)
+    - [Self-Documenting Code](#self-documenting-code-1)
     - [Authorization 🛂](#authorization-)
       - [Authorization Implementation](#authorization-implementation)
   - [Presentation Layer](#presentation-layer)
+    - [Self-Documenting Code](#self-documenting-code-2)
     - [Contracts Project (classlib)](#contracts-project-classlib)
     - [Api Project (webapi)](#api-project-webapi)
   - [Infrastructure Layer](#infrastructure-layer)
+    - [Self-Documenting Code](#self-documenting-code-3)
     - [Persistence Highlights](#persistence-highlights)
-- [CQRS: Command Query Responsibility Segregation](#cqrs-command-query-responsibility-segregation)
-- [Global Error Handling](#global-error-handling)
+- [Global Error Handling ⚠️](#global-error-handling-️)
   - [Objectives](#objectives)
   - [Exception Handling vs. Result Pattern](#exception-handling-vs-result-pattern)
   - [Implementation](#implementation)
-    - [`ErrorsController`](#errorscontroller)
-    - [Custom implementation of `ProblemDetailsFactory`](#custom-implementation-of-problemdetailsfactory)
-    - [Domain errors, external vs. internal "language", and Clean Architecture](#domain-errors-external-vs-internal-language-and-clean-architecture)
 - [Comments DevOps \& Deployment](#comments-devops--deployment)
   - [token secret](#token-secret)
   - [ci/cd](#cicd)
@@ -52,9 +56,50 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Getting Started](#getting-started)
   - [Testing](#testing-1)
 
-# Self-Documenting Code
+# Domain Overview 🌎
 
-More detailed sections on each of the following topics can be found further down the page of this README, but if you want to jump straight into reviewing the code, here are some pointers:
+# Use Cases / Features 💪
+
+# Getting Started 🏁
+
+## Interact with Live Project
+
+## Swagger UI
+
+## Clone Project and Run Locally
+
+# DB Schema / ERD 🌎
+
+- ERD diagram
+  ![Entity Relationship Diagram for the relational database of an ecommerce store](./docs/ERD.jpg)
+
+- Eraser comments
+
+# Project Architecture
+
+## CA, DDD, CQRS... what does it all mean?
+
+This project was created following and aiming to integrate as well as possible the concepts, design rules, and patterns of Clean Architecture ("CA"), Domain-Driven Design ("DDD"), and CQRS ("Command-Query-Responsibility-Segregation").
+
+This README uses a range of conceptual terms from CA, DDD, and CQRS without further explanation.
+
+So if you are new to any of these concepts...
+
+- **Clean Architecture:** You can read this short [introduction to Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+- **Domain-Driven Design:** You can [watch "Domain-Driven Design in 150 Seconds" by Amichai Mantinband](https://www.youtube.com/watch?v=8Z5IAkWcnIw) on YouTubefor a quick overview of the concepts of DDD including some visualizations.
+- **CQRS Pattern:** To gain an overview of this pattern in less than 5 minutes, read the [introduction to CQRS on the EventStore blog](https://www.eventstore.com/cqrs-pattern)
+
+## Folder Structure 🗂
+
+// CA Figma template
+
+## Domain Layer
+
+// Figma template only Domain
+
+### Self-Documenting Code
+
+If you want to jump straight into the code, here are some pointers of what can be found in the Domain Layer:
 
 - **DDD Domain Model**
   - The `Entities` folder in the domain layer gives an [overview](./src/CoreNutrition.Domain/Entities/) of how the Aggregate Root Entities are defining and modeling the business domain
@@ -65,33 +110,6 @@ More detailed sections on each of the following topics can be found further down
     - ...and a closer look at the code that models the root entity (--> [ProductLine.cs](./src/CoreNutrition.Domain/ProductLineAggregate/ProductLine.cs)) indicates that
       - ...a Product Line contains several more value objects that are commonly shared by other aggregates, such as `CurrencyAmount` and `AverageRating`.
       - and that a Product Line has relations with several other aggregates, such as `Category`, `ProductLineSize`, `ProductLineFlavour`, and `Product`.
-- The [Domain Errors](./src/CoreNutrition.Domain/Common/DomainErrors/) folder and the [ErrorsController] give a good overview of how **Global Exception/Error Handling** was implemented.
-- A thorough overview of the implemented **Rest API** can be gained by looking at the contracts defined in
-  - [ApiRoutes.cs](./src/CoreNutrition.Api/Contracts/ApiRoutes.cs)
-  - The `CoreNutrition.Contracts` project, which is a class library containing [Models for all HTTP Request and HTTP Response objects](./src/CoreNutrition.Contracts)
-
-# DB Schema / ERD
-
-- ERD diagram
-  ![Entity Relationship Diagram for the relational database of an ecommerce store](./docs/ERD.jpg)
-
-- Eraser comments
-
-# Clean Architecture
-
-# Domain-Driven Design
-
-## Eventual Consistency; Aggregates as Transactional Boundaries
-
-Ideally, each command updates a single aggregate in a single transaction.
-
-Then, in an _"eventual consistent"_ manner, the other aggregates are updated via domain events.
-
-# E-Commerce Project Architecture
-
-## Domain Layer
-
-- Persistence Ignorance
 
 ### Rationale for strongly typed IDs as value objects
 
@@ -180,7 +198,11 @@ In the `AggregateRootId<TId>` class, `base(value)` is used in the constructor to
 
 ## Application Layer
 
-Lorem ipsum
+// Figma template
+
+### Self-Documenting Code
+
+If you want to jump straight into the code, here are some pointers of what can be found in the Application Layer:
 
 ### Authorization 🛂
 
@@ -208,7 +230,20 @@ The `AuthorizationService` ([see code](./src/CoreNutrition.Infrastructure/Securi
 
 ## Presentation Layer
 
-Lorem ipsum
+// Figma template
+
+### Self-Documenting Code
+
+If you want to jump straight into the code, here are some pointers of what can be found in the Presentation Layer:
+
+- A thorough overview of the implemented **Rest API** can be gained by looking at the contracts defined in
+
+  - [ApiRoutes.cs](./src/CoreNutrition.Api/Contracts/ApiRoutes.cs) in combination with
+  - ...the `CoreNutrition.Contracts` project, which is a class library containing [models for all HTTP Request and HTTP Response objects](./src/CoreNutrition.Contracts)
+
+- **Error Handlings**:
+  - The [Domain Errors](./src/CoreNutrition.Domain/Common/DomainErrors/) folder and...
+  - ...the `ErrorsController` [ErrorsController](./src/CoreNutrition.Domain/Comm) give a good overview of how **Global Exception/Error Handling** was implemented.
 
 ### Contracts Project (classlib)
 
@@ -222,26 +257,19 @@ It models the shape of Rest API requests and responses which are referenced by t
 
 ## Infrastructure Layer
 
+// Figma template
+
+### Self-Documenting Code
+
+If you want to jump straight into the code, here are some pointers of what can be found in the Infrastructure Layer:
+
 ### Persistence Highlights
 
 **PublishDomainEventsInterceptor**
 
 - Part 17
 
-# CQRS: Command Query Responsibility Segregation
-
-- commands vs. queries
-- use repositories only for commands >> data manipulation on the aggregate
-- queries: no repositories. complex queries unrestricted by aggregates' transactional boundaries
-- performance optimization on query side / query caching / ISP
-
-Request lifecycle:
-Controllers, routes > Contracts (request model) > Mapsterr to map requests to commands/queries > MediatR to call CommandHandlers/QueryHandlers >
-
-Reqsponse lifecycle:
-HTTP response < Contracxts (response) model < Mapster to map result to response < MediatR...???
-
-# Global Error Handling
+# Global Error Handling ⚠️
 
 ## Objectives
 
@@ -269,28 +297,26 @@ The Result Pattern allows a structured approach to granular custom error handlin
 
 ## Implementation
 
-### `ErrorsController`
+**`ErrorsController`**
 
-A `.UseExceptionHandler("/error")` middleware, registered as the first middleware, encapsulates subsequent middleware in a try-catch-like pattern that reroutes and re-executes any request that throws an exception.
+- A `.UseExceptionHandler("/error")` middleware, registered as the first middleware, encapsulates subsequent middleware in a try-catch-like pattern that reroutes and re-executes any request that throws an exception.
 
-Failing requests are directed to a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
+- Failing requests are directed to a dedicated `ErrorsController` that extends `Problems()` from the `ControllerBase` class so that - _unless_ the exception can be matched to a custom domain error - a generic `500 Internal Server Error` without any sensitive information is returned to the user.
 
-API controllers (meaning all controllers _except_ the `ErrorsController`) implement a `Problems()` method accepting a list of custom errors, mapping them to an `IActionResult` response.
+- API controllers (meaning all controllers _except_ the `ErrorsController`) implement a `Problems()` method accepting a list of custom errors, mapping them to an `IActionResult` response.
 
-### Custom implementation of `ProblemDetailsFactory`
+**Custom implementation of `ProblemDetailsFactory`**
 
-A custom `ProblemDetailsFactory` overrides methods creating `ProblemDetails` and `ValidationProblemDetails` objects for consistent and customizable error handling in CoreNutrition.Api.
+- A custom `ProblemDetailsFactory` overrides methods creating `ProblemDetails` and `ValidationProblemDetails` objects for consistent and customizable error handling in CoreNutrition.Api.
 
-### Domain errors, external vs. internal "language", and Clean Architecture
+**Domain errors, external vs. internal "language", and Clean Architecture**
 
 ![Static Badge](https://img.shields.io/badge/ErrorOr-v.2.0.1-black)
-Located in the Core/Domain Layer, all custom `DomainErrors` can be referenced and properly handled by any other component across the architecture.
 
-The custom domain errors are implemented using the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package.
-
-Error types and descriptions are defined using the internal business logic and terminology. This internal error logic is only translated into HTTP status codes in the outermost layer.
-
-This way, error handling is not confined to the limits of speaking in the "language of HTTP status codes". Instead, the application can handle errors in the expressive language of its internal error logic. This flexibility aligns with _Clean Architecture_ principles: Changes to how errors are communicated to clients (such as switching to a different protocol, e.g. GraphQL, gRPC, WebSockets) can be made without impacting the underlying error handling logic.
+- Located in the Core/Domain Layer, all custom `DomainErrors` can be referenced and properly handled by any other component across the architecture.
+- The custom domain errors are implemented using the [ErrorOr](https://www.nuget.org/packages/ErrorOr) package.
+- Error types and descriptions are defined using the internal business logic and terminology. This internal error logic is only translated into HTTP status codes in the outermost layer.
+- This way, error handling is not confined to the limits of speaking in the "language of HTTP status codes". Instead, the application can handle errors in the expressive language of its internal error logic. This flexibility aligns with _Clean Architecture_ principles: Changes to how errors are communicated to clients (such as switching to a different protocol, e.g. GraphQL, gRPC, WebSockets) can be made without impacting the underlying error handling logic.
 
 # Comments DevOps & Deployment
 
