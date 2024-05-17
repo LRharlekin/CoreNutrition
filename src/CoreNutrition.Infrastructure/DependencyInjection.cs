@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
 using CoreNutrition.Infrastructure.Authentication;
+using CoreNutrition.Application.Common.Interfaces.Cryptography;
+using CoreNutrition.Infrastructure.Cryptography;
 using CoreNutrition.Infrastructure.Services;
+using CoreNutrition.Domain.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 using CoreNutrition.Domain.Common.Interfaces.Services;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
@@ -66,6 +69,9 @@ public static class DependencyInjection
         // Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"])
         )
       });
+
+    services.AddTransient<IPasswordHasher, PasswordHasher>();
+    services.AddTransient<IPasswordHashChecker, PasswordHasher>();
     return services;
   }
 }
