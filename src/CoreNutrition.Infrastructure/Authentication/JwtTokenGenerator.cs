@@ -16,15 +16,18 @@ namespace CoreNutrition.Infrastructure.Authentication
     private readonly JwtSettings _jwtSettings;
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    // TODO options pattern --> easier for unit tests
     public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
     {
-      _jwtSettings = jwtOptions.Value;
       _dateTimeProvider = dateTimeProvider;
+      _jwtSettings = jwtOptions.Value;
     }
 
     public string GenerateToken(User user)
     {
+      Console.WriteLine("JwtTokenGenerator.GenerateToken");
+      Console.WriteLine($"_jwtSettings.Issuer {_jwtSettings.Issuer}");
+      Console.WriteLine($"_jwtSettings.Audience {_jwtSettings.Audience}");
+
       var signingCredentials = new SigningCredentials(
         new SymmetricSecurityKey(
           Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
@@ -34,17 +37,13 @@ namespace CoreNutrition.Infrastructure.Authentication
       var claims = new[]
       {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-        // new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
         new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
         new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-        // claim for role "Admin"
-        // new Claim(ClaimTypes.Role, "Admin"),
-
+        // claims for roles
+        new Claim(ClaimTypes.Role, "Admin"),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       };
-
-      Console.WriteLine($"issuer {_jwtSettings.Issuer}");
-      Console.WriteLine($"audience {_jwtSettings.Audience}");
 
       var token = new JwtSecurityToken(
         expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
@@ -53,6 +52,9 @@ namespace CoreNutrition.Infrastructure.Authentication
         claims: claims,
         signingCredentials: signingCredentials
       );
+
+      Console.WriteLine($"raw token before handler:");
+      Console.WriteLine($"{token}");
 
       // serialize JWT into compact string format
       /* 
