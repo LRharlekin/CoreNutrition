@@ -46,13 +46,13 @@ public static class ApiRoutes
 
   public static class ProductLines
   {
-    public const string Create = "productlines";
-    public const string Update = "productlines/{productLineId:guid}";
-    public const string Delete = "productlines/{productLineId:guid}";
-    public const string GetAll = "productlines";
-    public const string GetById = "productlines/{productLineId:guid}";
-    public const string GetProductsByLine = "{productLineId:guid}";
-    public const string TogglePublished = "productlines/{productLineId:guid}/publish";
+    public const string Create = "lines";
+    public const string Update = "lines/{productLineId:guid}";
+    public const string Delete = "lines/{productLineId:guid}";
+    public const string GetAll = "lines";
+    public const string GetById = "lines/{productLineId:guid}";
+    public const string GetProductsByLine = "lines/{productLineId:guid}/products";
+    public const string TogglePublished = "lines/{productLineId:guid}/publish";
   }
 
   // Contains the products routes
