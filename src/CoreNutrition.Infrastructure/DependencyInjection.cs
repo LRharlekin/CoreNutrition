@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 
-using CoreNutrition.Infrastructure.Authentication;
+using CoreNutrition.Infrastructure.Security.TokenGenerator;
 using CoreNutrition.Application.Common.Interfaces.Cryptography;
 using CoreNutrition.Infrastructure.Cryptography;
 using CoreNutrition.Infrastructure.Services;
