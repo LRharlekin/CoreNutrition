@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Cryptography;
 
 using ErrorOr;
 using MediatR;
 using MapsterMapper;
 
+using CoreNutrition.Api.Infrastructure;
+using CoreNutrition.Api.Contracts;
 using CoreNutrition.Contracts.Authentication;
 using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Application.Authentication.Common;
@@ -19,11 +20,7 @@ namespace CoreNutrition.Api.Controllers;
 // logic (e.g. persist in db), 
 // map returned object to response contract
 
-[ApiController]
-[Route("auth")]
-[AllowAnonymous]
-public class AuthenticationController : ApiControllerBase
-// ControllerBase docs: https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-8.0
+public sealed class AuthenticationController : ApiControllerBase
 {
   private readonly ISender _mediator;
   private readonly IMapper _mapper;
@@ -34,17 +31,10 @@ public class AuthenticationController : ApiControllerBase
     _mapper = mapper;
   }
 
-  // public static User user = new User();
-
-  [HttpPost("register")]
+  [AllowAnonymous]
+  [HttpPost(ApiRoutes.Authentication.Register)]
   public async Task<IActionResult> Register(RegisterRequest request)
   {
-    // CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-    // request.PasswordHash = passwordHash;
-    // request.PasswordSalt = passwordSalt;
-    // request.Password = null;
-
     var command = _mapper.Map<RegisterCommand>(request);
 
     ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
@@ -55,7 +45,8 @@ public class AuthenticationController : ApiControllerBase
       );
   }
 
-  [HttpPost("login")]
+  [AllowAnonymous]
+  [HttpPost(ApiRoutes.Authentication.Login)]
   public async Task<IActionResult> Login(LoginRequest request)
   {
     var query = _mapper.Map<LoginQuery>(request);
@@ -73,18 +64,5 @@ public class AuthenticationController : ApiControllerBase
       authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
       errors => ResolveProblems(errors)
       );
-  }
-
-  private void CreatePasswordHash(
-    string password,
-    out byte[] passwordHash,
-    out byte[] passwordSalt
-  )
-  {
-    using (var hmac = new HMACSHA512())
-    {
-      passwordSalt = hmac.Key;
-      passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-    }
   }
 }

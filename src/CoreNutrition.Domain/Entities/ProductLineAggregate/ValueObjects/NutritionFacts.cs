@@ -47,12 +47,12 @@ public sealed class NutritionFacts : ValueObject
       !IsValidMacro(carbohydratesPer100Grams) ||
       !IsValidMacro(proteinPer100Grams) ||
       !IsValidMacro(saltPer100Grams))
-      return Errors.ProductLine.InvalidNutritionFacts;
+      return Errors.NutritionFacts.InvalidNutritionFacts;
 
     // Validate derived nutrients
     if (!IsValidOfWhichMacro(saturatedFatPer100Grams, fatPer100Grams) ||
       !IsValidOfWhichMacro(sugarPer100Grams, carbohydratesPer100Grams))
-      return Errors.ProductLine.InvalidNutritionFacts;
+      return Errors.NutritionFacts.InvalidNutritionFacts;
 
     return new NutritionFacts(
       caloriesPer100Grams,
