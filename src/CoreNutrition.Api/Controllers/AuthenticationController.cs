@@ -35,9 +35,12 @@ public sealed class AuthenticationController : ApiControllerBase
   [HttpPost(ApiRoutes.Authentication.Register)]
   public async Task<IActionResult> Register(RegisterRequest request)
   {
+    Console.WriteLine("Controller before map:" + request.Email);
     var command = _mapper.Map<RegisterCommand>(request);
+    Console.WriteLine("Controller after map:" + command.Email);
 
     ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+    Console.WriteLine("Controller after handler:" + authResult.Value.User.Email);
 
     return authResult.Match(
       // authResult => CreatedAtAction() // TODO: 201 Created
