@@ -1,0 +1,1 @@
+namespace CoreNutrition.Application.Categories.Commands.CreateCategory;

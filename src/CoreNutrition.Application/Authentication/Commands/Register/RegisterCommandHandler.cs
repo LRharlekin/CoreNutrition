@@ -11,7 +11,6 @@ using CoreNutrition.Application.Common.Interfaces.Authentication;
 
 namespace CoreNutrition.Application.Authentication.Commands.Register;
 
-// public class RegisterCommandHandler :
 internal sealed class RegisterCommandHandler :
   IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {

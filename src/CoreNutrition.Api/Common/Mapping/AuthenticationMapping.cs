@@ -7,7 +7,7 @@ using CoreNutrition.Contracts.Authentication;
 
 namespace CoreNutrition.Api.Common.Mapping;
 
-public class AuthenticationMappingConfig : IRegister
+public class AuthenticationMapping : IRegister
 {
   public void Register(TypeAdapterConfig config)
   {

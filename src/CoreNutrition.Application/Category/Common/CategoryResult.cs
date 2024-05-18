@@ -1,8 +1,5 @@
 using CoreNutrition.Domain.CategoryAggregate;
 
-namespace CoreNutrition.Application.Category.Common;
+namespace CoreNutrition.Application.Categories.Common;
 
-public record CategoryResult(
-// User User,
-// string Token
-);
+public record CategoryResult(Category Category);
