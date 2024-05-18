@@ -1,8 +1,7 @@
-
 using ErrorOr;
 
 using CoreNutrition.Application.Common.Security;
-using CoreNutrition.Application.Categories.Common;
+using CoreNutrition.Domain.CategoryAggregate;
 
 namespace CoreNutrition.Application.Categories.Commands.CreateCategory;
 
@@ -12,4 +11,4 @@ public record CreateCategoryCommand(
   string Description,
   string CategoryImageUrl
   )
-  : IAuthorizeableAction<ErrorOr<CategoryResult>>;
+  : IAuthorizeableAction<ErrorOr<Category>>;

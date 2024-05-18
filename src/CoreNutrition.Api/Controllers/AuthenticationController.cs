@@ -40,6 +40,7 @@ public sealed class AuthenticationController : ApiControllerBase
     ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
     return authResult.Match(
+      // authResult => CreatedAtAction() // TODO: 201 Created
       authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
       errors => ResolveProblems(errors)
       );
