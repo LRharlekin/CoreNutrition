@@ -8,6 +8,7 @@ using MapsterMapper;
 using CoreNutrition.Api.Infrastructure;
 using CoreNutrition.Api.Contracts;
 using CoreNutrition.Application.Categories.Commands.CreateCategory;
+using CoreNutrition.Application.Categories.Commands.UpsertCategory;
 using CoreNutrition.Application.Categories.Queries.GetCategoryById;
 using CoreNutrition.Contracts.Category;
 using CoreNutrition.Domain.CategoryAggregate;
@@ -38,20 +39,24 @@ public sealed class CategoriesController : ApiControllerBase
     );
   }
 
-  // [HttpPatch(ApiRoutes.Categories.Update)]
-  // public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
-  // {
-  //   var command = _mapper.Map<UpdateCategoryCommand>(request);
+  [HttpPut(ApiRoutes.Categories.Upsert)]
+  public async Task<IActionResult> UpsertCategory(
+    Guid categoryId,
+    UpsertCategoryRequest request)
+  {
+    var command = _mapper.Map<UpsertCategoryCommand>((categoryId, request));
 
-  //   ErrorOr<Category> updateCategoryResult = await _mediator.Send(command);
+    ErrorOr<Category> upsertCategoryResult = await _mediator.Send(command);
 
-  //   return updateCategoryResult.Match(
-  //     category => Ok(_mapper.Map<CategoryResponse>(category)),
-  //     errors => ResolveProblems(errors)
-  //   );
-  // }
+    return upsertCategoryResult.Match(
+      category => Ok(_mapper.Map<CategoryResponse>(category)),
+      errors => ResolveProblems(errors)
+    );
+  }
 
-  [AllowAnonymous]
+  [HttpDelete(ApiRoutes.Categories.Delete)]
+
+  [AllowAnonymous] // TODO Delete later
   [HttpGet(ApiRoutes.Categories.GetById)]
   public async Task<IActionResult> GetCategoryById(Guid categoryId)
   {
@@ -59,16 +64,25 @@ public sealed class CategoriesController : ApiControllerBase
 
     ErrorOr<Category> getCategoryByIdResult = await _mediator.Send(query);
 
+    // TODO return 201 if new category was created
+    // TODO return 203 if category was updated
+
     return getCategoryByIdResult.Match(
       category => Ok(_mapper.Map<CategoryResponse>(getCategoryByIdResult)),
       errors => ResolveProblems(errors)
     );
   }
 
-  [AllowAnonymous]
+  [AllowAnonymous] // TODO Delete later
   [HttpGet(ApiRoutes.Categories.GetAll)]
   public IActionResult GetAllCategories()
   {
     return Ok("List of categories");
   }
+
+  // [AllowAnonymous]
+  // [HttpGet(ApiRoutes.Categories.GetProductLines)]
+
+  // [AllowAnonymous]
+  // [HttpGet(ApiRoutes.Categories.GetProducts)]
 }

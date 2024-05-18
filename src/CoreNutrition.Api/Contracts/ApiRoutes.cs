@@ -23,7 +23,7 @@ public static class ApiRoutes
     public const string GetAll = "users";
     public const string GetById = "users/{userId:guid}";
 
-    public const string Update = "users/{userId:guid}";
+    public const string Upsert = "users/{userId:guid}";
 
     public const string Delete = "users/{userId:guid}";
     public const string GetWithSession = "profile";
@@ -39,8 +39,8 @@ public static class ApiRoutes
   public static class Categories
   {
     public const string Create = "categories";
-    public const string Update = "categories/{categoryId:guid}";
-    // public const string Delete = "categories/{categoryId:guid}";
+    public const string Upsert = "categories/{categoryId:guid}";
+    public const string Delete = "categories/{categoryId:guid}";
     public const string GetAll = "categories";
     public const string GetById = "categories/{categoryId:guid}";
     // public const string GetProductLines = "categories/{categoryId:guid}/productlines";
@@ -57,7 +57,7 @@ public static class ApiRoutes
   public static class ProductLines
   {
     public const string Create = "lines";
-    public const string Update = "lines/{productLineId:guid}";
+    public const string Upsert = "lines/{productLineId:guid}";
     public const string Delete = "lines/{productLineId:guid}";
     public const string GetAll = "lines";
     public const string GetById = "lines/{productLineId:guid}";
@@ -70,9 +70,9 @@ public static class ApiRoutes
   public static class Products
   {
     public const string Create = "products";
-    public const string Update = "products/{productId:guid}";
+    public const string Upsert = "products/{productId:guid}";
     public const string Delete = "products/{productId:guid}";
-    public const string UpdateQuantityInStock = "products/{productId:guid}/inventory";
+    public const string UpsertQuantityInStock = "products/{productId:guid}/inventory";
     public const string TogglePublished = "products/{productId:guid}/publish";
     public const string GetAll = "products";
     public const string GetById = "products/{productId:guid}";
@@ -83,7 +83,7 @@ public static class ApiRoutes
   public static class Sizes
   {
     public const string Create = "sizes";
-    public const string Update = "sizes/{productLineSizeId:guid}";
+    public const string Upsert = "sizes/{productLineSizeId:guid}";
     public const string Delete = "sizes/{productLineSizeId:guid}";
     public const string GetAll = "sizes";
     public const string GetById = "sizes/{productLineSizeId:guid}";
@@ -95,7 +95,7 @@ public static class ApiRoutes
   public static class Flavours
   {
     public const string Create = "flavours";
-    public const string Update = "flavours/{productLineFlavourId:guid}";
+    public const string Upsert = "flavours/{productLineFlavourId:guid}";
     public const string Delete = "flavours/{productLineFlavourId:guid}";
     public const string GetAll = "flavours";
     public const string GetById = "flavours/{productLineFlavourId:guid}";
@@ -116,7 +116,7 @@ public static class ApiRoutes
   public static class Reviews
   {
     public const string Create = "reviews";
-    public const string Update = "reviews/{reviewId:guid}";
+    public const string Upsert = "reviews/{reviewId:guid}";
     public const string Delete = "reviews/{reviewId:guid}";
     public const string GetAll = "reviews";
     public const string GetById = "reviews/{reviewId:guid}";
@@ -130,7 +130,7 @@ public static class ApiRoutes
   public static class DiscountCodes
   {
     public const string Create = "codes";
-    public const string Update = "codes/{discountCodeId:guid}";
+    public const string Upsert = "codes/{discountCodeId:guid}";
     public const string Delete = "codes/{discountCodeId:guid}";
     public const string ToggleActive = "codes/{discountCodeId:guid}/activate";
     public const string GetAll = "codes";
@@ -143,7 +143,7 @@ public static class ApiRoutes
   public static class ShippingMethods
   {
     public const string Create = "shippingmethods";
-    public const string Update = "shippingmethods/{shippingMethodId:guid}";
+    public const string Upsert = "shippingmethods/{shippingMethodId:guid}";
     public const string Delete = "shippingmethods/{shippingMethodId:guid}";
     public const string GetAll = "shippingmethods";
     public const string GetById = "shippingmethods/{shippingMethodId:guid}";
@@ -154,7 +154,7 @@ public static class ApiRoutes
   public static class ShopOrders
   {
     public const string Create = "orders";
-    public const string Update = "orders/{shopOrderId:guid}";
+    public const string Upsert = "orders/{shopOrderId:guid}";
     public const string Delete = "orders/{shopOrderId:guid}";
     public const string GetAll = "orders";
     public const string GetById = "orders/{shopOrderId:guid}";
@@ -167,7 +167,7 @@ public static class ApiRoutes
   public static class Addresses
   {
     public const string Create = "addresses";
-    public const string Update = "addresses/{customerAddressId:guid}";
+    public const string Upsert = "addresses/{customerAddressId:guid}";
     public const string Delete = "addresses/{customerAddressId:guid}";
     public const string GetAll = "addresses";
     public const string GetById = "addresses/{customerAddressId:guid}";
@@ -180,7 +180,7 @@ public static class ApiRoutes
   public static class UserRoles
   {
     public const string Create = "roles";
-    public const string Update = "roles/{userRoleId:guid}";
+    public const string Upsert = "roles/{userRoleId:guid}";
     public const string Delete = "roles/{userRoleId:guid}";
     public const string GetAll = "roles";
     public const string GetById = "roles/{userRoleId:guid}";
@@ -192,7 +192,7 @@ public static class ApiRoutes
 
   public static class FreeShippingAmounts
   {
-    public const string Update = "freeshippingamount";
+    public const string Upsert = "freeshippingamount";
     public const string Get = "freeshippingamount";
     public const string ToggleActive = "freeshippingamount/activate";
   }
