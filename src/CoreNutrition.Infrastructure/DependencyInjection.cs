@@ -12,7 +12,8 @@ using CoreNutrition.Domain.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 using CoreNutrition.Domain.Common.Interfaces.Services;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
-using CoreNutrition.Infrastructure.Persistence;
+using CoreNutrition.Infrastructure.Users.Persistence;
+using CoreNutrition.Infrastructure.Categories.Persistence;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CoreNutrition.Infrastructure;

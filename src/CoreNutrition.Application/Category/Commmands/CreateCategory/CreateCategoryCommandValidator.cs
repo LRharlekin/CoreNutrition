@@ -9,8 +9,13 @@ public class CreateCategoryCommandValidator
 {
   public CreateCategoryCommandValidator()
   {
-    RuleFor(x => x.Name).NotEmpty();
-    RuleFor(x => x.Description).NotEmpty();
+    RuleFor(x => x.Name)
+      .NotEmpty()
+      .MaximumLength(50);
+    RuleFor(x => x.Description)
+    .NotEmpty()
+    .MinimumLength(20)
+    .MaximumLength(800);
     RuleFor(x => x.CategoryImageUrl)
       .NotEmpty();
   }

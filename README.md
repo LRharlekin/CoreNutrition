@@ -34,7 +34,8 @@
     - [Api Project (webapi)](#api-project-webapi)
   - [Infrastructure Layer](#infrastructure-layer)
     - [Self-Documenting Code](#self-documenting-code-3)
-    - [Persistence Highlights](#persistence-highlights)
+    - [Persistence / Write Operations / UoW](#persistence--write-operations--uow)
+    - [Read Operations:](#read-operations)
 - [Global Error Handling ⚠️](#global-error-handling-️)
   - [Objectives](#objectives)
   - [Exception Handling vs. Result Pattern](#exception-handling-vs-result-pattern)
@@ -297,7 +298,16 @@ It models the shape of Rest API requests and responses which are referenced by t
 
 If you want to jump straight into the code, here are some pointers of what can be found in the Infrastructure Layer:
 
-### Persistence Highlights
+### Persistence / Write Operations / UoW
+
+- DDD, transactional boundary: marker `IRepository<T> : where T : AggregateRoot`
+- Unit of Work in behavior pipeline with MediatR
+- interceptors abstracted away into UoW
+
+### Read Operations:
+
+- fast caching repository decorator > memory cache with exploration against stale values
+- specification pattern
 
 **PublishDomainEventsInterceptor**
 

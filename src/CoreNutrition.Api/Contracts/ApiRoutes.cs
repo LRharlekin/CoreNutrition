@@ -40,11 +40,11 @@ public static class ApiRoutes
   {
     public const string Create = "categories";
     public const string Update = "categories/{categoryId:guid}";
-    public const string Delete = "categories/{categoryId:guid}";
+    // public const string Delete = "categories/{categoryId:guid}";
     public const string GetAll = "categories";
     public const string GetById = "categories/{categoryId:guid}";
-    public const string GetProductLines = "categories/{categoryId:guid}/productlines";
-    public const string GetProducts = "categories/{categoryId:guid}/products";
+    // public const string GetProductLines = "categories/{categoryId:guid}/productlines";
+    // public const string GetProducts = "categories/{categoryId:guid}/products";
   }
 
   /* CATEGORIES */
