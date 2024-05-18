@@ -1,5 +1,5 @@
 namespace CoreNutrition.Contracts.Category;
 
-public record CreateCategoryRequest(
+public record CreateCategoryResponse(
   string Id
 );

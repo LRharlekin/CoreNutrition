@@ -11,7 +11,7 @@ public class AuthorizationService(
         : IAuthorizationService
 {
   public ErrorOr<Success> AuthorizeCurrentUser<T>(
-      IAuthorizeableRequest<T> request,
+      IAuthorizeableAction<T> request,
       // List<string> requiredPermissions,
       List<string> requiredRoles)
   {

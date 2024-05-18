@@ -31,6 +31,11 @@ public static class ApiRoutes
   }
   // Contains the categories routes
 
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
+
   public static class Categories
   {
     public const string Create = "categories";
@@ -41,6 +46,11 @@ public static class ApiRoutes
     public const string GetProductLines = "categories/{categoryId:guid}/productlines";
     public const string GetProducts = "categories/{categoryId:guid}/products";
   }
+
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
 
   // Contains the product lines routes
 

@@ -14,10 +14,9 @@ namespace CoreNutrition.Api.Controllers;
 public sealed class CategoriesController : ApiControllerBase
 {
   [HttpPost(ApiRoutes.Categories.Create)]
-  [Authorize(Roles = "Admin")]
   public IActionResult CreateCategory(CreateCategoryRequest request)
   {
-    return Ok("Create a category");
+    return Ok(request);
   }
 
   [AllowAnonymous]
