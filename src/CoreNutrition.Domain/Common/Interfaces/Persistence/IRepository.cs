@@ -1,8 +1,8 @@
+using CoreNutrition.Domain.Common.Models;
+
 namespace CoreNutrition.Domain.Common.Interfaces.Persistence;
 
-public interface IRepository
-{
-  public void Add(string key, string value);
-  public void Update(string key, string value);
-  public void Remove(string key);
-}
+public interface IRepository<T, TId, TIdType>
+  where T : AggregateRoot<TId, TIdType>
+  where TId : AggregateRootId<TIdType>
+{ }

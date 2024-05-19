@@ -29,12 +29,8 @@ public static class ApiRoutes
     public const string GetWithSession = "profile";
     public const string SetRole = "user/{userId:guid}/role";
   }
-  // Contains the categories routes
 
-  /* CATEGORIES */
-  /* CATEGORIES */
-  /* CATEGORIES */
-  /* CATEGORIES */
+  // Contains the categories routes
 
   public static class Categories
   {
@@ -46,11 +42,6 @@ public static class ApiRoutes
     // public const string GetProductLines = "categories/{categoryId:guid}/productlines";
     // public const string GetProducts = "categories/{categoryId:guid}/products";
   }
-
-  /* CATEGORIES */
-  /* CATEGORIES */
-  /* CATEGORIES */
-  /* CATEGORIES */
 
   // Contains the product lines routes
 
@@ -80,7 +71,7 @@ public static class ApiRoutes
 
   // Contains the sizes routes
 
-  public static class Sizes
+  public static class ProductLineSizes
   {
     public const string Create = "sizes";
     public const string Update = "sizes/{productLineSizeId:guid}";
@@ -92,7 +83,7 @@ public static class ApiRoutes
 
   // Contains the flavours routes
 
-  public static class Flavours
+  public static class ProductLineFlavours
   {
     public const string Create = "flavours";
     public const string Update = "flavours/{productLineFlavourId:guid}";
