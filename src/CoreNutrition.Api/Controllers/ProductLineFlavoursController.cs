@@ -12,7 +12,7 @@ using CoreNutrition.Contracts.ProductLineFlavour;
 using CoreNutrition.Domain.ProductLineFlavourAggregate;
 using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Application.ProductLineFlavours.Commands.CreateProductLineFlavour;
-// using CoreNutrition.Application.ProductLineFlavours.Queries.ListProductLineFlavours;
+using CoreNutrition.Application.ProductLineFlavours.Queries.ListProductLineFlavours;
 using CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavourById;
 
 namespace CoreNutrition.Api.Controllers;
@@ -46,10 +46,10 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
 
   // [HttpPut(ApiRoutes.ProductLineFlavours.Update)]
   // public async Task<IActionResult> UpdateProductLineFlavour(
-  //   Guid categoryId,
+  //   Guid productLineFlavourId,
   //   UpdateProductLineFlavourRequest request)
   // {
-  //   var command = _mapper.Map<UpdateProductLineFlavourCommand>((categoryId, request));
+  //   var command = _mapper.Map<UpdateProductLineFlavourCommand>((productLineFlavourId, request));
 
   //   ErrorOr<Category> updateProductLineFlavourResult = await _mediator.Send(command);
 
@@ -62,7 +62,7 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
 
   // [HttpDelete(ApiRoutes.ProductLineFlavours.Delete)]
   // {
-  //   var command = _mapper.Map<DeleteCategoryCommand>(categoryId);
+  //   var command = _mapper.Map<DeleteCategoryCommand>(productLineFlavourId);
 
   //   ErrorOr<??> deleteCategoryResult = await _mediator.Send(command);
 
@@ -76,7 +76,6 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
   public async Task<IActionResult> GetProductLineFlavourById(Guid productLineFlavourId)
   {
     await Task.CompletedTask; // TODO delete later
-    Console.WriteLine("Controller before map:" + productLineFlavourId);
     var query = _mapper.Map<GetProductLineFlavourByIdQuery>(productLineFlavourId);
 
     ErrorOr<ProductLineFlavour> getProductLineFlavourByIdResult = await _mediator.Send(query);
@@ -90,13 +89,14 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
   [HttpGet(ApiRoutes.ProductLineFlavours.List)]
   public async Task<IActionResult> ListProductLineFlavours()
   {
-    var query = new ListProductLineFlavoursQuery();
+    var query = new ListProductLineFlavoursQuery(); // TODO: add sorting
 
-    ErrorOr<List<Category>> listProductLineFlavoursResult = await _mediator.Send(query);
+    ErrorOr<List<ProductLineFlavour>> listProductLineFlavoursResult = await _mediator.Send(query);
 
     return listProductLineFlavoursResult.Match(
-      productLineFlavours => categories.Count > 0
-        ? Ok(_mapper.Map<List<CategoryResponse>>(categories))
+      productLineFlavours => productLineFlavours.Count > 0
+        ? Ok(_mapper.Map<List<ProductLineFlavourResponse>>(productLineFlavours))
+        // ? Ok(_mapper.Map<ListProductLineFlavoursResponse>(productLineFlavours))
         : NoContent(),
       errors => ResolveProblems(errors)
     );
