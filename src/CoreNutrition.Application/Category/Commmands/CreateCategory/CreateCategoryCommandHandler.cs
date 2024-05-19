@@ -32,7 +32,7 @@ internal sealed class CreateCategoryCommandHandler
 
     if (categoryResult.IsError)
     {
-      return categoryResult.Errors; // errors bybass mapping pipeline?
+      return categoryResult.Errors; // errors bybass mapping pipeline
     }
 
     _categoryRepository.Add(categoryResult.Value);

@@ -39,7 +39,8 @@ public class CategoryMapping : IRegister
 
     /* responses */
 
-    // map errors to error response?
+    config.NewConfig<List<Category>, ListCategoriesResponse>()
+      .Map((dest) => dest, (src) => src);
 
     config.NewConfig<Category, CategoryResponse>()
       .Map((dest) => dest.Id, (src) => src.Id.Value.ToString())

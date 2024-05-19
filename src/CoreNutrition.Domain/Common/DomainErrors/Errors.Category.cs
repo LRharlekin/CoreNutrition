@@ -23,5 +23,8 @@ public static partial class Errors
         public static Error NotFound => Error.NotFound(
             code: "Category.NotFound",
             description: "Category with given ID does not exist");
+        public static Error ListNotFound => Error.NotFound(
+            code: "Category.ListNotFound",
+            description: "Not able to retrieve a list of categories based on given parameters.");
     }
 }

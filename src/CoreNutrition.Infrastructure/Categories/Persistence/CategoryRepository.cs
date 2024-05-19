@@ -8,6 +8,13 @@ public class CategoryRepository : ICategoryRepository
 {
   private static readonly List<Category> _categories = new();
 
+  public List<Category> GetAll()
+  {
+    return _categories;
+  }
+
+  // (TODO: implement)
+
   public Category? GetById(CategoryId categoryId)
   {
     return _categories.SingleOrDefault(c => c.Id == categoryId);

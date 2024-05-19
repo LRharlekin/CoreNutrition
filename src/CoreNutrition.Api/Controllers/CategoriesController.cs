@@ -10,6 +10,7 @@ using CoreNutrition.Api.Contracts;
 using CoreNutrition.Application.Categories.Commands.CreateCategory;
 using CoreNutrition.Application.Categories.Commands.UpdateCategory;
 using CoreNutrition.Application.Categories.Queries.GetCategoryById;
+using CoreNutrition.Application.Categories.Queries.ListCategories;
 using CoreNutrition.Contracts.Category;
 using CoreNutrition.Domain.CategoryAggregate;
 
@@ -57,7 +58,7 @@ public sealed class CategoriesController : ApiControllerBase
     );
   }
 
-  [HttpDelete(ApiRoutes.Categories.Delete)]
+  // [HttpDelete(ApiRoutes.Categories.Delete)]
   // {
   //   var command = _mapper.Map<DeleteCategoryCommand>(categoryId);
 
@@ -76,7 +77,6 @@ public sealed class CategoriesController : ApiControllerBase
 
     ErrorOr<Category> getCategoryByIdResult = await _mediator.Send(query);
 
-
     return getCategoryByIdResult.Match(
       category => Ok(_mapper.Map<CategoryResponse>(category)),
       errors => ResolveProblems(errors)
@@ -84,10 +84,19 @@ public sealed class CategoriesController : ApiControllerBase
   }
 
   [AllowAnonymous] // TODO Delete later
-  [HttpGet(ApiRoutes.Categories.GetAll)]
-  public IActionResult GetAllCategories()
+  [HttpGet(ApiRoutes.Categories.List)]
+  public async Task<IActionResult> ListCategories()
   {
-    return Ok("List of categories");
+    var query = new ListCategoriesQuery();
+
+    ErrorOr<List<Category>> listCategoriesResult = await _mediator.Send(query);
+
+    return listCategoriesResult.Match(
+      categories => categories.Count > 0
+        ? Ok(_mapper.Map<List<CategoryResponse>>(categories))
+        : NoContent(),
+      errors => ResolveProblems(errors)
+    );
   }
 
   // [AllowAnonymous]
