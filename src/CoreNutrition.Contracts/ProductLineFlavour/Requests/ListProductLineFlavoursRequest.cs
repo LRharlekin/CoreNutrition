@@ -1,6 +1,6 @@
 namespace CoreNutrition.Contracts.ProductLineFlavour;
 
-public record ListProductLineFlavourssRequest(
+public record ListProductLineFlavoursRequest(
   int Page,
   int PageSize,
   string? SortColumn,

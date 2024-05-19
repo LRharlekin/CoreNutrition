@@ -19,5 +19,9 @@ public static partial class Errors
         public static Error NotFound => Error.NotFound(
             code: "ProductLineFlavour.NotFound",
             description: "Product Line Flavour with given ID does not exist");
+
+        public static Error ListNotFound => Error.NotFound(
+            code: "ProductLineFlavour.ListNotFound",
+            description: "Not able to retrieve a list of product line flavours based on given parameters.");
     }
 }
