@@ -1,7 +1,7 @@
 using CoreNutrition.Domain.UserAggregate;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 
-namespace CoreNutrition.Infrastructure.Persistence;
+namespace CoreNutrition.Infrastructure.Users.Persistence;
 
 public class UserRepository : IUserRepository
 {

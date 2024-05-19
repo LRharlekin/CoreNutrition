@@ -1,17 +1,14 @@
-Live project can be viewed at:
-https://core-nutrition.azurewebsites.net
-
-Swagger UI:
-https://core-nutrition.azurewebsites.net/swagger/index.html
-
 **Table of Contents**
 
-- [Domain Overview 🌎](#domain-overview-)
-- [Use Cases / Features 💪](#use-cases--features-)
+- [Overview 🌎](#overview-)
+  - [Use Cases / Features 💪](#use-cases--features-)
+    - [Register as a **customer** and...](#register-as-a-customer-and)
+    - [Login as an **admin** and...](#login-as-an-admin-and)
 - [Getting Started 🏁](#getting-started-)
-  - [Interact with Live Project](#interact-with-live-project)
-  - [Swagger UI](#swagger-ui)
-  - [Clone Project and Run Locally](#clone-project-and-run-locally)
+  - [Video Walkthrough 👀](#video-walkthrough-)
+  - [Browse the Live Website 👩🏽‍💻](#browse-the-live-website-)
+  - [Swagger UI 💬](#swagger-ui-)
+  - [Clone Project and Run Locally ⚛️](#clone-project-and-run-locally-️)
 - [DB Schema / ERD 🌎](#db-schema--erd-)
 - [Project Architecture](#project-architecture)
   - [CA, DDD, CQRS... what does it all mean?](#ca-ddd-cqrs-what-does-it-all-mean)
@@ -37,7 +34,8 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
     - [Api Project (webapi)](#api-project-webapi)
   - [Infrastructure Layer](#infrastructure-layer)
     - [Self-Documenting Code](#self-documenting-code-3)
-    - [Persistence Highlights](#persistence-highlights)
+    - [Persistence / Write Operations / UoW](#persistence--write-operations--uow)
+    - [Read Operations:](#read-operations)
 - [Global Error Handling ⚠️](#global-error-handling-️)
   - [Objectives](#objectives)
   - [Exception Handling vs. Result Pattern](#exception-handling-vs-result-pattern)
@@ -56,17 +54,54 @@ https://core-nutrition.azurewebsites.net/swagger/index.html
   - [Getting Started](#getting-started)
   - [Testing](#testing-1)
 
-# Domain Overview 🌎
+# Overview 🌎
 
-# Use Cases / Features 💪
+This is a feature-rich backend server for an ecommerce store built with ASP .NET Core 8, Entity Framework Core, and PostgreSQL as the database.
+
+![.NET Core](https://img.shields.io/badge/.NET%20Core-v.8-purple)
+![EF Core](https://img.shields.io/badge/EF%20Core-v.8-cyan)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v.16-drakblue)
+
+The backend project is part of a fullstack project: The frontend was built using React, Redux, Redux Toolkit, SASS and MaterialUI.
+
+## Use Cases / Features 💪
+
+### Register as a **customer** and...
+
+- Browse products, filter by category, and combine sorts and filters for 8 different product attributes.
+- Read and write product reviews.
+- Collect items to buy in your shopping cart.
+- Apply discount codes on checkout, select your shipping method, and place an order.
+- Benefit from free shipping on orders over EUR 100.
+- Observe your order's status.
+- View your order history.
+- Login, logout, change your profile details, shipping and billing addresses.
+
+### Login as an **admin** and...
+
+- Create, edit and delete products, categories, and product lines.
+- Create discount codes, specify their discount rate, activate them and set their expiry date.
+- Lower prices of single items within a product line to promote sales.
+- Unpublish product lines and products from the store when they go out of stock, publish them again when they are back in stock.
+- Manage inventory levels of products.
+- Update order status, or cancel an order.
+- Analyse your sales by querying against your database of shop orders.
 
 # Getting Started 🏁
 
-## Interact with Live Project
+## Video Walkthrough 👀
 
-## Swagger UI
+## Browse the Live Website 👩🏽‍💻
 
-## Clone Project and Run Locally
+Live project can be viewed at:
+https://core-nutrition.azurewebsites.net
+
+## Swagger UI 💬
+
+Swagger UI:
+https://core-nutrition.azurewebsites.net/swagger/index.html
+
+## Clone Project and Run Locally ⚛️
 
 # DB Schema / ERD 🌎
 
@@ -263,7 +298,16 @@ It models the shape of Rest API requests and responses which are referenced by t
 
 If you want to jump straight into the code, here are some pointers of what can be found in the Infrastructure Layer:
 
-### Persistence Highlights
+### Persistence / Write Operations / UoW
+
+- DDD, transactional boundary: marker `IRepository<T> : where T : AggregateRoot`
+- Unit of Work in behavior pipeline with MediatR
+- interceptors abstracted away into UoW
+
+### Read Operations:
+
+- fast caching repository decorator > memory cache with exploration against stale values
+- specification pattern
 
 **PublishDomainEventsInterceptor**
 
@@ -347,19 +391,6 @@ Testing Project structure
 Testing Validation Pipeline behavior: 8/23:00
 
 # Fullstack Project
-
-![TypeScript](https://img.shields.io/badge/TypeScript-v.4-green)
-![SASS](https://img.shields.io/badge/SASS-v.4-hotpink)
-![React](https://img.shields.io/badge/React-v.18-blue)
-![Redux toolkit](https://img.shields.io/badge/Redux-v.1.9-brown)
-![.NET Core](https://img.shields.io/badge/.NET%20Core-v.8-purple)
-![EF Core](https://img.shields.io/badge/EF%20Core-v.8-cyan)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v.16-drakblue)
-
-This project involves creating a Fullstack project with React and Redux in the frontend and ASP.NET Core 7 in the backend. The goal is to provide a seamless experience for users, along with robust management system for administrators.
-
-- Frontend: SASS, TypeScript, React, Redux Toolkit
-- Backend: ASP.NET Core, Entity Framework Core, PostgreSQL
 
 ## Features
 

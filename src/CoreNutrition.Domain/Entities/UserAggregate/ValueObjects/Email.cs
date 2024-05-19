@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using ErrorOr;
@@ -45,6 +43,9 @@ public sealed class Email : ValueObject
 
     return new Email(email);
   }
+
+  public override string ToString() => Value;
+
   public override IEnumerable<object> GetEqualityComponents()
   {
     yield return Value;
