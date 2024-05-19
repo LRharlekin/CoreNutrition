@@ -1,6 +1,6 @@
 namespace CoreNutrition.Contracts.Category;
 
-public record CreateCategoryResponse(
+public record CategoryResponse(
   string Id,
   string Name,
   string Description,

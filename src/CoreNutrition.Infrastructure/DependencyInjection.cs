@@ -12,7 +12,8 @@ using CoreNutrition.Domain.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 using CoreNutrition.Domain.Common.Interfaces.Services;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
-using CoreNutrition.Infrastructure.Persistence;
+using CoreNutrition.Infrastructure.Users.Persistence;
+using CoreNutrition.Infrastructure.Categories.Persistence;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CoreNutrition.Infrastructure;
@@ -24,9 +25,20 @@ public static class DependencyInjection
     ConfigurationManager configuration
   )
   {
-    services.AddAuth(configuration);
+    services
+      .AddAuth(configuration)
+      .AddPersistence();
     services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+    return services;
+  }
+
+  public static IServiceCollection AddPersistence(
+    this IServiceCollection services
+  )
+  {
     services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<ICategoryRepository, CategoryRepository>();
 
     return services;
   }

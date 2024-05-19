@@ -7,7 +7,7 @@ namespace CoreNutrition.Application.Common.Interfaces.Authorization;
 public interface IAuthorizationService
 {
   ErrorOr<Success> AuthorizeCurrentUser<T>(
-      IAuthorizeableRequest<T> request,
+      IAuthorizeableAction<T> request,
       // List<string> requiredPermissions,
       List<string> requiredRoles);
 }

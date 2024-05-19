@@ -20,7 +20,7 @@ public static class ApiRoutes
 
   public static class Users
   {
-    public const string GetAll = "users";
+    public const string List = "users";
     public const string GetById = "users/{userId:guid}";
 
     public const string Update = "users/{userId:guid}";
@@ -31,16 +31,26 @@ public static class ApiRoutes
   }
   // Contains the categories routes
 
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
+
   public static class Categories
   {
     public const string Create = "categories";
     public const string Update = "categories/{categoryId:guid}";
-    public const string Delete = "categories/{categoryId:guid}";
-    public const string GetAll = "categories";
+    // public const string Delete = "categories/{categoryId:guid}";
+    public const string List = "categories";
     public const string GetById = "categories/{categoryId:guid}";
-    public const string GetProductLines = "categories/{categoryId:guid}/productlines";
-    public const string GetProducts = "categories/{categoryId:guid}/products";
+    // public const string GetProductLines = "categories/{categoryId:guid}/productlines";
+    // public const string GetProducts = "categories/{categoryId:guid}/products";
   }
+
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
+  /* CATEGORIES */
 
   // Contains the product lines routes
 
@@ -49,7 +59,7 @@ public static class ApiRoutes
     public const string Create = "lines";
     public const string Update = "lines/{productLineId:guid}";
     public const string Delete = "lines/{productLineId:guid}";
-    public const string GetAll = "lines";
+    public const string List = "lines";
     public const string GetById = "lines/{productLineId:guid}";
     public const string GetProductsByLine = "lines/{productLineId:guid}/products";
     public const string TogglePublished = "lines/{productLineId:guid}/publish";
@@ -64,7 +74,7 @@ public static class ApiRoutes
     public const string Delete = "products/{productId:guid}";
     public const string UpdateQuantityInStock = "products/{productId:guid}/inventory";
     public const string TogglePublished = "products/{productId:guid}/publish";
-    public const string GetAll = "products";
+    public const string List = "products";
     public const string GetById = "products/{productId:guid}";
   }
 
@@ -75,7 +85,7 @@ public static class ApiRoutes
     public const string Create = "sizes";
     public const string Update = "sizes/{productLineSizeId:guid}";
     public const string Delete = "sizes/{productLineSizeId:guid}";
-    public const string GetAll = "sizes";
+    public const string List = "sizes";
     public const string GetById = "sizes/{productLineSizeId:guid}";
     public const string GetByProductLine = "sizes/{productLineId:guid}";
   }
@@ -87,7 +97,7 @@ public static class ApiRoutes
     public const string Create = "flavours";
     public const string Update = "flavours/{productLineFlavourId:guid}";
     public const string Delete = "flavours/{productLineFlavourId:guid}";
-    public const string GetAll = "flavours";
+    public const string List = "flavours";
     public const string GetById = "flavours/{productLineFlavourId:guid}";
     public const string GetByProductLine = "flavours/{productLineId:guid}";
   }
@@ -108,7 +118,7 @@ public static class ApiRoutes
     public const string Create = "reviews";
     public const string Update = "reviews/{reviewId:guid}";
     public const string Delete = "reviews/{reviewId:guid}";
-    public const string GetAll = "reviews";
+    public const string List = "reviews";
     public const string GetById = "reviews/{reviewId:guid}";
     public const string GetByProduct = "reviews/{productId:guid}";
     public const string GetByProductLine = "reviews/{productLineId:guid}";
@@ -123,7 +133,7 @@ public static class ApiRoutes
     public const string Update = "codes/{discountCodeId:guid}";
     public const string Delete = "codes/{discountCodeId:guid}";
     public const string ToggleActive = "codes/{discountCodeId:guid}/activate";
-    public const string GetAll = "codes";
+    public const string List = "codes";
     public const string GetById = "codes/{discountCodeId:guid}";
     public const string GetOrders = "codes/{discountCodeId:guid}/orders";
   }
@@ -135,7 +145,7 @@ public static class ApiRoutes
     public const string Create = "shippingmethods";
     public const string Update = "shippingmethods/{shippingMethodId:guid}";
     public const string Delete = "shippingmethods/{shippingMethodId:guid}";
-    public const string GetAll = "shippingmethods";
+    public const string List = "shippingmethods";
     public const string GetById = "shippingmethods/{shippingMethodId:guid}";
   }
 
@@ -146,11 +156,10 @@ public static class ApiRoutes
     public const string Create = "orders";
     public const string Update = "orders/{shopOrderId:guid}";
     public const string Delete = "orders/{shopOrderId:guid}";
-    public const string GetAll = "orders";
+    public const string List = "orders";
     public const string GetById = "orders/{shopOrderId:guid}";
     public const string GetByCustomer = "orders/{userId:guid}";
     public const string Cancel = "orders/{shopOrderId:guid}/cancel";
-
   }
 
   // Contains the addresses routes.
@@ -160,7 +169,7 @@ public static class ApiRoutes
     public const string Create = "addresses";
     public const string Update = "addresses/{customerAddressId:guid}";
     public const string Delete = "addresses/{customerAddressId:guid}";
-    public const string GetAll = "addresses";
+    public const string List = "addresses";
     public const string GetById = "addresses/{customerAddressId:guid}";
     public const string GetByCustomer = "addresses/{userId:guid}";
     public const string GetByOrder = "addresses/{shopOrderId:guid}";
@@ -173,7 +182,7 @@ public static class ApiRoutes
     public const string Create = "roles";
     public const string Update = "roles/{userRoleId:guid}";
     public const string Delete = "roles/{userRoleId:guid}";
-    public const string GetAll = "roles";
+    public const string List = "roles";
     public const string GetById = "roles/{userRoleId:guid}";
     public const string GetByUser = "roles/{userId:guid}";
     public const string GetUsersWithRole = "roles/{userRoleId:guid}/users";

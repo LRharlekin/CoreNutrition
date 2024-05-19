@@ -3,7 +3,7 @@ using CoreNutrition.Domain.CustomerAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CoreNutrition.Infrastructure.Persistence.Configurations;
+namespace CoreNutrition.Infrastructure.Users.Persistence;
 
 public class CustomerConfigurations : IEntityTypeConfiguration<Customer>
 {

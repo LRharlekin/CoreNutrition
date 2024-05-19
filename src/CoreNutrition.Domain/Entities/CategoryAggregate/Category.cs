@@ -2,11 +2,20 @@ using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.CategoryAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 using CoreNutrition.Domain.CategoryAggregate.Events;
+using CoreNutrition.Domain.Common.DomainErrors;
+
+using ErrorOr;
 
 namespace CoreNutrition.Domain.CategoryAggregate;
 
 public sealed class Category : AggregateRoot<CategoryId, Guid>
 {
+  public const int MinNameLength = 3;
+  public const int MaxNameLength = 50;
+  public const int MinDescriptionLength = 20;
+  public const int MaxDescriptionLength = 800;
+
+
   private List<ProductLineId> _productLineIds = new();
 
   public string Name { get; private set; }
@@ -34,12 +43,27 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
     UpdatedDateTime = createdDateTime;
   }
 
-  public static Category Create(
+  public static ErrorOr<Category> Create(
     string name,
     string description,
     string categoryImageUrl)
   {
-    // TODO: enforce invariants
+    List<Error> errors = new();
+
+    if (name.Length < MinNameLength || name.Length > MaxNameLength)
+    {
+      errors.Add(Errors.Category.InvalidName);
+    }
+    if (description.Length < MinDescriptionLength || description.Length > MaxDescriptionLength)
+    {
+      errors.Add(Errors.Category.InvalidDescription);
+    }
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
     var category = new Category(
       CategoryId.CreateUnique(),
       name,
@@ -59,9 +83,9 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
     // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
   }
 
-  #pragma warning disable CS8618
+#pragma warning disable CS8618
   private Category()
   {
   }
-  #pragma warning disable CS8618
+#pragma warning disable CS8618
 }
