@@ -24,14 +24,19 @@ internal sealed class CreateCategoryCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
-    var category = Category.Create(
+    ErrorOr<Category> categoryResult = Category.Create(
       command.Name,
       command.Description,
       command.CategoryImageUrl
     );
 
-    _categoryRepository.Add(category);
+    if (categoryResult.IsError)
+    {
+      return categoryResult.Errors; // errors bybass mapping pipeline?
+    }
 
-    return category;
+    _categoryRepository.Add(categoryResult.Value);
+
+    return categoryResult.Value;
   }
 }

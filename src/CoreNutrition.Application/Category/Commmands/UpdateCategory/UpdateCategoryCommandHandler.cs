@@ -8,14 +8,14 @@ using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Application.Common.Interfaces.Cryptography;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 
-namespace CoreNutrition.Application.Categories.Commands.UpsertCategory;
+namespace CoreNutrition.Application.Categories.Commands.UpdateCategory;
 
-internal sealed class UpsertCategoryCommandHandler
-  : IRequestHandler<UpsertCategoryCommand, ErrorOr<Category>>
+internal sealed class UpdateCategoryCommandHandler
+  : IRequestHandler<UpdateCategoryCommand, ErrorOr<Category>>
 {
   private readonly ICategoryRepository _categoryRepository;
 
-  public UpsertCategoryCommandHandler(
+  public UpdateCategoryCommandHandler(
     ICategoryRepository categoryRepository
   )
   {
@@ -23,17 +23,28 @@ internal sealed class UpsertCategoryCommandHandler
   }
 
   public async Task<ErrorOr<Category>> Handle(
-    UpsertCategoryCommand command,
+    UpdateCategoryCommand command,
     CancellationToken cancellationToken)
   {
     await Task.CompletedTask; // TODO delete later
     /* perform action */
-    var category = _categoryRepository.GetById(command.Id);
+    Category? categoryResult = _categoryRepository.GetById(command.Id);
+
+    if (categoryResult is null)
+    {
+      return Errors.Category.NotFound;
+    }
+
+    // categoryResult.ChangeName(command.Name);
+    // categoryResult.ChangeDescription(command.Description);
+    // categoryResult.ChangeCategoryImageUrl(command.CategoryImageUrl);
+
     /* persist changes */
     // _categoryRepository.Method(category)
+    // await _unitOfWork.SaveChangesAsync(cancellationToken);
 
     /* return result */
-    // return new UpsertCategoryResult(category);
+    // return categoryResult;
     return default!;
   }
 }

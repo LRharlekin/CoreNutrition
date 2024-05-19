@@ -2,6 +2,8 @@ using MediatR;
 using ErrorOr;
 using FluentValidation;
 
+using CoreNutrition.Domain.CategoryAggregate;
+
 namespace CoreNutrition.Application.Categories.Commands.CreateCategory;
 
 public class CreateCategoryCommandValidator
@@ -11,11 +13,12 @@ public class CreateCategoryCommandValidator
   {
     RuleFor(x => x.Name)
       .NotEmpty()
-      .MaximumLength(50);
+      .MinimumLength(Category.MinNameLength)
+      .MaximumLength(Category.MaxNameLength);
     RuleFor(x => x.Description)
     .NotEmpty()
-    .MinimumLength(20)
-    .MaximumLength(800);
+    .MinimumLength(Category.MinDescriptionLength)
+    .MaximumLength(Category.MaxDescriptionLength);
     RuleFor(x => x.CategoryImageUrl)
       .NotEmpty();
   }

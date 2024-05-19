@@ -6,14 +6,13 @@ using CoreNutrition.Domain.CategoryAggregate;
 using CoreNutrition.Domain.CategoryAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 
-namespace CoreNutrition.Application.Categories.Commands.UpsertCategory;
+namespace CoreNutrition.Application.Categories.Commands.UpdateCategory;
 
 [Authorize(Roles = "Admin")]
-public record UpsertCategoryCommand(
+public record UpdateCategoryCommand(
   CategoryId Id,
   string Name,
   string Description,
-  string CategoryImageUrl,
-  List<ProductLineId> ProductLineIds
+  string CategoryImageUrl
   )
   : IAuthorizeableAction<ErrorOr<Category>>;

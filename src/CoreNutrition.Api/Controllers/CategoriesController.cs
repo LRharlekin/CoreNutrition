@@ -8,7 +8,7 @@ using MapsterMapper;
 using CoreNutrition.Api.Infrastructure;
 using CoreNutrition.Api.Contracts;
 using CoreNutrition.Application.Categories.Commands.CreateCategory;
-using CoreNutrition.Application.Categories.Commands.UpsertCategory;
+using CoreNutrition.Application.Categories.Commands.UpdateCategory;
 using CoreNutrition.Application.Categories.Queries.GetCategoryById;
 using CoreNutrition.Contracts.Category;
 using CoreNutrition.Domain.CategoryAggregate;
@@ -33,30 +33,42 @@ public sealed class CategoriesController : ApiControllerBase
     ErrorOr<Category> createCategoryResult = await _mediator.Send(command);
 
     return createCategoryResult.Match(
-      // cateogry => CreatedAtAction()) // TODO: 201 Created
-      category => Ok(_mapper.Map<CategoryResponse>(category)),
+      category => CreatedAtAction(
+        actionName: nameof(GetCategoryById),
+        routeValues: new { categoryId = category.Id },
+        value: _mapper.Map<CategoryResponse>(category)),
       errors => ResolveProblems(errors)
     );
   }
 
-  [HttpPut(ApiRoutes.Categories.Upsert)]
-  public async Task<IActionResult> UpsertCategory(
+  [HttpPut(ApiRoutes.Categories.Update)]
+  public async Task<IActionResult> UpdateCategory(
     Guid categoryId,
-    UpsertCategoryRequest request)
+    UpdateCategoryRequest request)
   {
-    var command = _mapper.Map<UpsertCategoryCommand>((categoryId, request));
+    var command = _mapper.Map<UpdateCategoryCommand>((categoryId, request));
 
-    ErrorOr<Category> upsertCategoryResult = await _mediator.Send(command);
+    ErrorOr<Category> updateCategoryResult = await _mediator.Send(command);
 
-    return upsertCategoryResult.Match(
+    // 200 OK
+    return updateCategoryResult.Match(
       category => Ok(_mapper.Map<CategoryResponse>(category)),
       errors => ResolveProblems(errors)
     );
   }
 
   [HttpDelete(ApiRoutes.Categories.Delete)]
+  // {
+  //   var command = _mapper.Map<DeleteCategoryCommand>(categoryId);
 
-  [AllowAnonymous] // TODO Delete later
+  //   ErrorOr<??> deleteCategoryResult = await _mediator.Send(command);
+
+  //   return deleteCategoryResult.Match(
+  //     ?? => NoContent(), // 204 No Content
+  //     errors => ResolveProblems(errors)
+  //   );
+  // }
+
   [HttpGet(ApiRoutes.Categories.GetById)]
   public async Task<IActionResult> GetCategoryById(Guid categoryId)
   {
@@ -64,11 +76,9 @@ public sealed class CategoriesController : ApiControllerBase
 
     ErrorOr<Category> getCategoryByIdResult = await _mediator.Send(query);
 
-    // TODO return 201 if new category was created
-    // TODO return 203 if category was updated
 
     return getCategoryByIdResult.Match(
-      category => Ok(_mapper.Map<CategoryResponse>(getCategoryByIdResult)),
+      category => Ok(_mapper.Map<CategoryResponse>(category)),
       errors => ResolveProblems(errors)
     );
   }
@@ -85,4 +95,13 @@ public sealed class CategoriesController : ApiControllerBase
 
   // [AllowAnonymous]
   // [HttpGet(ApiRoutes.Categories.GetProducts)]
+
+  // private CreatedAtActionResult CreatedAtGetCategory(Category category)
+  // {
+  //   return CreatedAtAction(
+  //     actionName: nameof(GetCategoryById),
+  //     routeValues: new { categoryId = category.Id },
+  //     value: _mapper.Map<CategoryResponse>(category)
+  //   );
+  // }
 }

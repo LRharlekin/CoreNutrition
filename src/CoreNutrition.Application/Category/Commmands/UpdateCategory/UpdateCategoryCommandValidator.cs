@@ -8,12 +8,12 @@ using FluentValidation;
 // using CoreNutrition.Application.Authentication.Common;
 // using CoreNutrition.Domain.Common.DomainErrors;
 
-namespace CoreNutrition.Application.Categories.Commands.UpsertCategory;
+namespace CoreNutrition.Application.Categories.Commands.UpdateCategory;
 
-public class UpsertCategoryCommandValidator
-  : AbstractValidator<UpsertCategoryCommand>
+public class UpdateCategoryCommandValidator
+  : AbstractValidator<UpdateCategoryCommand>
 {
-  public UpsertCategoryCommandValidator()
+  public UpdateCategoryCommandValidator()
   {
     // RuleFor(x => x.FirstName).NotEmpty();
     // RuleFor(x => x.LastName).NotEmpty();
