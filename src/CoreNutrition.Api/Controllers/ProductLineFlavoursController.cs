@@ -44,23 +44,23 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
     );
   }
 
-  // [HttpPut(ApiRoutes.Categories.Update)]
-  // public async Task<IActionResult> UpdateCategory(
+  // [HttpPut(ApiRoutes.ProductLineFlavours.Update)]
+  // public async Task<IActionResult> UpdateProductLineFlavour(
   //   Guid categoryId,
-  //   UpdateCategoryRequest request)
+  //   UpdateProductLineFlavourRequest request)
   // {
-  //   var command = _mapper.Map<UpdateCategoryCommand>((categoryId, request));
+  //   var command = _mapper.Map<UpdateProductLineFlavourCommand>((categoryId, request));
 
-  //   ErrorOr<Category> updateCategoryResult = await _mediator.Send(command);
+  //   ErrorOr<Category> updateProductLineFlavourResult = await _mediator.Send(command);
 
   //   // 200 OK
-  //   return updateCategoryResult.Match(
+  //   return updateProductLineFlavourResult.Match(
   //     category => Ok(_mapper.Map<CategoryResponse>(category)),
   //     errors => ResolveProblems(errors)
   //   );
   // }
 
-  // [HttpDelete(ApiRoutes.Categories.Delete)]
+  // [HttpDelete(ApiRoutes.ProductLineFlavours.Delete)]
   // {
   //   var command = _mapper.Map<DeleteCategoryCommand>(categoryId);
 
@@ -87,34 +87,21 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
     );
   }
 
-  // [AllowAnonymous] // TODO Delete later
-  // [HttpGet(ApiRoutes.Categories.List)]
-  // public async Task<IActionResult> ListCategories()
-  // {
-  //   var query = new ListCategoriesQuery();
+  [HttpGet(ApiRoutes.ProductLineFlavours.List)]
+  public async Task<IActionResult> ListProductLineFlavours()
+  {
+    var query = new ListProductLineFlavoursQuery();
 
-  //   ErrorOr<List<Category>> listCategoriesResult = await _mediator.Send(query);
+    ErrorOr<List<Category>> listProductLineFlavoursResult = await _mediator.Send(query);
 
-  //   return listCategoriesResult.Match(
-  //     categories => categories.Count > 0
-  //       ? Ok(_mapper.Map<List<CategoryResponse>>(categories))
-  //       : NoContent(),
-  //     errors => ResolveProblems(errors)
-  //   );
-  // }
+    return listProductLineFlavoursResult.Match(
+      productLineFlavours => categories.Count > 0
+        ? Ok(_mapper.Map<List<CategoryResponse>>(categories))
+        : NoContent(),
+      errors => ResolveProblems(errors)
+    );
+  }
 
-  // [AllowAnonymous]
-  // [HttpGet(ApiRoutes.Categories.GetProductLines)]
-
-  // [AllowAnonymous]
-  // [HttpGet(ApiRoutes.Categories.GetProducts)]
-
-  // private CreatedAtActionResult CreatedAtGetCategory(Category category)
-  // {
-  //   return CreatedAtAction(
-  //     actionName: nameof(GetCategoryById),
-  //     routeValues: new { categoryId = category.Id },
-  //     value: _mapper.Map<CategoryResponse>(category)
-  //   );
-  // }
+  // [HttpGet(ApiRoutes.ProductLineFlavours.GetByProductLine)]
+  // public async Task<IActionResult> GetProductLineFlavoursByProductLine(Guid productLineId)
 }
