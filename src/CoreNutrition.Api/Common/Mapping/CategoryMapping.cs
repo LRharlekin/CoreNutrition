@@ -1,5 +1,4 @@
 using Mapster;
-using ErrorOr;
 
 using CoreNutrition.Contracts.Category;
 using CoreNutrition.Application.Categories.Commands.CreateCategory;

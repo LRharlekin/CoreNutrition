@@ -1,11 +1,17 @@
 using ErrorOr;
 
+using CoreNutrition.Domain.ProductLineFlavourAggregate;
+
 namespace CoreNutrition.Domain.Common.DomainErrors;
 
 public static partial class Errors
 {
     public static class ProductLineFlavour
     {
+        public static Error InvalidName => Error.Validation(
+        code: "Flavour.InvalidName",
+        description: $"The name for a Flavour must be between {ProductLineFlavourAggregate.ProductLineFlavour.MinNameLength} and {ProductLineFlavourAggregate.ProductLineFlavour.MaxNameLength} characters long.");
+
         public static Error InvalidProductLineFlavourId => Error.Validation(
             code: "ProductLineFlavour.InvalidId",
             description: "Product Line Flavour ID is invalid");
