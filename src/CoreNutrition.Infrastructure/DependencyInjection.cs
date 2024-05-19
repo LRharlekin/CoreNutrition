@@ -14,6 +14,9 @@ using CoreNutrition.Domain.Common.Interfaces.Services;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 using CoreNutrition.Infrastructure.Users.Persistence;
 using CoreNutrition.Infrastructure.Categories.Persistence;
+using CoreNutrition.Infrastructure.ProductLineSizes.Persistence;
+using CoreNutrition.Infrastructure.ProductLineFlavours.Persistence;
+using CoreNutrition.Infrastructure.ProductLines.Persistence;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CoreNutrition.Infrastructure;
@@ -39,6 +42,9 @@ public static class DependencyInjection
   {
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<ICategoryRepository, CategoryRepository>();
+    services.AddScoped<IProductLineRepository, ProductLineRepository>();
+    services.AddScoped<IProductLineSizeRepository, ProductLineSizeRepository>();
+    services.AddScoped<IProductLineFlavourRepository, ProductLineFlavourRepository>();
 
     return services;
   }

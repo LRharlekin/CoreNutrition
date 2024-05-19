@@ -6,6 +6,7 @@ namespace CoreNutrition.Api.Controllers;
 public class ErrorsController : ControllerBase
 {
   [Route("/error")]
+  [HttpGet] // TODO: maybe delete later - only added for Swagger
   public IActionResult Error()
   {
     Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;

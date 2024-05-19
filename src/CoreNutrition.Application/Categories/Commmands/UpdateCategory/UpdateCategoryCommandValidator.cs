@@ -1,5 +1,3 @@
-using MediatR;
-using ErrorOr;
 using FluentValidation;
 
 // using CoreNutrition.Application.Common.Interfaces.Authentication;
@@ -21,5 +19,10 @@ public class UpdateCategoryCommandValidator
     //   .NotEmpty()
     //   .EmailAddress();
     // RuleFor(x => x.Password).NotEmpty();
+
+    // RuleFor(x => xId)
+    //       .NotEmpty()
+    //       .Length(36)
+    //       .Matches(@"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
   }
 }
