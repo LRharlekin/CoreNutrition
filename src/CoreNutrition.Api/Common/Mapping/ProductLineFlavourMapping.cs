@@ -3,7 +3,7 @@ using Mapster;
 using CoreNutrition.Contracts.ProductLineFlavour;
 using CoreNutrition.Application.ProductLineFlavours.Commands.CreateProductLineFlavour;
 // using CoreNutrition.Application.ProductLineFlavours.Commands.UpdateProductLineFlavour;
-// using CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavourById;
+using CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavourById;
 using CoreNutrition.Domain.ProductLineFlavourAggregate;
 using CoreNutrition.Domain.ProductLineFlavourAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
@@ -25,16 +25,22 @@ public class ProductLineFlavourMapping : IRegister
 
     /* queries */
 
-    // config.NewConfig<Guid, GetProductLineFlavourByIdQuery>()
-    //   .Map((dest) => dest.Id, (src) => src);
+    config.NewConfig<Guid, GetProductLineFlavourByIdQuery>()
+      .Map((dest) => dest.Id, (src) => src);
 
     /* value objects */
 
     config.NewConfig<Guid, ProductLineFlavourId>()
       .MapWith(guid => ProductLineFlavourId.Create(guid));
 
+    config.NewConfig<Guid, ProductLineFlavourId>()
+      .MapWith(guid => ProductLineFlavourId.Create(guid));
+
     config.NewConfig<Guid, ProductLineId>()
       .MapWith(guid => ProductLineId.Create(guid));
+
+    config.NewConfig<string, ProductLineId>()
+      .MapWith(guidString => ProductLineId.Create(guidString).Value);
 
     /* responses */
 

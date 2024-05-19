@@ -13,7 +13,7 @@ using CoreNutrition.Domain.ProductLineFlavourAggregate;
 using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Application.ProductLineFlavours.Commands.CreateProductLineFlavour;
 // using CoreNutrition.Application.ProductLineFlavours.Queries.ListProductLineFlavours;
-// using CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavourById;
+using CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavourById;
 
 namespace CoreNutrition.Api.Controllers;
 
@@ -73,18 +73,18 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
   // }
 
   [HttpGet(ApiRoutes.ProductLineFlavours.GetById)]
-  public async Task<IActionResult> GetProductLineFlavourById(Guid categoryId)
+  public async Task<IActionResult> GetProductLineFlavourById(Guid productLineFlavourId)
   {
     await Task.CompletedTask; // TODO delete later
-    // var query = _mapper.Map<GetCategoryByIdQuery>(categoryId);
+    Console.WriteLine("Controller before map:" + productLineFlavourId);
+    var query = _mapper.Map<GetProductLineFlavourByIdQuery>(productLineFlavourId);
 
-    // ErrorOr<Category> getCategoryByIdResult = await _mediator.Send(query);
+    ErrorOr<ProductLineFlavour> getProductLineFlavourByIdResult = await _mediator.Send(query);
 
-    // return getCategoryByIdResult.Match(
-    //   category => Ok(_mapper.Map<CategoryResponse>(category)),
-    //   errors => ResolveProblems(errors)
-    // );
-    return Ok();
+    return getProductLineFlavourByIdResult.Match(
+      productLineFlavour => Ok(_mapper.Map<ProductLineFlavourResponse>(productLineFlavour)),
+      errors => ResolveProblems(errors)
+    );
   }
 
   // [AllowAnonymous] // TODO Delete later
