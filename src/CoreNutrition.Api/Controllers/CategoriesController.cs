@@ -94,6 +94,7 @@ public sealed class CategoriesController : ApiControllerBase
     return listCategoriesResult.Match(
       categories => categories.Count > 0
         ? Ok(_mapper.Map<List<CategoryResponse>>(categories))
+        // ? Ok(_mapper.Map<ListCategoriesResponse> (categories))
         : NoContent(),
       errors => ResolveProblems(errors)
     );
