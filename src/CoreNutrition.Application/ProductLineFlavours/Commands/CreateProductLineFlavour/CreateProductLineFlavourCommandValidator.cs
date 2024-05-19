@@ -15,5 +15,7 @@ public class CreateProductLineFlavourCommandValidator
       .MaximumLength(ProductLineFlavour.MaxNameLength);
     RuleFor(x => x.FlavourImageUrl)
       .NotEmpty();
+    RuleFor(x => x.ProductLineId)
+      .NotNull();
   }
 }

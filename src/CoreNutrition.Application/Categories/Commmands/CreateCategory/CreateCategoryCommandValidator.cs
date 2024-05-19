@@ -14,9 +14,9 @@ public class CreateCategoryCommandValidator
       .MinimumLength(Category.MinNameLength)
       .MaximumLength(Category.MaxNameLength);
     RuleFor(x => x.Description)
-    .NotEmpty()
-    .MinimumLength(Category.MinDescriptionLength)
-    .MaximumLength(Category.MaxDescriptionLength);
+      .NotEmpty()
+      .MinimumLength(Category.MinDescriptionLength)
+      .MaximumLength(Category.MaxDescriptionLength);
     RuleFor(x => x.CategoryImageUrl)
       .NotEmpty();
   }
