@@ -44,7 +44,7 @@ public class ProductLineFlavourMapping : IRegister
 
     /* responses */
 
-    // config.NewConfig<List<ProductLineFlavour>, ListCategoriesResponse>()
+    // config.NewConfig<List<ProductLineFlavour>, ListProductLineFlavoursResponse>()
     //   .Map((dest) => dest, (src) => src);
 
     config.NewConfig<ProductLineFlavour, ProductLineFlavourResponse>()
