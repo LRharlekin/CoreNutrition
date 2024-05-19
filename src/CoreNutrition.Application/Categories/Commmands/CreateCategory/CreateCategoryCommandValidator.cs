@@ -1,5 +1,3 @@
-using MediatR;
-using ErrorOr;
 using FluentValidation;
 
 using CoreNutrition.Domain.CategoryAggregate;

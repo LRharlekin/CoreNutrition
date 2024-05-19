@@ -1,5 +1,3 @@
-using MediatR;
-using ErrorOr;
 using FluentValidation;
 
 namespace CoreNutrition.Application.Categories.Queries.GetCategoryById;
