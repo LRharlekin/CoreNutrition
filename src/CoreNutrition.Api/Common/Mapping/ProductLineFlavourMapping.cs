@@ -33,8 +33,13 @@ public class ProductLineFlavourMapping : IRegister
     config.NewConfig<Guid, ProductLineFlavourId>()
       .MapWith(guid => ProductLineFlavourId.Create(guid));
 
+    config.NewConfig<Guid, ProductLineFlavourId>()
+      .MapWith(guid => ProductLineFlavourId.Create(guid));
+
     config.NewConfig<Guid, ProductLineId>()
       .MapWith(guid => ProductLineId.Create(guid));
+    config.NewConfig<string, ProductLineId>()
+      .MapWith(guidString => ProductLineId.Create(guidString).Value);
 
     /* responses */
 
