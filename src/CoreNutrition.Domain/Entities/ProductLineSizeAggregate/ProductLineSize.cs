@@ -1,6 +1,8 @@
 using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.Common.ValueObjects;
+
 using CoreNutrition.Domain.ProductLineSizeAggregate.ValueObjects;
+using CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
 using CoreNutrition.Domain.ProductLineSizeAggregate.Events;
 
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
@@ -12,9 +14,9 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
 {
   private List<ProductId> _productIds = new List<ProductId>();
 
-  public SizeId SizeId { get; private set; }
   public ProductLineId ProductLineId { get; private set; }
   public CurrencyAmount RecommendedRetailPrice { get; private set; }
+  public SizeVariant SizeVariant { get; private set; }
 
   public DateTime CreatedDateTime { get; private set; }
   public DateTime UpdatedDateTime { get; private set; }
@@ -22,32 +24,32 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
   private ProductLineSize(
-    ProductLineSizeId productLineSizeId,
-    SizeId sizeId,
-    ProductLineId productLineId,
-    CurrencyAmount recommendedRetailPrice,
+    ProductLineSizeId productLineSizeId, // PK
+    ProductLineId productLineId, // FK
+    SizeVariant sizeVariant, // contained Entity
+    CurrencyAmount recommendedRetailPrice, // VO
     DateTime createdDateTime
     )
-    : base(productLineSizeId)
+    : base(productLineSizeId) // PK
   {
-    SizeId = sizeId;
-    ProductLineId = productLineId;
-    RecommendedRetailPrice = recommendedRetailPrice;
+    ProductLineId = productLineId; // FK
+    SizeVariant = sizeVariant; // contained Entity
+    RecommendedRetailPrice = recommendedRetailPrice; // VO
     CreatedDateTime = createdDateTime;
     UpdatedDateTime = createdDateTime;
   }
 
   public static ProductLineSize Create(
-    SizeId sizeId,
-    ProductLineId productLineId,
+    ProductLineId productLineId, // FK
+    SizeVariant sizeVariant, // contained Entity
     CurrencyAmount recommendedRetailPrice
     )
   {
     var productLineSize = new ProductLineSize(
       ProductLineSizeId.CreateUnique(),
-      sizeId,
-      productLineId,
-      recommendedRetailPrice,
+      productLineId, // FK
+      sizeVariant, // contained Entity
+      CurrencyAmount.CreateNew(), // VO
       DateTime.UtcNow);
 
     productLineSize.AddDomainEvent(new ProductLineSizeCreated(productLineSize));

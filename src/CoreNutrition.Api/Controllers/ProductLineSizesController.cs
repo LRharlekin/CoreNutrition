@@ -32,8 +32,9 @@ public sealed class ProductLineSizesController : ApiControllerBase
   [HttpPost(ApiRoutes.ProductLineSizes.Create)]
   public async Task<IActionResult> CreateProductLineSize(CreateProductLineSizeRequest request)
   {
-    // var command = _mapper.Map<CreateProductLineSizeCommand>(request);
-    // ErrorOr<ProductLineSize> createProductLineSizeResult = await _mediator.Send(command);
+    await Task.CompletedTask; // TODO delete later
+    var command = _mapper.Map<CreateProductLineSizeCommand>(request);
+    ErrorOr<ProductLineSize> createProductLineSizeResult = await _mediator.Send(command);
 
     // return createProductLineSizeResult.Match(
     //   productLineSize => CreatedAtAction(
@@ -42,7 +43,7 @@ public sealed class ProductLineSizesController : ApiControllerBase
     //     value: _mapper.Map<ProductLineSizeResponse>(productLineSize)),
     //   errors => ResolveProblems(errors)
     // );
-    return Ok(request);
+    return Ok(command);
   }
 
   // [HttpPut(ApiRoutes.ProductLineSizes.Update)]
