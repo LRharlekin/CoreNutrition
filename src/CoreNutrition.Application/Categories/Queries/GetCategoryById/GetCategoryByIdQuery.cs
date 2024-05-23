@@ -9,6 +9,6 @@ namespace CoreNutrition.Application.Categories.Queries.GetCategoryById;
 
 [Authorize(Roles = "Admin")]
 public record GetCategoryByIdQuery(
-  string Id
+  Guid Id
   )
   : IAuthorizeableAction<ErrorOr<Category>>;

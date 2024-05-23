@@ -1,11 +1,11 @@
 using FluentValidation;
 
-namespace CoreNutrition.Application.Categories.Queries.GetCategoryById;
+namespace CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavourById;
 
-public class GetCategoryByIdQueryValidator
-  : AbstractValidator<GetCategoryByIdQuery>
+public class GetProductLineFlavourByIdQueryValidator
+  : AbstractValidator<GetProductLineFlavourByIdQuery>
 {
-  public GetCategoryByIdQueryValidator()
+  public GetProductLineFlavourByIdQueryValidator()
   {
     RuleFor(query => query.Id)
       .NotNull()

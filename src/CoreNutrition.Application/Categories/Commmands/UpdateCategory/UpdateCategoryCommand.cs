@@ -8,7 +8,7 @@ namespace CoreNutrition.Application.Categories.Commands.UpdateCategory;
 
 [Authorize(Roles = "Admin")]
 public record UpdateCategoryCommand(
-  string Id,
+  Guid Id,
   string? Name,
   string? Description,
   string? CategoryImageUrl

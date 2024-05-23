@@ -13,13 +13,13 @@ public class CreateProductLineFlavourCommandValidator
       .NotNull()
       .NotEmpty()
       .Length(ProductLineFlavour.MinNameLength, ProductLineFlavour.MaxNameLength);
-    RuleFor(command => command.FlavourImageUrl)
-      .NotNull()
-      .NotEmpty()
-      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
     RuleFor(command => command.ProductLineId)
       .NotNull()
       .NotEmpty()
       .Must(id => Guid.TryParse(id, out _));
+    RuleFor(command => command.FlavourImageUrl)
+      .NotNull()
+      .NotEmpty()
+      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
   }
 }

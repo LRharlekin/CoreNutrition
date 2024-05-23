@@ -26,8 +26,8 @@ internal sealed class GetCategoryByIdQueryHandler
   {
     await Task.CompletedTask; // TODO delete later
 
-    Guid.TryParse(query.Id, out Guid guid);
-    CategoryId categoryId = CategoryId.Create(guid);
+    // Guid.TryParse(query.Id, out Guid guid);
+    CategoryId categoryId = CategoryId.Create(query.Id);
 
     var categoryResult = _categoryRepository.GetById(categoryId);
 

@@ -15,8 +15,7 @@ public class UpdateCategoryCommandValidator
   {
     RuleFor(command => command.Id)
       .NotNull()
-      .NotEmpty()
-      .Must(id => Guid.TryParse(id, out _));
+      .NotEmpty();
     Unless(command => command.Name == null, () =>
     {
       RuleFor(command => command.Name)

@@ -28,8 +28,8 @@ internal sealed class UpdateCategoryCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
-    Guid.TryParse(command.Id, out Guid guid);
-    CategoryId categoryId = CategoryId.Create(guid);
+    // Guid.TryParse(command.Id, out Guid guid);
+    CategoryId categoryId = CategoryId.Create(command.Id);
 
     Category? categoryResult = _categoryRepository.GetById(categoryId!);
 

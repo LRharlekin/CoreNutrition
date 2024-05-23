@@ -19,13 +19,13 @@ public class CategoryMapping : IRegister
     config.NewConfig<CreateCategoryRequest, CreateCategoryCommand>()
       .Map((dest) => dest, (src) => src);
 
-    config.NewConfig<(string CategoryId, UpdateCategoryRequest Request), UpdateCategoryCommand>()
+    config.NewConfig<(Guid CategoryId, UpdateCategoryRequest Request), UpdateCategoryCommand>()
       .Map((dest) => dest.Id, (src) => src.CategoryId)
       .Map((dest) => dest, (src) => src.Request);
 
     /* queries */
 
-    config.NewConfig<string, GetCategoryByIdQuery>()
+    config.NewConfig<Guid, GetCategoryByIdQuery>()
       .Map((dest) => dest.Id, (src) => src);
 
     /* value objects */
