@@ -26,8 +26,8 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
   private ProductLineSize(
     ProductLineSizeId productLineSizeId, // PK
     ProductLineId productLineId, // FK
-    SizeVariant sizeVariant, // contained Entity
     CurrencyAmount recommendedRetailPrice, // VO
+    SizeVariant sizeVariant, // contained Entity
     DateTime createdDateTime
     )
     : base(productLineSizeId) // PK
@@ -41,15 +41,15 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
 
   public static ProductLineSize Create(
     ProductLineId productLineId, // FK
-    SizeVariant sizeVariant, // contained Entity
-    CurrencyAmount recommendedRetailPrice
+    CurrencyAmount recommendedRetailPrice,
+    SizeVariant sizeVariant // contained Entity
     )
   {
     var productLineSize = new ProductLineSize(
       ProductLineSizeId.CreateUnique(),
       productLineId, // FK
+      recommendedRetailPrice, // VO
       sizeVariant, // contained Entity
-      CurrencyAmount.CreateNew(), // VO
       DateTime.UtcNow);
 
     productLineSize.AddDomainEvent(new ProductLineSizeCreated(productLineSize));
@@ -57,7 +57,7 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
     return productLineSize;
   }
 
-  // TODO: invoked by relevant domain events
+  // TODO: invoked by relevant domain events, e.g. when a Product is updated/created
   public void AddProductId(ProductId productId)
   {
     _productIds.Add(productId);

@@ -2,12 +2,12 @@ using FluentValidation;
 
 using CoreNutrition.Domain.ProductLineFlavourAggregate;
 
-namespace CoreNutrition.Application.ProductLineFlavours.Commands.CreateProductLineFlavour;
+namespace CoreNutrition.Application.ProductLineFlavours.Commands.UpdateProductLineFlavour;
 
-public class CreateProductLineFlavourCommandValidator
-  : AbstractValidator<CreateProductLineFlavourCommand>
+public class UpdateProductLineFlavourCommandValidator
+  : AbstractValidator<UpdateProductLineFlavourCommand>
 {
-  public CreateProductLineFlavourCommandValidator()
+  public UpdateProductLineFlavourCommandValidator()
   {
     RuleFor(command => command.Flavour)
       .NotNull()

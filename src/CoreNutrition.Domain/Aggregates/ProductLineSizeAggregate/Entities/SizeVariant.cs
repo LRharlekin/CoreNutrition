@@ -8,7 +8,7 @@ namespace CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
 
 public sealed class SizeVariant : Entity<SizeVariantId>
 {
-  // invariants:
+  // invariant constants:
   public const int MinNameLength = 1;
   public const int MaxNameLength = 20;
   public const int MinUnits = 1;
@@ -48,55 +48,66 @@ public sealed class SizeVariant : Entity<SizeVariantId>
     int? unitVolumeInMilliliters = null,
     SizeVariantId? singleSizeVariantId = null)
   {
-    // enforce invariants
-    List<Error> errors = [];
+    var sizeVariant = new SizeVariant(
+      name,
+      units,
+      unitWeightInGrams ?? new(),
+      unitVolumeInMilliliters ?? new(),
+      singleSizeVariantId);
 
-    if (name.Length is < MinNameLength or > MaxNameLength)
-    {
-      errors.Add(Errors.SizeVariant.InvalidName);
-    }
-
-    if (units < MinUnits)
-    {
-      errors.Add(Errors.SizeVariant.InvalidUnits);
-    }
-
-    if (units > 1 && singleSizeVariantId is null)
-    {
-      errors.Add(Errors.SizeVariant.MissingSingleSizeReference);
-    }
-
-    if (unitWeightInGrams is null && unitVolumeInMilliliters is null)
-    {
-      errors.Add(Errors.SizeVariant.MissingWeightOrVolume);
-    }
-
-    if (unitWeightInGrams is not null && unitVolumeInMilliliters is not null)
-    {
-      errors.Add(Errors.SizeVariant.WeightAndVolumeNotAllowed);
-    }
-
-    if (unitWeightInGrams < MinUnitWeightInGrams || unitVolumeInMilliliters < MinUnitVolumeInMilliliters)
-    {
-      errors.Add(Errors.SizeVariant.InvalidWeightOrVolume);
-    }
+    var errors = sizeVariant.EnforceInvariants();
 
     if (errors.Count > 0)
     {
       return errors;
     }
 
-    return new SizeVariant(
-        name,
-      units,
-      unitWeightInGrams ?? new(),
-      unitVolumeInMilliliters ?? new(),
-      singleSizeVariantId);
+    // emit domain events
+    // sizeVariant.AddDomainEvent(new SizeVariantCreated(sizeVariant));
+
+    return sizeVariant;
   }
 
   // TODO: invoked by relevant domain events, e.g. ProductLineSizeCreated, ProductLineSizeUpdated, ProductLineSizeDeleted
   public void AddProductLineSizeId(ProductLineSizeId productLineSizeId)
   {
     _productLineSizeIds.Add(productLineSizeId);
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (this.Name.Length is < MinNameLength or > MaxNameLength)
+    {
+      errors.Add(Errors.SizeVariant.InvalidName);
+    }
+
+    if (this.Units < MinUnits)
+    {
+      errors.Add(Errors.SizeVariant.InvalidUnits);
+    }
+
+    if (this.Units > 1 && this.SingleSizeVariantId is null)
+    {
+      errors.Add(Errors.SizeVariant.MissingSingleSizeReference);
+    }
+
+    if (this.UnitWeightInGrams is null && this.UnitVolumeInMilliliters is null)
+    {
+      errors.Add(Errors.SizeVariant.MissingWeightOrVolume);
+    }
+
+    if (this.UnitWeightInGrams is not null && this.UnitVolumeInMilliliters is not null)
+    {
+      errors.Add(Errors.SizeVariant.WeightAndVolumeNotAllowed);
+    }
+
+    if (this.UnitWeightInGrams < MinUnitWeightInGrams || this.UnitVolumeInMilliliters < MinUnitVolumeInMilliliters)
+    {
+      errors.Add(Errors.SizeVariant.InvalidWeightOrVolume);
+    }
+
+    return errors;
   }
 }

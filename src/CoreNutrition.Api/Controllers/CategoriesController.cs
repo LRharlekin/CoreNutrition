@@ -44,7 +44,7 @@ public sealed class CategoriesController : ApiControllerBase
 
   [HttpPut(ApiRoutes.Categories.Update)]
   public async Task<IActionResult> UpdateCategory(
-    Guid categoryId,
+    string categoryId,
     UpdateCategoryRequest request)
   {
     var command = _mapper.Map<UpdateCategoryCommand>((categoryId, request));
@@ -71,7 +71,7 @@ public sealed class CategoriesController : ApiControllerBase
   // }
 
   [HttpGet(ApiRoutes.Categories.GetById)]
-  public async Task<IActionResult> GetCategoryById(Guid categoryId)
+  public async Task<IActionResult> GetCategoryById(string categoryId)
   {
     var query = _mapper.Map<GetCategoryByIdQuery>(categoryId);
 

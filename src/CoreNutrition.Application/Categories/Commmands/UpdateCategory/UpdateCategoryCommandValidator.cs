@@ -1,10 +1,10 @@
 using FluentValidation;
 
 // using CoreNutrition.Application.Common.Interfaces.Authentication;
-// using CoreNutrition.Domain.CategoryAggregate;
+using CoreNutrition.Domain.CategoryAggregate;
 // using CoreNutrition.Domain.Common.Interfaces.Persistence;
 // using CoreNutrition.Application.Authentication.Common;
-// using CoreNutrition.Domain.Common.DomainErrors;
+using CoreNutrition.Domain.Common.DomainErrors;
 
 namespace CoreNutrition.Application.Categories.Commands.UpdateCategory;
 
@@ -13,16 +13,27 @@ public class UpdateCategoryCommandValidator
 {
   public UpdateCategoryCommandValidator()
   {
-    // RuleFor(x => x.FirstName).NotEmpty();
-    // RuleFor(x => x.LastName).NotEmpty();
-    // RuleFor(x => x.Email)
-    //   .NotEmpty()
-    //   .EmailAddress();
-    // RuleFor(x => x.Password).NotEmpty();
-
-    // RuleFor(x => xId)
-    //       .NotEmpty()
-    //       .Length(36)
-    //       .Matches(@"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+    RuleFor(command => command.Id)
+      .NotNull()
+      .NotEmpty()
+      .Must(id => Guid.TryParse(id, out _));
+    Unless(command => command.Name == null, () =>
+    {
+      RuleFor(command => command.Name)
+        .NotEmpty()
+        .Length(Category.MinNameLength, Category.MaxNameLength);
+    });
+    Unless(command => command.Description == null, () =>
+    {
+      RuleFor(command => command.Description)
+        .NotEmpty()
+        .Length(Category.MinDescriptionLength, Category.MaxDescriptionLength);
+    });
+    Unless(command => command.CategoryImageUrl == null, () =>
+    {
+      RuleFor(command => command.CategoryImageUrl)
+        .NotEmpty()
+        .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
+    });
   }
 }

@@ -25,13 +25,17 @@ internal sealed class GetProductLineFlavourByIdQueryHandler
     CancellationToken cancellationToken)
   {
     await Task.CompletedTask; // TODO delete later
-    var productLineFlavour = _productLineFlavourRepository.GetById(query.Id);
 
-    if (productLineFlavour is null)
+    Guid.TryParse(query.Id, out Guid guid);
+    var productLineFlavourId = ProductLineFlavourId.Create(guid);
+
+    var productLineFlavourResult = _productLineFlavourRepository.GetById(productLineFlavourId);
+
+    if (productLineFlavourResult is null)
     {
       return Errors.ProductLineFlavour.NotFound;
     }
 
-    return productLineFlavour;
+    return productLineFlavourResult;
   }
 }

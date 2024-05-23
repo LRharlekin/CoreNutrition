@@ -10,14 +10,14 @@ public sealed class SizeVariantId : EntityId<Guid>
   private SizeVariantId(Guid value) : base(value)
   {
   }
+  public static SizeVariantId CreateUnique()
+  {
+    return new SizeVariantId(Guid.NewGuid());
+  }
 
   public static SizeVariantId Create(Guid value)
   {
     return new SizeVariantId(value);
-  }
-  public static SizeVariantId CreateUnique()
-  {
-    return new SizeVariantId(Guid.NewGuid());
   }
 
   public static ErrorOr<SizeVariantId> Create(string value)
