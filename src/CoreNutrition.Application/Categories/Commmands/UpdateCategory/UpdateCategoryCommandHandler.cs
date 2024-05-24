@@ -27,8 +27,11 @@ internal sealed class UpdateCategoryCommandHandler
     CancellationToken cancellationToken)
   {
     await Task.CompletedTask; // TODO delete later
-    /* perform action */
-    Category? categoryResult = _categoryRepository.GetById(command.Id);
+
+    // Guid.TryParse(command.Id, out Guid guid);
+    CategoryId categoryId = CategoryId.Create(command.Id);
+
+    Category? categoryResult = _categoryRepository.GetById(categoryId!);
 
     if (categoryResult is null)
     {

@@ -20,7 +20,7 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
 
   public string Name { get; private set; }
   public string Description { get; private set; }
-  public string CategoryImageUrl { get; private set; }
+  public Uri CategoryImageUrl { get; private set; }
   public IReadOnlyList<ProductLineId> ProductLineIds => _productLineIds.AsReadOnly();
 
   public DateTime CreatedDateTime { get; private set; }
@@ -31,7 +31,7 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
     CategoryId categoryId,
     string name,
     string description,
-    string categoryImageUrl,
+    Uri categoryImageUrl,
     DateTime createdDateTime
     )
     : base(categoryId)
@@ -46,24 +46,8 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
   public static ErrorOr<Category> Create(
     string name,
     string description,
-    string categoryImageUrl)
+    Uri categoryImageUrl)
   {
-    List<Error> errors = new();
-
-    if (name.Length < MinNameLength || name.Length > MaxNameLength)
-    {
-      errors.Add(Errors.Category.InvalidName);
-    }
-    if (description.Length < MinDescriptionLength || description.Length > MaxDescriptionLength)
-    {
-      errors.Add(Errors.Category.InvalidDescription);
-    }
-
-    if (errors.Count > 0)
-    {
-      return errors;
-    }
-
     var category = new Category(
       CategoryId.CreateUnique(),
       name,
@@ -71,16 +55,40 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
       categoryImageUrl,
       DateTime.UtcNow);
 
+    var errors = category.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
     category.AddDomainEvent(new CategoryCreated(category));
 
     return category;
   }
 
-  // TODO: invoked by ProductLineCreated, ProductLineUpdated, ProductLineDeleted
+  // TODO: invoked by ProductLineCreated, ProductLineUpdated, ProductLineDeleted >> event handler in Application Layer
   public void AddProductLineId(ProductLineId productLineId)
   {
     _productLineIds.Add(productLineId);
     // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (this.Name.Length < MinNameLength || this.Name.Length > MaxNameLength)
+    {
+      errors.Add(Errors.Category.InvalidName);
+    }
+
+    if (this.Description.Length < MinDescriptionLength || this.Description.Length > MaxDescriptionLength)
+    {
+      errors.Add(Errors.Category.InvalidDescription);
+    }
+
+    return errors;
   }
 
 #pragma warning disable CS8618

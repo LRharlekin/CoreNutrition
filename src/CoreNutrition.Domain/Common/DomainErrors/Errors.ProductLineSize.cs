@@ -6,6 +6,11 @@ public static partial class Errors
 {
     public static class ProductLineSize
     {
+        public static Error InvalidRecommendedRetailPrice => Error.Validation(
+            code: "ProductLineSize.InvalidRRP",
+            description: "The Recommended Retail Price must be greater than 0."
+        );
+
         public static Error InvalidProductLineSizeId => Error.Validation(
             code: "ProductLineSize.InvalidId",
             description: "Product Line Size ID is invalid");

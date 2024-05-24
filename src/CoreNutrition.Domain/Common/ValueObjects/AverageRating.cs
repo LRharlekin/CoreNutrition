@@ -1,23 +1,39 @@
+using ErrorOr;
+
 using CoreNutrition.Domain.Common.Models;
+using CoreNutrition.Domain.Common.DomainErrors;
 
 namespace CoreNutrition.Domain.Common.ValueObjects;
 
 public sealed class AverageRating : ValueObject
 {
-  private double _value;
+  // invariant constants:
+  public const decimal MinAvgRating = 1;
+  public const decimal MaxAvgRating = 5;
 
-  private AverageRating(double value, int numRatings)
+  private decimal _value;
+
+  private AverageRating(decimal value, int numRatings)
   {
     Value = value;
     NumRatings = numRatings;
   }
 
-  public double? Value { get => NumRatings > 0 ? _value : null; private set => _value = value!.Value; }
+  public decimal? Value { get => NumRatings > 0 ? _value : null; private set => _value = value!.Value; }
   public int NumRatings { get; private set; }
 
-  public static AverageRating CreateNew(double rating = 0, int numRatings = 0)
+  public static ErrorOr<AverageRating> CreateNew(decimal rating = 0, int numRatings = 0)
   {
-    return new AverageRating(rating, numRatings);
+    var averageRating = new AverageRating(rating, numRatings);
+
+    var errors = averageRating.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
+    return averageRating;
   }
 
 
@@ -42,4 +58,21 @@ public sealed class AverageRating : ValueObject
   {
   }
 #pragma warning restore CS8618
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (this.NumRatings <= 0 && this.Value is not null)
+    {
+      errors.Add(Errors.AverageRating.InvalidDefaultValue(this.NumRatings, this.Value.GetType(), this.Value));
+    }
+
+    if (this.NumRatings > 0 && this.Value is not null && this.Value is not >= MinAvgRating or <= MaxAvgRating)
+    {
+      errors.Add(Errors.AverageRating.OutOfRange(this.Value!, this.NumRatings));
+    }
+
+    return errors;
+  }
 }

@@ -7,16 +7,17 @@ using MapsterMapper;
 
 using CoreNutrition.Api.Infrastructure;
 using CoreNutrition.Api.Contracts;
+using CoreNutrition.Contracts.Category;
 using CoreNutrition.Application.Categories.Commands.CreateCategory;
 using CoreNutrition.Application.Categories.Commands.UpdateCategory;
 using CoreNutrition.Application.Categories.Queries.GetCategoryById;
 using CoreNutrition.Application.Categories.Queries.ListCategories;
-using CoreNutrition.Contracts.Category;
 using CoreNutrition.Domain.CategoryAggregate;
 
 namespace CoreNutrition.Api.Controllers;
 
-public sealed class CategoriesController : ApiControllerBase
+public sealed class CategoriesController
+  : ApiControllerBase
 {
   private readonly ISender _mediator;
   private readonly IMapper _mapper;

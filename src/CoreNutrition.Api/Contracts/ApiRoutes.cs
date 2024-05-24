@@ -74,11 +74,17 @@ public static class ApiRoutes
   public static class ProductLineSizes
   {
     public const string Create = "sizes";
-    public const string Update = "sizes/{productLineSizeId:guid}";
-    public const string Delete = "sizes/{productLineSizeId:guid}";
+    // public const string Update = "sizes/{productLineSizeId:guid}";
+    // public const string Delete = "sizes/{productLineSizeId:guid}";
     public const string List = "sizes";
     public const string GetById = "sizes/{productLineSizeId:guid}";
-    public const string GetByProductLine = "sizes/{productLineId:guid}";
+
+    // public const string ListByProductLine = "sizes/{productLineId:guid}";
+    // as contained entities, sizeVariants are either created when a ProductLineSize is created, or via AddVariant route
+    public const string AddVariant = "sizes/{productLineSizeId:guid}/var";
+    public const string UpdateVariant = "sizes/var/{sizeVariantId:guid}";
+    public const string RemoveVariant = "sizes/var/{sizeVariantId:guid}";
+    public const string ListVariants = "sizes/var";
   }
 
   // Contains the flavours routes
@@ -86,18 +92,20 @@ public static class ApiRoutes
   public static class ProductLineFlavours
   {
     public const string Create = "flavours";
-    public const string Update = "flavours/{productLineFlavourId:guid}";
-    public const string Delete = "flavours/{productLineFlavourId:guid}";
+    // public const string Update = "flavours/{productLineFlavourId:guid}";
+    // public const string Delete = "flavours/{productLineFlavourId:guid}";
     public const string List = "flavours";
     public const string GetById = "flavours/{productLineFlavourId:guid}";
-    public const string GetByProductLine = "flavours/{productLineId:guid}";
+    // public const string GetByProductLine = "flavours/productlines/{productLineId:guid}";
   }
 
   // Contains the shopping cart routes
 
   public static class Cart
   {
-    public const string EditItems = "cart/{productId:guid}";
+    public const string AddCartItem = "cart/items/{productId:guid}";
+    public const string EditCartItem = "cart/items/{cartItemId:guid}";
+    public const string RemoveCartItem = "cart/items/{cartItemId:guid}";
     public const string Get = "cart";
     public const string Clear = "cart";
   }
@@ -106,14 +114,14 @@ public static class ApiRoutes
 
   public static class Reviews
   {
-    public const string Create = "reviews";
+    public const string Create = "u/{userId:guid}/reviews";
     public const string Update = "reviews/{reviewId:guid}";
     public const string Delete = "reviews/{reviewId:guid}";
     public const string List = "reviews";
     public const string GetById = "reviews/{reviewId:guid}";
-    public const string GetByProduct = "reviews/{productId:guid}";
-    public const string GetByProductLine = "reviews/{productLineId:guid}";
-    public const string GetByCustomer = "reviews/{userId:guid}";
+    public const string GetByProduct = "reviews/products/{productId:guid}";
+    public const string GetByProductLine = "reviews/productlines/{productLineId:guid}";
+    public const string GetByCustomer = "reviews/users/{userId:guid}";
   }
 
   // Contains the discount codes routes.
@@ -144,7 +152,7 @@ public static class ApiRoutes
 
   public static class ShopOrders
   {
-    public const string Create = "orders";
+    public const string Create = "u/{userId:guid}/orders";
     public const string Update = "orders/{shopOrderId:guid}";
     public const string Delete = "orders/{shopOrderId:guid}";
     public const string List = "orders";
@@ -157,7 +165,7 @@ public static class ApiRoutes
 
   public static class Addresses
   {
-    public const string Create = "addresses";
+    public const string Create = "u/{userId:guid}/addresses";
     public const string Update = "addresses/{customerAddressId:guid}";
     public const string Delete = "addresses/{customerAddressId:guid}";
     public const string List = "addresses";
