@@ -10,7 +10,7 @@ namespace CoreNutrition.Application.ProductLineFlavours.Commands.CreateProductLi
 [Authorize(Roles = "Admin")]
 public record CreateProductLineFlavourCommand(
   string Flavour,
-  ProductLineId ProductLineId,
+  string ProductLineId,
   string FlavourImageUrl
   )
   : IAuthorizeableAction<ErrorOr<ProductLineFlavour>>;

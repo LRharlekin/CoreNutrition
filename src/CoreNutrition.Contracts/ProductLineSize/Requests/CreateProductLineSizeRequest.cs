@@ -1,21 +1,21 @@
 namespace CoreNutrition.Contracts.ProductLineSize;
 
 public record CreateProductLineSizeRequest(
-  SizeVariant SizeVariant,
   string ProductLineId,
-  CurrencyAmount RecommendedRetailPrice
+  RecommendedRetailPriceRequest RecommendedRetailPrice,
+  SizeVariantRequest SizeVariant
 );
 
-public record SizeVariant(
-  string? Id,
+public record RecommendedRetailPriceRequest(
+  decimal Amount,
+  string CurrencyCode
+);
+
+public record SizeVariantRequest(
+  string? SizeVariantId,
   string Name,
   int Units,
   int? UnitWeightInGrams,
   int? UnitVolumeInMilliliters,
-  string? SingleSizeId
-);
-
-public record CurrencyAmount(
-  decimal Amount,
-  string CurrencyCode
+  string? SingleSizeVariantId
 );

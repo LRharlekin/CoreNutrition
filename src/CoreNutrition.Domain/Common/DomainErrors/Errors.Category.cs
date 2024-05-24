@@ -13,7 +13,7 @@ public static partial class Errors
         description: $"Category name must be between {CategoryAggregate.Category.MinNameLength} and {CategoryAggregate.Category.MaxNameLength} characters long.");
 
         public static Error InvalidDescription => Error.Validation(
-        code: "Category.InvalidId",
+        code: "Category.InvalidDescription",
         description: $"Category description must be between {CategoryAggregate.Category.MinDescriptionLength} and {CategoryAggregate.Category.MaxDescriptionLength} characters long.");
 
         public static Error InvalidCategoryId => Error.Validation(

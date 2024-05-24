@@ -9,15 +9,17 @@ public class CreateCategoryCommandValidator
 {
   public CreateCategoryCommandValidator()
   {
-    RuleFor(x => x.Name)
+    RuleFor(command => command.Name)
+      .NotNull()
       .NotEmpty()
-      .MinimumLength(Category.MinNameLength)
-      .MaximumLength(Category.MaxNameLength);
-    RuleFor(x => x.Description)
+      .Length(Category.MinNameLength, Category.MaxNameLength);
+    RuleFor(command => command.Description)
+      .NotNull()
       .NotEmpty()
-      .MinimumLength(Category.MinDescriptionLength)
-      .MaximumLength(Category.MaxDescriptionLength);
-    RuleFor(x => x.CategoryImageUrl)
-      .NotEmpty();
+      .Length(Category.MinDescriptionLength, Category.MaxDescriptionLength);
+    RuleFor(command => command.CategoryImageUrl)
+      .NotNull()
+      .NotEmpty()
+      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
   }
 }

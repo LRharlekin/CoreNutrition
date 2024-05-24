@@ -1,8 +1,21 @@
+using ErrorOr;
+
 using CoreNutrition.Domain.Common.Models;
+using CoreNutrition.Domain.Common.DomainErrors;
+
 namespace CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 
 public sealed class ProductLineInfo : ValueObject
 {
+    // invariant constants
+    public const int MinDescriptionShortLength = 50;
+    public const int MaxDescriptionShortLength = 200;
+    public const int MinDescriptionLongLength = 200;
+    public const int MaxDescriptionLongLength = 1000;
+    public const int MinSuggestedUseLength = 20;
+    public const int MaxSuggestedUseLength = 400;
+    public const int MaxBenefitLength = 150;
+
     public string DescriptionShort { get; private set; }
     public string DescriptionLong { get; private set; }
     public string SuggestedUse { get; private set; }
@@ -35,7 +48,7 @@ public sealed class ProductLineInfo : ValueObject
         IsHealthWellness = isHealthWellness;
     }
 
-    public static ProductLineInfo CreateNew(
+    public static ErrorOr<ProductLineInfo> CreateNew(
         string descriptionShort,
         string descriptionLong,
         string suggestedUse,
@@ -46,7 +59,7 @@ public sealed class ProductLineInfo : ValueObject
         bool isWeightLoss,
         bool isHealthWellness)
     {
-        return new ProductLineInfo(
+        var productLineInfo = new ProductLineInfo(
             descriptionShort,
             descriptionLong,
             suggestedUse,
@@ -56,6 +69,15 @@ public sealed class ProductLineInfo : ValueObject
             isMuscleGain,
             isWeightLoss,
             isHealthWellness);
+
+        var errors = productLineInfo.EnforceInvariants();
+
+        if (errors.Count > 0)
+        {
+            return errors;
+        }
+
+        return productLineInfo;
     }
 
     public override IEnumerable<object> GetEqualityComponents()
@@ -76,4 +98,48 @@ public sealed class ProductLineInfo : ValueObject
     {
     }
 #pragma warning restore CS8618
+
+    private List<Error> EnforceInvariants()
+    {
+        var errors = new List<Error>();
+
+        if (this.DescriptionShort.Length is < MinDescriptionShortLength or > MaxDescriptionShortLength)
+        {
+            errors.Add(Errors.ProductLineInfo.InvalidShortDescription);
+        }
+
+        if (this.DescriptionLong.Length is < MinDescriptionLongLength or > MaxDescriptionLongLength)
+        {
+            errors.Add(Errors.ProductLineInfo.InvalidLongDescription);
+        }
+
+        if (this.SuggestedUse.Length is < MinSuggestedUseLength or > MaxSuggestedUseLength)
+        {
+            errors.Add(Errors.ProductLineInfo.InvalidSuggestedUse);
+        }
+
+        if (
+            this.Benefit1.Length > MaxBenefitLength ||
+            this.Benefit2.Length > MaxBenefitLength ||
+            this.Benefit3.Length > MaxBenefitLength)
+        {
+            errors.Add(Errors.ProductLineInfo.InvalidBenefitLength);
+        }
+
+        if (
+            this.Benefit1.Equals(this.Benefit2, StringComparison.OrdinalIgnoreCase) ||
+            this.Benefit1.Equals(this.Benefit3, StringComparison.OrdinalIgnoreCase) ||
+            this.Benefit2.Equals(this.Benefit3, StringComparison.OrdinalIgnoreCase)
+        )
+        {
+            errors.Add(Errors.ProductLineInfo.DuplicateBenefits);
+        }
+
+        if (!this.IsMuscleGain && !this.IsWeightLoss && !this.IsHealthWellness)
+        {
+            errors.Add(Errors.ProductLineInfo.DietGoalRequired);
+        }
+
+        return errors;
+    }
 }

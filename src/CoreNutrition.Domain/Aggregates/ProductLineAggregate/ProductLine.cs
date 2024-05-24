@@ -1,4 +1,7 @@
+using ErrorOr;
+
 using CoreNutrition.Domain.Common.Models;
+using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineAggregate.Events;
 
@@ -12,9 +15,17 @@ namespace CoreNutrition.Domain.ProductLineAggregate;
 
 public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
 {
+  // invariant constants
+  public const int MinNameLength = 3;
+  public const int MaxNameLength = 100;
+
+
   private List<ProductId> _productIds = new List<ProductId>();
   private List<ProductLineSizeId> _productLineSizeIds = new List<ProductLineSizeId>();
   private List<ProductLineFlavourId> _productLineFlavourIds = new List<ProductLineFlavourId>();
+  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
+  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();
+  public IReadOnlyList<ProductLineFlavourId> ProductLineFlavourIds => _productLineFlavourIds.AsReadOnly();
 
   public string Name { get; private set; }
   public bool IsPublished { get; private set; }
@@ -23,10 +34,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   public ProductLineInfo ProductLineInfo { get; private set; }
   public NutritionFacts NutritionFacts { get; private set; }
 
-  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
-  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();
-  public IReadOnlyList<ProductLineFlavourId> ProductLineFlavourIds => _productLineFlavourIds.AsReadOnly();
-  
+
   public DateTime CreatedDateTime { get; private set; }
   public DateTime UpdatedDateTime { get; private set; }
 
@@ -60,7 +68,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   }
 
   // public factory method
-  public static ProductLine Create(
+  public static ErrorOr<ProductLine> Create(
     string name,
     bool isPublished,
     CategoryId categoryId,
@@ -87,6 +95,13 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
       productLineFlavourIds ?? new List<ProductLineFlavourId>()
     );
 
+    var errors = productLine.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
     productLine.AddDomainEvent(new ProductLineCreated(productLine));
 
     return productLine;
@@ -109,5 +124,27 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   {
     _productLineFlavourIds.Add(productLineFlavourId);
     // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (this.Name.Length is < MinNameLength or > MaxNameLength)
+    {
+      errors.Add(Errors.ProductLine.InvalidNameLength);
+    }
+
+    // if (this.ProductLineInfo is null)
+    // {
+    //   // invalid productline info
+    // }
+
+    // if (this.NutritionFacts is null)
+    // {
+    //   // invalid nutrition facts
+    // }
+
+    return errors;
   }
 }
