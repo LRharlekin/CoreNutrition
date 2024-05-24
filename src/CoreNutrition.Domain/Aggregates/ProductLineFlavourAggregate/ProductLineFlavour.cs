@@ -18,7 +18,7 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
 
   public string Flavour { get; private set; }
   public ProductLineId ProductLineId { get; private set; }
-  public string FlavourImageUrl { get; private set; }
+  public Uri FlavourImageUrl { get; private set; }
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
   public DateTime CreatedDateTime { get; private set; }
@@ -28,7 +28,7 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
     ProductLineFlavourId productLineFlavourId,
     string flavour,
     ProductLineId productLineId,
-    string flavourImageUrl,
+    Uri flavourImageUrl,
     DateTime createdDateTime
     )
     : base(productLineFlavourId)
@@ -42,20 +42,9 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
   public static ErrorOr<ProductLineFlavour> Create(
     string flavour,
     ProductLineId productLineId,
-    string flavourImageUrl
+    Uri flavourImageUrl
     )
   {
-    List<Error> errors = new();
-
-    if (flavour.Length < MinNameLength || flavour.Length > MaxNameLength)
-    {
-      errors.Add(Errors.ProductLineFlavour.InvalidName);
-    }
-
-    if (errors.Count > 0)
-    {
-      return errors;
-    }
 
     var productLineFlavour = new ProductLineFlavour(
       ProductLineFlavourId.CreateUnique(),
@@ -64,6 +53,13 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
       flavourImageUrl,
       DateTime.UtcNow
     );
+
+    var errors = productLineFlavour.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
 
     productLineFlavour.AddDomainEvent(new ProductLineFlavourCreated(productLineFlavour));
 
@@ -75,5 +71,17 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
   {
     _productIds.Add(productId);
     // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    List<Error> errors = new();
+
+    if (this.Flavour.Length < MinNameLength || this.Flavour.Length > MaxNameLength)
+    {
+      errors.Add(Errors.ProductLineFlavour.InvalidName);
+    }
+
+    return errors;
   }
 }

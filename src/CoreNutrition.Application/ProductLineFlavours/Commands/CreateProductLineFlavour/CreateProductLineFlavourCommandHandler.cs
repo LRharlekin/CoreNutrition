@@ -2,6 +2,7 @@ using MediatR;
 using ErrorOr;
 
 using CoreNutrition.Domain.ProductLineFlavourAggregate;
+using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 
 namespace CoreNutrition.Application.ProductLineFlavours.Commands.CreateProductLineFlavour;
@@ -24,15 +25,20 @@ internal sealed class CreateProductLineFlavourCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
+    Guid.TryParse(command.ProductLineId, out Guid guid);
+    var productLineId = ProductLineId.Create(guid);
+
+    Uri.TryCreate(command.FlavourImageUrl, UriKind.Absolute, out var flavourImageUrl);
+
     ErrorOr<ProductLineFlavour> productLineFlavourResult = ProductLineFlavour.Create(
       command.Flavour,
-      command.ProductLineId,
-      command.FlavourImageUrl
+      productLineId,
+      flavourImageUrl!
     );
 
     if (productLineFlavourResult.IsError)
     {
-      return productLineFlavourResult.Errors; // errors bybass mapping pipeline
+      return productLineFlavourResult.Errors;
     }
 
     _productLineFlavourRepository.Add(productLineFlavourResult.Value);

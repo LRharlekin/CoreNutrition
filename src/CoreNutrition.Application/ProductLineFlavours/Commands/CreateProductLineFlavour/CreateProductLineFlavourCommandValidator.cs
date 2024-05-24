@@ -9,13 +9,17 @@ public class CreateProductLineFlavourCommandValidator
 {
   public CreateProductLineFlavourCommandValidator()
   {
-    RuleFor(x => x.Flavour)
+    RuleFor(command => command.Flavour)
+      .NotNull()
       .NotEmpty()
-      .MinimumLength(ProductLineFlavour.MinNameLength)
-      .MaximumLength(ProductLineFlavour.MaxNameLength);
-    RuleFor(x => x.FlavourImageUrl)
-      .NotEmpty();
-    RuleFor(x => x.ProductLineId)
-      .NotNull();
+      .Length(ProductLineFlavour.MinNameLength, ProductLineFlavour.MaxNameLength);
+    RuleFor(command => command.ProductLineId)
+      .NotNull()
+      .NotEmpty()
+      .Must(id => Guid.TryParse(id, out _));
+    RuleFor(command => command.FlavourImageUrl)
+      .NotNull()
+      .NotEmpty()
+      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
   }
 }

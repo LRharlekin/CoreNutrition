@@ -8,20 +8,22 @@ public class CategoryRepository : ICategoryRepository
 {
   private static readonly List<Category> _categories = new();
 
-  public List<Category> GetAll()
+  public void Add(Category category)
   {
-    return _categories;
+    _categories.Add(category);
   }
 
-  // (TODO: implement)
+  // update
+
+  // delete
 
   public Category? GetById(CategoryId categoryId)
   {
     return _categories.SingleOrDefault(c => c.Id == categoryId);
   }
 
-  public void Add(Category category)
+  public List<Category> GetAll()
   {
-    _categories.Add(category);
+    return _categories;
   }
 }

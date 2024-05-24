@@ -25,13 +25,17 @@ internal sealed class GetCategoryByIdQueryHandler
     CancellationToken cancellationToken)
   {
     await Task.CompletedTask; // TODO delete later
-    var category = _categoryRepository.GetById(query.Id);
 
-    if (category is null)
+    // Guid.TryParse(query.Id, out Guid guid);
+    CategoryId categoryId = CategoryId.Create(query.Id);
+
+    var categoryResult = _categoryRepository.GetById(categoryId);
+
+    if (categoryResult is null)
     {
       return Errors.Category.NotFound;
     }
 
-    return category;
+    return categoryResult;
   }
 }
