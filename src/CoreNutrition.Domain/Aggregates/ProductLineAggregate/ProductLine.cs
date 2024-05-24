@@ -1,6 +1,7 @@
 using ErrorOr;
 
 using CoreNutrition.Domain.Common.Models;
+using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineAggregate.Events;
 
@@ -67,7 +68,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   }
 
   // public factory method
-  public static ProductLine Create(
+  public static ErrorOr<ProductLine> Create(
     string name,
     bool isPublished,
     CategoryId categoryId,
@@ -94,6 +95,13 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
       productLineFlavourIds ?? new List<ProductLineFlavourId>()
     );
 
+    var errors = productLine.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
     productLine.AddDomainEvent(new ProductLineCreated(productLine));
 
     return productLine;
@@ -116,5 +124,17 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   {
     _productLineFlavourIds.Add(productLineFlavourId);
     // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (this.Name.Length is < MinNameLength or > MaxNameLength)
+    {
+      errors.Add(Errors.ProductLine.InvalidNameLength);
+    }
+
+    return errors;
   }
 }
