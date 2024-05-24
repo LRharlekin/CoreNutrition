@@ -28,30 +28,36 @@ internal sealed class CreateProductLineSizeCommandHandler
     CancellationToken cancellationToken)
   {
     await Task.CompletedTask; // TODO delete later
-    Guid.TryParse(command.SizeVariant.SingleSizeVariantId, out var guid);
 
-    // 1. create
+    Guid.TryParse(command.ProductLineId, out var productLineIdGuid);
+    ProductLineId productLineId = ProductLineId.Create(productLineIdGuid);
+
     var recommendedRetailPrice = CurrencyAmount.CreateNew(
       amount: command.RecommendedRetailPrice.Amount,
       currencyCode: command.RecommendedRetailPrice.CurrencyCode);
 
-    var sizeVariant = SizeVariant.Create(
+    Guid.TryParse(command.SizeVariant.SizeVariantId, out var sizeVariantIdGuid);
+    Guid.TryParse(command.SizeVariant.SingleSizeVariantId, out var singleSizeVariantIdGuid);
+
+    // 1. create
+
+    ErrorOr<SizeVariant> sizeVariantResult = SizeVariant.Create(
       name: command.SizeVariant.Name,
       units: command.SizeVariant.Units,
       unitWeightInGrams: command.SizeVariant.UnitWeightInGrams,
       unitVolumeInMilliliters: command.SizeVariant.UnitVolumeInMilliliters,
-      singleSizeVariantId: SizeVariantId.Create(guid)
+      singleSizeVariantId: SizeVariantId.Create(singleSizeVariantIdGuid)
     );
 
-    if (sizeVariant.IsError)
+    if (sizeVariantResult.IsError)
     {
-      return sizeVariant.Errors; // errors bybass mapping pipeline
+      return sizeVariantResult.Errors; // errors bybass mapping pipeline
     }
 
     ErrorOr<ProductLineSize> productLineSizeResult = ProductLineSize.Create(
-      productLineId: ProductLineId.Create(command.ProductLineId).Value, // returns ErrorOr<>
+      productLineId!,
       recommendedRetailPrice,
-      sizeVariant.Value);
+      sizeVariantResult.Value);
 
 
     if (productLineSizeResult.IsError)

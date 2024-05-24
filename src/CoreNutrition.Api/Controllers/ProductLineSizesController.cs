@@ -36,14 +36,14 @@ public sealed class ProductLineSizesController : ApiControllerBase
     var command = _mapper.Map<CreateProductLineSizeCommand>(request);
     ErrorOr<ProductLineSize> createProductLineSizeResult = await _mediator.Send(command);
 
-    // return createProductLineSizeResult.Match(
-    //   productLineSize => CreatedAtAction(
-    //     actionName: nameof(GetProductLineSizeById),
-    //     routeValues: new { productLineSizeId = productLineSize.Id },
-    //     value: _mapper.Map<ProductLineSizeResponse>(productLineSize)),
-    //   errors => ResolveProblems(errors)
-    // );
-    return Ok(command);
+    return createProductLineSizeResult.Match(
+      productLineSize => CreatedAtAction(
+        actionName: nameof(GetProductLineSizeById),
+        routeValues: new { productLineSizeId = productLineSize.Id },
+        value: _mapper.Map<ProductLineSizeResponse>(productLineSize)),
+      errors => ResolveProblems(errors)
+    );
+    // return Ok(createProductLineSizeResult);
   }
 
   // [HttpPut(ApiRoutes.ProductLineSizes.Update)]

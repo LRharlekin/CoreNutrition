@@ -7,22 +7,26 @@ namespace CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 
 public sealed class NutritionFacts : ValueObject
 {
-  public decimal CaloriesPer100Grams { get; private set; }
-  public decimal FatPer100Grams { get; private set; }
-  public decimal SaturatedFatPer100Grams { get; private set; }
-  public decimal CarbohydratesPer100Grams { get; private set; }
-  public decimal SugarPer100Grams { get; private set; }
-  public decimal ProteinPer100Grams { get; private set; }
-  public decimal SaltPer100Grams { get; private set; }
+  // invariant constants:
+  public const double MinPer100Grams = 0;
+  public const double MaxPer100Grams = 100;
+
+  public double CaloriesPer100Grams { get; private set; }
+  public double FatPer100Grams { get; private set; }
+  public double SaturatedFatPer100Grams { get; private set; }
+  public double CarbohydratesPer100Grams { get; private set; }
+  public double SugarPer100Grams { get; private set; }
+  public double ProteinPer100Grams { get; private set; }
+  public double SaltPer100Grams { get; private set; }
 
   private NutritionFacts(
-    decimal caloriesPer100Grams,
-    decimal fatPer100Grams,
-    decimal saturatedFatPer100Grams,
-    decimal carbohydratesPer100Grams,
-    decimal sugarPer100Grams,
-    decimal proteinPer100Grams,
-    decimal saltPer100Grams)
+    double caloriesPer100Grams,
+    double fatPer100Grams,
+    double saturatedFatPer100Grams,
+    double carbohydratesPer100Grams,
+    double sugarPer100Grams,
+    double proteinPer100Grams,
+    double saltPer100Grams)
   {
     CaloriesPer100Grams = caloriesPer100Grams;
     FatPer100Grams = fatPer100Grams;
@@ -34,27 +38,15 @@ public sealed class NutritionFacts : ValueObject
   }
 
   public static ErrorOr<NutritionFacts> CreateNew(
-    decimal caloriesPer100Grams,
-    decimal fatPer100Grams,
-    decimal saturatedFatPer100Grams,
-    decimal carbohydratesPer100Grams,
-    decimal sugarPer100Grams,
-    decimal proteinPer100Grams,
-    decimal saltPer100Grams)
+    double caloriesPer100Grams,
+    double fatPer100Grams,
+    double saturatedFatPer100Grams,
+    double carbohydratesPer100Grams,
+    double sugarPer100Grams,
+    double proteinPer100Grams,
+    double saltPer100Grams)
   {
-    // Validate macros
-    if (!IsValidMacro(fatPer100Grams) ||
-      !IsValidMacro(carbohydratesPer100Grams) ||
-      !IsValidMacro(proteinPer100Grams) ||
-      !IsValidMacro(saltPer100Grams))
-      return Errors.NutritionFacts.InvalidNutritionFacts;
-
-    // Validate derived nutrients
-    if (!IsValidOfWhichMacro(saturatedFatPer100Grams, fatPer100Grams) ||
-      !IsValidOfWhichMacro(sugarPer100Grams, carbohydratesPer100Grams))
-      return Errors.NutritionFacts.InvalidNutritionFacts;
-
-    return new NutritionFacts(
+    var nutritionFacts = new NutritionFacts(
       caloriesPer100Grams,
       fatPer100Grams,
       saturatedFatPer100Grams,
@@ -62,17 +54,17 @@ public sealed class NutritionFacts : ValueObject
       sugarPer100Grams,
       proteinPer100Grams,
       saltPer100Grams);
+
+    var errors = nutritionFacts.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
+    return nutritionFacts;
   }
 
-  private static bool IsValidMacro(decimal value)
-  {
-    return value >= 0 && value <= 100;
-  }
-
-  private static bool IsValidOfWhichMacro(decimal value, decimal macroValue)
-  {
-    return value >= 0 && value <= macroValue;
-  }
 
   public override IEnumerable<object> GetEqualityComponents()
   {
@@ -90,4 +82,39 @@ public sealed class NutritionFacts : ValueObject
   {
   }
 #pragma warning restore CS8618
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (this.CaloriesPer100Grams <= MinPer100Grams)
+    {
+      errors.Add(Errors.NutritionFacts.InvalidCalories);
+    }
+
+    if (!IsValidMacro(this.FatPer100Grams) ||
+      !IsValidMacro(this.CarbohydratesPer100Grams) ||
+      !IsValidMacro(this.ProteinPer100Grams) ||
+      !IsValidMacro(this.SaltPer100Grams))
+    {
+      errors.Add(Errors.NutritionFacts.InvalidMacros);
+    }
+
+    if (!IsValidOfWhichMacro(this.SaturatedFatPer100Grams, this.FatPer100Grams) ||
+      !IsValidOfWhichMacro(this.SugarPer100Grams, this.CarbohydratesPer100Grams))
+    {
+      errors.Add(Errors.NutritionFacts.InvalidOfWhichMacros);
+    }
+
+    static bool IsValidMacro(double value)
+    {
+      return value >= 0 && value <= 100;
+    }
+
+    static bool IsValidOfWhichMacro(double value, double macroValue)
+    {
+      return value >= 0 && value <= macroValue;
+    }
+
+    return errors;
+  }
 }

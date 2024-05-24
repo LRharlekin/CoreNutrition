@@ -1,3 +1,5 @@
+using ErrorOr;
+
 using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineAggregate.Events;
@@ -12,9 +14,17 @@ namespace CoreNutrition.Domain.ProductLineAggregate;
 
 public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
 {
+  // invariant constants
+  public const int MinNameLength = 3;
+  public const int MaxNameLength = 100;
+
+
   private List<ProductId> _productIds = new List<ProductId>();
   private List<ProductLineSizeId> _productLineSizeIds = new List<ProductLineSizeId>();
   private List<ProductLineFlavourId> _productLineFlavourIds = new List<ProductLineFlavourId>();
+  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
+  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();
+  public IReadOnlyList<ProductLineFlavourId> ProductLineFlavourIds => _productLineFlavourIds.AsReadOnly();
 
   public string Name { get; private set; }
   public bool IsPublished { get; private set; }
@@ -23,10 +33,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   public ProductLineInfo ProductLineInfo { get; private set; }
   public NutritionFacts NutritionFacts { get; private set; }
 
-  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
-  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();
-  public IReadOnlyList<ProductLineFlavourId> ProductLineFlavourIds => _productLineFlavourIds.AsReadOnly();
-  
+
   public DateTime CreatedDateTime { get; private set; }
   public DateTime UpdatedDateTime { get; private set; }
 

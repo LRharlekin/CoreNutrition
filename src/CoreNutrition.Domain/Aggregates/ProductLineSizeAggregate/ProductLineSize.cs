@@ -1,5 +1,8 @@
+using ErrorOr;
+
 using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.Common.ValueObjects;
+using CoreNutrition.Domain.Common.DomainErrors;
 
 using CoreNutrition.Domain.ProductLineSizeAggregate.ValueObjects;
 using CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
@@ -12,7 +15,11 @@ namespace CoreNutrition.Domain.ProductLineSizeAggregate;
 
 public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
 {
+  // invariant constants:
+  public const decimal MinRRP = 0;
+
   private List<ProductId> _productIds = new List<ProductId>();
+  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
   public ProductLineId ProductLineId { get; private set; }
   public CurrencyAmount RecommendedRetailPrice { get; private set; }
@@ -21,25 +28,24 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
   public DateTime CreatedDateTime { get; private set; }
   public DateTime UpdatedDateTime { get; private set; }
 
-  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
   private ProductLineSize(
-    ProductLineSizeId productLineSizeId, // PK
-    ProductLineId productLineId, // FK
-    CurrencyAmount recommendedRetailPrice, // VO
-    SizeVariant sizeVariant, // contained Entity
+    ProductLineSizeId productLineSizeId,
+    ProductLineId productLineId,
+    CurrencyAmount recommendedRetailPrice,
+    SizeVariant sizeVariant,
     DateTime createdDateTime
     )
-    : base(productLineSizeId) // PK
+    : base(productLineSizeId)
   {
-    ProductLineId = productLineId; // FK
-    SizeVariant = sizeVariant; // contained Entity
-    RecommendedRetailPrice = recommendedRetailPrice; // VO
+    ProductLineId = productLineId;
+    SizeVariant = sizeVariant;
+    RecommendedRetailPrice = recommendedRetailPrice;
     CreatedDateTime = createdDateTime;
     UpdatedDateTime = createdDateTime;
   }
 
-  public static ProductLineSize Create(
+  public static ErrorOr<ProductLineSize> Create(
     ProductLineId productLineId, // FK
     CurrencyAmount recommendedRetailPrice,
     SizeVariant sizeVariant // contained Entity
@@ -52,6 +58,13 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
       sizeVariant, // contained Entity
       DateTime.UtcNow);
 
+    var errors = productLineSize.EnforceInvariants();
+
+    if (errors.Count > 0)
+    {
+      return errors;
+    }
+
     productLineSize.AddDomainEvent(new ProductLineSizeCreated(productLineSize));
 
     return productLineSize;
@@ -62,5 +75,17 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
   {
     _productIds.Add(productId);
     // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (RecommendedRetailPrice.Amount <= MinRRP)
+    {
+      errors.Add(Errors.ProductLineSize.InvalidRecommendedRetailPrice);
+    }
+
+    return errors;
   }
 }

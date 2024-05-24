@@ -78,7 +78,13 @@ public static class ApiRoutes
     // public const string Delete = "sizes/{productLineSizeId:guid}";
     public const string List = "sizes";
     public const string GetById = "sizes/{productLineSizeId:guid}";
-    // public const string GetByProductLine = "sizes/{productLineId:guid}";
+
+    // public const string ListByProductLine = "sizes/{productLineId:guid}";
+    // as contained entities, sizeVariants are either created when a ProductLineSize is created, or via AddVariant route
+    public const string AddVariant = "sizes/{productLineSizeId:guid}/var";
+    public const string UpdateVariant = "sizes/var/{sizeVariantId:guid}";
+    public const string RemoveVariant = "sizes/var/{sizeVariantId:guid}";
+    public const string ListVariants = "sizes/var";
   }
 
   // Contains the flavours routes
@@ -97,7 +103,9 @@ public static class ApiRoutes
 
   public static class Cart
   {
-    public const string EditItems = "cart/{productId:guid}";
+    public const string AddCartItem = "cart/items/{productId:guid}";
+    public const string EditCartItem = "cart/items/{cartItemId:guid}";
+    public const string RemoveCartItem = "cart/items/{cartItemId:guid}";
     public const string Get = "cart";
     public const string Clear = "cart";
   }

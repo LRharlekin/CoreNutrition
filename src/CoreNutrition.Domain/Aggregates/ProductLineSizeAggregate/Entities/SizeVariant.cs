@@ -3,6 +3,7 @@ using ErrorOr;
 using CoreNutrition.Domain.Common.Models;
 using CoreNutrition.Domain.Common.DomainErrors;
 using CoreNutrition.Domain.ProductLineSizeAggregate.ValueObjects;
+using CoreNutrition.Domain.ProductLineSizeAggregate.Events;
 
 namespace CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
 
@@ -16,14 +17,13 @@ public sealed class SizeVariant : Entity<SizeVariantId>
   public const int MinUnitVolumeInMilliliters = 1;
 
   private List<ProductLineSizeId> _productLineSizeIds = new();
+  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();  // related / referenced entities
 
   public string Name { get; private set; }
   public int? UnitWeightInGrams { get; private set; }
   public int? UnitVolumeInMilliliters { get; private set; }
   public int Units { get; private set; }
   public SizeVariantId? SingleSizeVariantId { get; private set; }
-  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();  // related / referenced entities
-
 
   private SizeVariant(
     string name,
@@ -32,7 +32,8 @@ public sealed class SizeVariant : Entity<SizeVariantId>
     int? unitVolumeInMilliliters = null,
     SizeVariantId? singleSizeVariantId = null,
     SizeVariantId? id = null)
-    : base(id ?? SizeVariantId.CreateUnique())
+  // : base(sizeVariantId)
+  : base(id ?? SizeVariantId.CreateUnique())
   {
     Name = name;
     Units = units;
@@ -63,7 +64,7 @@ public sealed class SizeVariant : Entity<SizeVariantId>
     }
 
     // emit domain events
-    // sizeVariant.AddDomainEvent(new SizeVariantCreated(sizeVariant));
+    sizeVariant.AddDomainEvent(new SizeVariantCreated(sizeVariant));
 
     return sizeVariant;
   }
