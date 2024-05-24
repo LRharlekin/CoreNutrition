@@ -135,6 +135,16 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
       errors.Add(Errors.ProductLine.InvalidNameLength);
     }
 
+    // if (this.ProductLineInfo is null)
+    // {
+    //   // invalid productline info
+    // }
+
+    // if (this.NutritionFacts is null)
+    // {
+    //   // invalid nutrition facts
+    // }
+
     return errors;
   }
 }

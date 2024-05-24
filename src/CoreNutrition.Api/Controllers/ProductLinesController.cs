@@ -30,6 +30,23 @@ public sealed class ProductLinesController
   {
     await Task.CompletedTask; // TODO delete later
     var command = _mapper.Map<CreateProductLineCommand>(request);
-    return Ok(command);
+    ErrorOr<ProductLine> createProductLineResult = await _mediator.Send(command);
+
+    return createProductLineResult.Match(
+      productLine => CreatedAtAction(
+        actionName: nameof(GetProductLineById),
+        routeValues: new { productLineId = productLine.Id },
+        value: productLine),
+      // value: _mapper.Map<ProductLineResponse>(productLine)),
+      errors => ResolveProblems(errors)
+    );
+    // return Ok(createProductLineResult);
+  }
+
+  [HttpGet(ApiRoutes.ProductLines.GetById)]
+  public async Task<IActionResult> GetProductLineById(Guid productLineId)
+  {
+    await Task.CompletedTask;
+    return Ok(productLineId);
   }
 }

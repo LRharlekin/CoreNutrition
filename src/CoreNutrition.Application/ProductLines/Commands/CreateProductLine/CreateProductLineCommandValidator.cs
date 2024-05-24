@@ -34,13 +34,14 @@ public class CreateProductLineCommandValidator
       .NotNull()
       .NotEmpty()
       .Length(ProductLineInfo.MinSuggestedUseLength, ProductLineInfo.MaxSuggestedUseLength);
-    RuleForEach(command => new List<string>{
+    RuleForEach(command => new List<string> {
       command.ProductLineInfo.Benefit1,
       command.ProductLineInfo.Benefit2,
       command.ProductLineInfo.Benefit3})
       .NotNull()
       .NotEmpty()
-      .MaximumLength(ProductLineInfo.MaxBenefitLength);
+      .MaximumLength(ProductLineInfo.MaxBenefitLength)
+      .OverridePropertyName("Benefit");
     RuleFor(command => command.ProductLineInfo.IsMuscleGain)
       .NotNull();
     RuleFor(command => command.ProductLineInfo.IsWeightLoss)
@@ -52,7 +53,7 @@ public class CreateProductLineCommandValidator
     RuleFor(command => command.NutritionFacts.CaloriesPer100Grams)
       .NotNull()
       .GreaterThan(0);
-    RuleForEach(command => new List<double>{
+    RuleForEach(command => new List<double> {
       command.NutritionFacts.FatPer100Grams,
       command.NutritionFacts.SaturatedFatPer100Grams,
       command.NutritionFacts.CarbohydratesPer100Grams,
@@ -62,6 +63,7 @@ public class CreateProductLineCommandValidator
     })
       .NotNull()
       .GreaterThanOrEqualTo(0)
-      .LessThanOrEqualTo(100);
+      .LessThanOrEqualTo(100)
+      .OverridePropertyName("NutritionFacts");
   }
 }
