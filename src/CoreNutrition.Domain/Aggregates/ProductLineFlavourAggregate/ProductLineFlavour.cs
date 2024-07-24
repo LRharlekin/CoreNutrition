@@ -16,8 +16,8 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
 
   private List<ProductId> _productIds = new List<ProductId>();
 
-  public string Flavour { get; private set; }
   public ProductLineId ProductLineId { get; private set; }
+  public string Flavour { get; private set; }
   public Uri FlavourImageUrl { get; private set; }
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 

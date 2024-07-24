@@ -36,6 +36,7 @@ public static partial class Errors
         public static Error InvalidDescription => Error.Validation(
         code: "SizeVariant.InvalidUnitAmount",
         description: $"Size Variant must contain at least {ProductLineSizeAggregate.Entities.SizeVariant.MinUnits} unit.");
+
         public static Error InvalidSizeVariantId => Error.Validation(
             code: "SizeVariant.InvalidId",
             description: "Size Variant ID is invalid");
