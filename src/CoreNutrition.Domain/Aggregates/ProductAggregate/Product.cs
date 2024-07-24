@@ -18,7 +18,6 @@ namespace CoreNutrition.Domain.ProductAggregate;
 
 public sealed class Product : AggregateRoot<ProductId, Guid>
 {
-  // invariant constants
   public static class Constraints
   {
     public const int MinNameLength = 3;
@@ -37,7 +36,7 @@ public sealed class Product : AggregateRoot<ProductId, Guid>
   public ProductLineFlavourId ProductLineFlavourId { get; private set; }
   public bool IsVegan { get; private set; }
   public bool IsSample { get; private set; }
-  public string ProductImageUrl { get; private set; }
+  public Uri ProductImageUrl { get; private set; }
 
   private List<ReviewId> _reviewIds = new List<ReviewId>();
   private List<OrderLineItemId> _orderLineItemIds = new List<OrderLineItemId>();
@@ -61,7 +60,7 @@ public sealed class Product : AggregateRoot<ProductId, Guid>
     ProductLineFlavourId productLineFlavourId,
     bool isVegan,
     bool isSample,
-    string productImageUrl,
+    Uri productImageUrl,
     DateTime createdDateTime,
     List<ReviewId>? reviewIds,
     List<OrderLineItemId>? orderLineItemIds,
@@ -98,7 +97,7 @@ public sealed class Product : AggregateRoot<ProductId, Guid>
     ProductLineFlavourId productLineFlavourId,
     bool isVegan,
     bool isSample,
-    string productImageUrl,
+    Uri productImageUrl,
     List<ReviewId>? reviewIds = null,
     List<OrderLineItemId>? orderLineItemIds = null,
     List<CartItemId>? cartItemIds = null
