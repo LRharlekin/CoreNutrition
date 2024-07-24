@@ -33,5 +33,12 @@ public class ProductMapping : IRegister
     // config.NewConfig<List<Product>, ListProductsResponse>()
     //   .Map((dest) => dest, (src) => src);
 
+    config.NewConfig<Product, ProductResponse>()
+      .Map((dest) => dest.Id, (src) => src.Id.Value.ToString())
+      .Map((dest) => dest.ReviewIds, (src) => src.ReviewIds.Select((reviewId) => reviewId.Value))
+      .Map((dest) => dest.CartItemIds, (src) => src.CartItemIds.Select((cartItemId) => cartItemId.Value))
+      .Map((dest) => dest.OrderLineItemIds, (src) => src.OrderLineItemIds.Select((orderLineItemId) => orderLineItemId.Value))
+      .Map((dest) => dest, (src) => src);
+
   }
 }
