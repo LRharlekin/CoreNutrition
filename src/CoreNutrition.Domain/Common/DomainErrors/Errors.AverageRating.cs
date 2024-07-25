@@ -14,6 +14,6 @@ public static partial class Errors
 
         public static Error OutOfRange(decimal? avgRatingResult, int numRatings) => Error.Validation(
             code: "AverageRating.OutOfRange",
-            description: $"Value for Average Rating is out of range: Average rating should be between {ValueObjects.AverageRating.MinAvgRating} and {ValueObjects.AverageRating.MaxAvgRating}, but was calculated as {avgRatingResult} on basis of {numRatings} ratings.");
+            description: $"Value for Average Rating is out of range: Average rating should be between {ValueObjects.AverageRating.Constraints.MinAvgRating} and {ValueObjects.AverageRating.Constraints.MaxAvgRating}, but was calculated as {avgRatingResult} on basis of {numRatings} ratings.");
     }
 }

@@ -29,6 +29,7 @@ internal sealed class CreateProductLineSizeCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
+    // 0. prepare immutable value objects
     Guid.TryParse(command.ProductLineId, out var productLineIdGuid);
     ProductLineId productLineId = ProductLineId.Create(productLineIdGuid);
 
@@ -39,7 +40,7 @@ internal sealed class CreateProductLineSizeCommandHandler
     Guid.TryParse(command.SizeVariant.SizeVariantId, out var sizeVariantIdGuid);
     Guid.TryParse(command.SizeVariant.SingleSizeVariantId, out var singleSizeVariantIdGuid);
 
-    // 1. create
+    // 0. create contained entity
     ErrorOr<SizeVariant> sizeVariantResult = SizeVariant.Create(
       name: command.SizeVariant.Name,
       units: command.SizeVariant.Units,
@@ -53,6 +54,7 @@ internal sealed class CreateProductLineSizeCommandHandler
       return sizeVariantResult.Errors; // errors bybass mapping pipeline
     }
 
+    // 1. create
     ErrorOr<ProductLineSize> productLineSizeResult = ProductLineSize.Create(
       productLineId!,
       recommendedRetailPrice,

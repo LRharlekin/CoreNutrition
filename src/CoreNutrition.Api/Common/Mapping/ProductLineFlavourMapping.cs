@@ -49,7 +49,7 @@ public class ProductLineFlavourMapping : IRegister
 
     config.NewConfig<ProductLineFlavour, ProductLineFlavourResponse>()
       .Map((dest) => dest.Id, (src) => src.Id.Value.ToString())
-      .Map((dest) => dest.ProductLineId, (src) => src.ProductLineId)
+      .Map((dest) => dest.ProductLineId, (src) => src.ProductLineId) // FK
       .Map((dest) => dest, (src) => src);
   }
 }

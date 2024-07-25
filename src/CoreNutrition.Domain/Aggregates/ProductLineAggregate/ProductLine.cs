@@ -94,7 +94,6 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     // productLineFlavourIds ?? new List<ProductLineFlavourId>()
     );
 
-    // Enforce invariants
     var errors = productLine.EnforceInvariants();
 
     if (errors.Count > 0)

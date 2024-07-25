@@ -4,7 +4,7 @@ public record ProductResponse(
   string Id,
   string Name,
   bool IsPublished,
-  double AverageRating,
+  AverageRatingResponse AverageRating,
   RetailPriceResponse RetailPrice,
   int QuantityInStock,
   string ProductLineSizeId,
@@ -18,6 +18,11 @@ public record ProductResponse(
   List<string> OrderLineItemIds,
   DateTime CreatedDateTime,
   DateTime UpdatedDateTime
+);
+
+public record AverageRatingResponse(
+  double Value,
+  int NumRatings
 );
 
 public record RetailPriceResponse

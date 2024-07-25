@@ -31,16 +31,15 @@ public sealed class ProductLinesController
     await Task.CompletedTask; // TODO delete later
     var command = _mapper.Map<CreateProductLineCommand>(request);
     ErrorOr<ProductLine> createProductLineResult = await _mediator.Send(command);
-
+    Console.WriteLine("Controller: BEFORE matching result");
     return createProductLineResult.Match(
       productLine => CreatedAtAction(
         actionName: nameof(GetProductLineById),
         routeValues: new { productLineId = productLine.Id },
-      // value: productLine),
-      value: _mapper.Map<ProductLineResponse>(productLine)),
+        value: _mapper.Map<ProductLineResponse>(productLine)
+      ),
       errors => ResolveProblems(errors)
     );
-    // return Ok(createProductLineResult);
   }
 
   [HttpGet(ApiRoutes.ProductLines.GetById)]

@@ -32,6 +32,9 @@ public class ProductMapping : IRegister
 
     config.NewConfig<Product, ProductResponse>()
       .Map((dest) => dest.Id, (src) => src.Id.Value.ToString())
+      .Map((dest) => dest.ProductLineId, (src) => src.ProductLineId) // FK 
+      .Map((dest) => dest.ProductLineSizeId, (src) => src.ProductLineSizeId) // FK 
+      .Map((dest) => dest.ProductLineFlavourId, (src) => src.ProductLineFlavourId) // FK 
       .Map((dest) => dest.ReviewIds, (src) => src.ReviewIds.Select((reviewId) => reviewId.Value))
       .Map((dest) => dest.CartItemIds, (src) => src.CartItemIds.Select((cartItemId) => cartItemId.Value))
       .Map((dest) => dest.OrderLineItemIds, (src) => src.OrderLineItemIds.Select((orderLineItemId) => orderLineItemId.Value))

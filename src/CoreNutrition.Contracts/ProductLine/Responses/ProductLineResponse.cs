@@ -5,7 +5,7 @@ public record ProductLineResponse(
   string Name,
   string CategoryId,
   bool IsPublished,
-  double AverageRating,
+  AverageRatingResponse AverageRating,
   ProductLineInfoResponse ProductLineInfo,
   NutritionFactsResponse NutritionFacts,
   List<string> ProductLineSizeIds,
@@ -13,6 +13,11 @@ public record ProductLineResponse(
   List<string> ProductIds,
   DateTime CreatedDateTime,
   DateTime UpdatedDateTime
+);
+
+public record AverageRatingResponse(
+  double Value,
+  int NumRatings
 );
 
 public record ProductLineInfoResponse(

@@ -7,7 +7,7 @@ namespace CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 
 public sealed class ProductLineInfo : ValueObject
 {
-    // invariant constants
+    // invariant constraints
     public const int MinDescriptionShortLength = 50;
     public const int MaxDescriptionShortLength = 200;
     public const int MinDescriptionLongLength = 200;

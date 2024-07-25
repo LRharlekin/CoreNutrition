@@ -27,15 +27,16 @@ internal sealed class CreateProductLineCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
+    // 0. prepare immutable value objects
     Guid.TryParse(command.CategoryId, out var categoryIdGuid);
     CategoryId categoryId = CategoryId.Create(categoryIdGuid);
 
-    ErrorOr<ProductLine> productLineResult = ProductLine.Create(
-      command.Name,
-      command.IsPublished,
-      categoryId,
-      AverageRating.CreateNew().Value,
-      ProductLineInfo.CreateNew(
+    var averageRating = AverageRating.CreateNew().Value;
+
+    Console.WriteLine("AFTER .CreateNew() in handler");
+    Console.WriteLine($"average rating: {averageRating.Score}");
+
+    ErrorOr<ProductLineInfo> productLineInfoResult = ProductLineInfo.CreateNew(
         command.ProductLineInfo.DescriptionShort,
         command.ProductLineInfo.DescriptionLong,
         command.ProductLineInfo.SuggestedUse,
@@ -45,16 +46,57 @@ internal sealed class CreateProductLineCommandHandler
         command.ProductLineInfo.IsMuscleGain,
         command.ProductLineInfo.IsWeightLoss,
         command.ProductLineInfo.IsHealthWellness
-      ).Value,
-      NutritionFacts.CreateNew(
-        command.NutritionFacts.CaloriesPer100Grams,
-        command.NutritionFacts.FatPer100Grams,
-        command.NutritionFacts.SaturatedFatPer100Grams,
-        command.NutritionFacts.CarbohydratesPer100Grams,
-        command.NutritionFacts.SugarPer100Grams,
-        command.NutritionFacts.ProteinPer100Grams,
-        command.NutritionFacts.SaltPer100Grams
-      ).Value
+      );
+
+    if (productLineInfoResult.IsError)
+    {
+      return productLineInfoResult.Errors;
+    }
+
+    ErrorOr<NutritionFacts> nutritionFactsResult = NutritionFacts.CreateNew(
+      command.NutritionFacts.CaloriesPer100Grams,
+      command.NutritionFacts.FatPer100Grams,
+      command.NutritionFacts.SaturatedFatPer100Grams,
+      command.NutritionFacts.CarbohydratesPer100Grams,
+      command.NutritionFacts.SugarPer100Grams,
+      command.NutritionFacts.ProteinPer100Grams,
+      command.NutritionFacts.SaltPer100Grams
+    );
+
+    if (nutritionFactsResult.IsError)
+    {
+      return nutritionFactsResult.Errors;
+    }
+
+    // 1. create
+    ErrorOr<ProductLine> productLineResult = ProductLine.Create(
+      command.Name,
+      command.IsPublished,
+      categoryId,
+      // AverageRating.CreateNew().Value,
+      averageRating,
+      productLineInfoResult.Value,
+      // ProductLineInfo.CreateNew(
+      //   command.ProductLineInfo.DescriptionShort,
+      //   command.ProductLineInfo.DescriptionLong,
+      //   command.ProductLineInfo.SuggestedUse,
+      //   command.ProductLineInfo.Benefit1,
+      //   command.ProductLineInfo.Benefit2,
+      //   command.ProductLineInfo.Benefit3,
+      //   command.ProductLineInfo.IsMuscleGain,
+      //   command.ProductLineInfo.IsWeightLoss,
+      //   command.ProductLineInfo.IsHealthWellness
+      // ).Value,
+      nutritionFactsResult.Value
+    // NutritionFacts.CreateNew(
+    //   command.NutritionFacts.CaloriesPer100Grams,
+    //   command.NutritionFacts.FatPer100Grams,
+    //   command.NutritionFacts.SaturatedFatPer100Grams,
+    //   command.NutritionFacts.CarbohydratesPer100Grams,
+    //   command.NutritionFacts.SugarPer100Grams,
+    //   command.NutritionFacts.ProteinPer100Grams,
+    //   command.NutritionFacts.SaltPer100Grams
+    // ).Value
     );
 
     if (productLineResult.IsError)

@@ -7,22 +7,39 @@ namespace CoreNutrition.Domain.Common.ValueObjects;
 
 public sealed class AverageRating : ValueObject
 {
-  // invariant constants:
-  public const decimal MinAvgRating = 1;
-  public const decimal MaxAvgRating = 5;
-
-  private decimal _value;
-
-  private AverageRating(decimal value, int numRatings)
+  public static class Constraints
   {
-    Value = value;
+    public const decimal MinAvgRating = 1;
+    public const decimal MaxAvgRating = 5;
+  }
+
+  private decimal? _score;
+
+  private AverageRating(decimal? score, int numRatings)
+  {
+    Score = score;
     NumRatings = numRatings;
   }
 
-  public decimal? Value { get => NumRatings > 0 ? _value : null; private set => _value = value!.Value; }
+  public decimal? Score
+  {
+    get => NumRatings > 0 ? _score : null;
+    // private set => _score = value!.Value; }
+    private set
+    {
+      if (value.HasValue)
+      {
+        _score = value.Value;
+      }
+      else
+      {
+        _score = null;
+      }
+    }
+  }
   public int NumRatings { get; private set; }
 
-  public static ErrorOr<AverageRating> CreateNew(decimal rating = 0, int numRatings = 0)
+  public static ErrorOr<AverageRating> CreateNew(decimal? rating = null, int numRatings = 0)
   {
     var averageRating = new AverageRating(rating, numRatings);
 
@@ -50,7 +67,7 @@ public sealed class AverageRating : ValueObject
 
   public override IEnumerable<object?> GetEqualityComponents()
   {
-    yield return Value;
+    yield return Score;
   }
 
 #pragma warning disable CS8618
@@ -63,14 +80,14 @@ public sealed class AverageRating : ValueObject
   {
     var errors = new List<Error>();
 
-    if (this.NumRatings <= 0 && this.Value is not null)
+    if (this.NumRatings <= 0 && this.Score is not null)
     {
-      errors.Add(Errors.AverageRating.InvalidDefaultValue(this.NumRatings, this.Value.GetType(), this.Value));
+      errors.Add(Errors.AverageRating.InvalidDefaultValue(this.NumRatings, this.Score.GetType(), this.Score));
     }
 
-    if (this.NumRatings > 0 && this.Value is not null && this.Value is not >= MinAvgRating or <= MaxAvgRating)
+    if (this.NumRatings > 0 && this.Score is not null && (this.Score < Constraints.MinAvgRating || this.Score > Constraints.MaxAvgRating))
     {
-      errors.Add(Errors.AverageRating.OutOfRange(this.Value!, this.NumRatings));
+      errors.Add(Errors.AverageRating.OutOfRange(this.Score!, this.NumRatings));
     }
 
     return errors;
