@@ -52,16 +52,16 @@ internal sealed class CreateProductCommandHandler
 
     // create
     ErrorOr<Product> productResult = Product.Create(
-      name: command.Name,
-      isPublished: command.IsPublished,
-      averageRating: AverageRating.CreateNew().Value,
+      command.Name,
+      command.IsPublished,
+      AverageRating.CreateNew().Value,
       retailPrice,
-      quantityInStock: command.QuantityInStock,
-      productLineId,
-      productLineSizeId,
-      productLineFlavourId,
-      isVegan: command.IsVegan,
-      isSample: command.IsSample,
+      command.QuantityInStock,
+      productLineId!,
+      productLineSizeId!,
+      productLineFlavourId!,
+      command.IsVegan,
+      command.IsSample,
       productImageUrl!
     );
 
@@ -71,6 +71,8 @@ internal sealed class CreateProductCommandHandler
     }
 
     // persist
+
+    Console.WriteLine(productResult.Value);
 
     return productResult.Value;
   }

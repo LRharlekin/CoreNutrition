@@ -16,7 +16,7 @@ public class UpdateProductLineFlavourCommandValidator
       {
         RuleFor(command => command.Flavour)
           .NotEmpty()
-          .Length(ProductLineFlavour.MinNameLength, ProductLineFlavour.MaxNameLength);
+          .Length(ProductLineFlavour.Constraints.MinNameLength, ProductLineFlavour.Constraints.MaxNameLength);
       });
     Unless(command => command.FlavourImageUrl == null, () =>
     {

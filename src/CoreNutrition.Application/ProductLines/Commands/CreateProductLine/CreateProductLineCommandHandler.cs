@@ -27,7 +27,6 @@ internal sealed class CreateProductLineCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
-    // Uri.TryCreate(command.CategoryImageUrl, UriKind.Absolute, out var categoryImageUrl);
     Guid.TryParse(command.CategoryId, out var categoryIdGuid);
     CategoryId categoryId = CategoryId.Create(categoryIdGuid);
 

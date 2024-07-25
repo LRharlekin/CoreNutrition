@@ -25,9 +25,6 @@ public class ProductMapping : IRegister
     config.NewConfig<Guid, ProductId>()
       .MapWith(guid => ProductId.Create(guid));
 
-    config.NewConfig<Guid, ProductId>()
-      .MapWith(guid => ProductId.Create(guid));
-
     /* responses */
 
     // config.NewConfig<List<Product>, ListProductsResponse>()
@@ -39,6 +36,5 @@ public class ProductMapping : IRegister
       .Map((dest) => dest.CartItemIds, (src) => src.CartItemIds.Select((cartItemId) => cartItemId.Value))
       .Map((dest) => dest.OrderLineItemIds, (src) => src.OrderLineItemIds.Select((orderLineItemId) => orderLineItemId.Value))
       .Map((dest) => dest, (src) => src);
-
   }
 }

@@ -36,8 +36,8 @@ public sealed class ProductLinesController
       productLine => CreatedAtAction(
         actionName: nameof(GetProductLineById),
         routeValues: new { productLineId = productLine.Id },
-        value: productLine),
-      // value: _mapper.Map<ProductLineResponse>(productLine)),
+      // value: productLine),
+      value: _mapper.Map<ProductLineResponse>(productLine)),
       errors => ResolveProblems(errors)
     );
     // return Ok(createProductLineResult);

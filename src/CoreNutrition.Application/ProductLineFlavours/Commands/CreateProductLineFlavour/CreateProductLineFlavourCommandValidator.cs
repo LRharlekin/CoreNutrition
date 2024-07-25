@@ -12,7 +12,7 @@ public class CreateProductLineFlavourCommandValidator
     RuleFor(command => command.Flavour)
       .NotNull()
       .NotEmpty()
-      .Length(ProductLineFlavour.MinNameLength, ProductLineFlavour.MaxNameLength);
+      .Length(ProductLineFlavour.Constraints.MinNameLength, ProductLineFlavour.Constraints.MaxNameLength);
     RuleFor(command => command.ProductLineId)
       .NotNull()
       .NotEmpty()

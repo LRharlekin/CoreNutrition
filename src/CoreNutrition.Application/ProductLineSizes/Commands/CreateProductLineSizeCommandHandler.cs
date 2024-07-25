@@ -40,7 +40,6 @@ internal sealed class CreateProductLineSizeCommandHandler
     Guid.TryParse(command.SizeVariant.SingleSizeVariantId, out var singleSizeVariantIdGuid);
 
     // 1. create
-
     ErrorOr<SizeVariant> sizeVariantResult = SizeVariant.Create(
       name: command.SizeVariant.Name,
       units: command.SizeVariant.Units,
@@ -69,7 +68,6 @@ internal sealed class CreateProductLineSizeCommandHandler
     _productLineSizeRepository.Add(productLineSizeResult.Value);
 
     // 3. return
-    //     return productLineSizeResult.Value;
-    return default!;
+    return productLineSizeResult.Value;
   }
 }

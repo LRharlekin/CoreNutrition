@@ -31,9 +31,8 @@ public class ProductLineMapping : IRegister
 
     config.NewConfig<Guid, ProductLineId>()
       .MapWith(guid => ProductLineId.Create(guid));
-
-    config.NewConfig<Guid, ProductLineId>()
-      .MapWith(guid => ProductLineId.Create(guid));
+    config.NewConfig<string, ProductLineId>()
+      .MapWith(guidString => ProductLineId.Create(guidString).Value);
 
     /* responses */
 
