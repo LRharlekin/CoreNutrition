@@ -6,6 +6,7 @@ using CoreNutrition.Application.ProductLines.Commands.CreateProductLine;
 // using CoreNutrition.Application.ProductLines.Queries.GetProductLineById;
 using CoreNutrition.Domain.ProductLineAggregate;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
+// using CoreNutrition.Domain.CategoryAggregate.ValueObjects;
 
 namespace CoreNutrition.Api.Common.Mapping;
 
@@ -31,9 +32,13 @@ public class ProductLineMapping : IRegister
 
     config.NewConfig<Guid, ProductLineId>()
       .MapWith(guid => ProductLineId.Create(guid));
+    config.NewConfig<string, ProductLineId>()
+      .MapWith(guidString => ProductLineId.Create(guidString).Value);
 
-    config.NewConfig<Guid, ProductLineId>()
-      .MapWith(guid => ProductLineId.Create(guid));
+    // config.NewConfig<Guid, CategoryId>()
+    //   .MapWith(guid => CategoryId.Create(guid));
+    // config.NewConfig<string, CategoryId>()
+    //   .MapWith(guidString => CategoryId.Create(guidString).Value);
 
     /* responses */
 
@@ -42,6 +47,7 @@ public class ProductLineMapping : IRegister
 
     config.NewConfig<ProductLine, ProductLineResponse>()
       .Map((dest) => dest.Id, (src) => src.Id.Value.ToString())
+      .Map((dest) => dest.CategoryId, (src) => src.CategoryId) // FK 
       .Map((dest) => dest.ProductIds, (src) => src.ProductIds.Select((productId) => productId.Value))
       .Map((dest) => dest.ProductLineSizeIds, (src) => src.ProductLineSizeIds.Select((productLineSizeId) => productLineSizeId.Value))
       .Map((dest) => dest.ProductLineFlavourIds, (src) => src.ProductLineFlavourIds.Select((productLineFlavourId) => productLineFlavourId.Value))

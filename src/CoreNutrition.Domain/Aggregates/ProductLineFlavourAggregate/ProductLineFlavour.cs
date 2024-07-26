@@ -11,13 +11,16 @@ namespace CoreNutrition.Domain.ProductLineFlavourAggregate;
 
 public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Guid>
 {
-  public const int MinNameLength = 3;
-  public const int MaxNameLength = 40;
+  public static class Constraints
+  {
+    public const int MinNameLength = 3;
+    public const int MaxNameLength = 40;
+  }
 
   private List<ProductId> _productIds = new List<ProductId>();
 
-  public string Flavour { get; private set; }
   public ProductLineId ProductLineId { get; private set; }
+  public string Flavour { get; private set; }
   public Uri FlavourImageUrl { get; private set; }
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
@@ -77,7 +80,7 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
   {
     List<Error> errors = new();
 
-    if (this.Flavour.Length < MinNameLength || this.Flavour.Length > MaxNameLength)
+    if (this.Flavour.Length < Constraints.MinNameLength || this.Flavour.Length > Constraints.MaxNameLength)
     {
       errors.Add(Errors.ProductLineFlavour.InvalidName);
     }
