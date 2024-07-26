@@ -9,8 +9,9 @@ public sealed class AverageRating : ValueObject
 {
   public static class Constraints
   {
-    public const decimal MinAvgRating = 1;
-    public const decimal MaxAvgRating = 5;
+    public const decimal MinScore = 1;
+    public const decimal MaxScore = 5;
+    public const int MinNumRatings = 0;
   }
 
   private decimal? _score;
@@ -80,12 +81,17 @@ public sealed class AverageRating : ValueObject
   {
     var errors = new List<Error>();
 
-    if (this.NumRatings <= 0 && this.Score is not null)
+    if (this.NumRatings <= Constraints.MinNumRatings && this.Score.HasValue)
     {
       errors.Add(Errors.AverageRating.InvalidDefaultValue(this.NumRatings, this.Score.GetType(), this.Score));
     }
 
-    if (this.NumRatings > 0 && this.Score is not null && (this.Score < Constraints.MinAvgRating || this.Score > Constraints.MaxAvgRating))
+    if (this.NumRatings > Constraints.MinNumRatings && this.Score is null)
+    {
+      errors.Add(Errors.AverageRating.ScoreIsNull(this.NumRatings));
+    }
+
+    if (this.NumRatings > Constraints.MinNumRatings && this.Score.HasValue && (this.Score < Constraints.MinScore || this.Score > Constraints.MaxScore))
     {
       errors.Add(Errors.AverageRating.OutOfRange(this.Score!, this.NumRatings));
     }
