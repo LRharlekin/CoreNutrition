@@ -40,7 +40,6 @@ public sealed class ProductsController
         value: _mapper.Map<ProductResponse>(product)),
       errors => ResolveProblems(errors)
     );
-    // return Ok(command);
   }
 
   [HttpGet(ApiRoutes.Products.GetById)]

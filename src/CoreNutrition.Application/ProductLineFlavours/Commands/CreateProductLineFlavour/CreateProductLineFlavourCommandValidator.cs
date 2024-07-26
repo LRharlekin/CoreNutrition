@@ -20,6 +20,7 @@ public class CreateProductLineFlavourCommandValidator
     RuleFor(command => command.FlavourImageUrl)
       .NotNull()
       .NotEmpty()
-      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
+      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
+      .WithMessage("The Flavour Image URL is not a valid URL.");
   }
 }

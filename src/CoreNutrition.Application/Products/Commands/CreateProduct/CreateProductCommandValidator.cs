@@ -22,13 +22,14 @@ public class CreateProductCommandValidator
 
     RuleFor(command => command.QuantityInStock)
       .NotNull()
-      .GreaterThan(0)
-      .GreaterThan(Product.Constraints.MinQuantityInStock);
+      .GreaterThanOrEqualTo(0)
+      .GreaterThanOrEqualTo(Product.Constraints.MinQuantityInStock);
 
     RuleFor(command => command.ProductImageUrl)
       .NotNull()
       .NotEmpty()
-      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
+      .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
+      .WithMessage("The Product Image URL is not a valid URL.");
 
     ApplyGuidValidationRule(command => command.ProductLineId);
     ApplyGuidValidationRule(command => command.ProductLineSizeId);

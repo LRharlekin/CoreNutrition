@@ -18,22 +18,24 @@ internal sealed class CreateProductCommandHandler
   : IRequestHandler<CreateProductCommand, ErrorOr<Product>>
 
 {
-  // private readonly IProductRepository _productRepository;
+  private readonly IProductRepository _productRepository;
 
-  // public CreateProductCommandHandler
-  // (
-  //   IProductRepository productRepository
-  // )
-  // {
-  //   _productRepository = productRepository;
-  // }
-
+  public CreateProductCommandHandler
+  (
+    IProductRepository productRepository
+  )
+  {
+    _productRepository = productRepository;
+  }
 
   public async Task<ErrorOr<Product>> Handle(
     CreateProductCommand command,
     CancellationToken cancellationToken)
   {
     await Task.CompletedTask; // TODO delete later
+
+    // 0. prepare immutable value objects
+    var averageRating = AverageRating.CreateNew().Value;
 
     var retailPrice = CurrencyAmount.CreateNew(
       amount: command.RetailPrice.Amount,
@@ -50,11 +52,11 @@ internal sealed class CreateProductCommandHandler
 
     Uri.TryCreate(command.ProductImageUrl, UriKind.Absolute, out var productImageUrl);
 
-    // create
+    // 1. create
     ErrorOr<Product> productResult = Product.Create(
       command.Name,
       command.IsPublished,
-      AverageRating.CreateNew().Value,
+      averageRating,
       retailPrice,
       command.QuantityInStock,
       productLineId!,
@@ -70,10 +72,11 @@ internal sealed class CreateProductCommandHandler
       return productResult.Errors;
     }
 
-    // persist
+    // 2. persist
+    _productRepository.Add(productResult.Value);
 
-    Console.WriteLine(productResult.Value);
 
+    // 3. return
     return productResult.Value;
   }
 }

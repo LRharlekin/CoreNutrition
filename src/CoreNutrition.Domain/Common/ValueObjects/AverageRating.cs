@@ -25,7 +25,6 @@ public sealed class AverageRating : ValueObject
   public double? Score
   {
     get => NumRatings > 0 ? _score : null;
-    // private set => _score = value!.Value; }
     private set
     {
       if (value.HasValue)
@@ -50,9 +49,6 @@ public sealed class AverageRating : ValueObject
     {
       return errors;
     }
-
-    Console.WriteLine("Before returning averageRating from inside fctory");
-    Console.WriteLine($"average rating: {averageRating.Score}");
 
     return averageRating;
   }

@@ -24,6 +24,8 @@ public class ProductMapping : IRegister
 
     config.NewConfig<Guid, ProductId>()
       .MapWith(guid => ProductId.Create(guid));
+    config.NewConfig<string, ProductId>()
+      .MapWith(guidString => ProductId.Create(guidString).Value);
 
     /* responses */
 

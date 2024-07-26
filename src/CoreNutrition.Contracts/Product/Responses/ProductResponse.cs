@@ -7,8 +7,8 @@ public record ProductResponse(
   AverageRatingResponse AverageRating,
   RetailPriceResponse RetailPrice,
   int QuantityInStock,
-  string ProductLineSizeId,
   string ProductLineId,
+  string ProductLineSizeId,
   string ProductLineFlavourId,
   bool IsVegan,
   bool IsSample,
@@ -21,7 +21,7 @@ public record ProductResponse(
 );
 
 public record AverageRatingResponse(
-  double Value,
+  double? Score,
   int NumRatings
 );
 

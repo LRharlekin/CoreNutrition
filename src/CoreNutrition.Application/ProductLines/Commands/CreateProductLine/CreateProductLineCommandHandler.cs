@@ -33,9 +33,6 @@ internal sealed class CreateProductLineCommandHandler
 
     var averageRating = AverageRating.CreateNew().Value;
 
-    Console.WriteLine("AFTER .CreateNew() in handler");
-    Console.WriteLine($"average rating: {averageRating.Score}");
-
     ErrorOr<ProductLineInfo> productLineInfoResult = ProductLineInfo.CreateNew(
         command.ProductLineInfo.DescriptionShort,
         command.ProductLineInfo.DescriptionLong,
