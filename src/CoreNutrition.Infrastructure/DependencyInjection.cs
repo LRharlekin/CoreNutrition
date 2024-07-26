@@ -12,6 +12,7 @@ using CoreNutrition.Domain.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 using CoreNutrition.Domain.Common.Interfaces.Services;
 
+using CoreNutrition.Infrastructure.Common.Persistence;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 using CoreNutrition.Infrastructure.Users.Persistence;
 using CoreNutrition.Infrastructure.Categories.Persistence;
@@ -21,6 +22,7 @@ using CoreNutrition.Infrastructure.ProductLines.Persistence;
 using CoreNutrition.Infrastructure.Products.Persistence;
 
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoreNutrition.Infrastructure;
 
@@ -43,6 +45,9 @@ public static class DependencyInjection
     this IServiceCollection services
   )
   {
+    services.AddDbContext<CoreNutritionDbContext>(options =>
+      options.UseNpgsql("connection string")); // TODO: add connection string
+
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<ICategoryRepository, CategoryRepository>();
     services.AddScoped<IProductLineRepository, ProductLineRepository>();
