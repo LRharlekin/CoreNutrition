@@ -6,6 +6,7 @@ namespace CoreNutrition.Domain.Common.Interfaces.Persistence;
 public interface IProductLineSizeRepository
 {
   void Add(ProductLineSize productLineSize);
+
   ProductLineSize? GetById(ProductLineSizeId productLineSizeId);
 
   List<ProductLineSize> GetAll();

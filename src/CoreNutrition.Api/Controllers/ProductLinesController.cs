@@ -31,7 +31,8 @@ public sealed class ProductLinesController
     await Task.CompletedTask; // TODO delete later
     var command = _mapper.Map<CreateProductLineCommand>(request);
     ErrorOr<ProductLine> createProductLineResult = await _mediator.Send(command);
-    Console.WriteLine("Controller: BEFORE matching result");
+    Console.WriteLine("Controller: BEFOREEEE matching result");
+    Console.WriteLine($"average rating: {createProductLineResult.Value.AverageRating.Score}");
     return createProductLineResult.Match(
       productLine => CreatedAtAction(
         actionName: nameof(GetProductLineById),

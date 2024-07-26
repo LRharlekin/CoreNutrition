@@ -73,30 +73,9 @@ internal sealed class CreateProductLineCommandHandler
       command.Name,
       command.IsPublished,
       categoryId,
-      // AverageRating.CreateNew().Value,
       averageRating,
       productLineInfoResult.Value,
-      // ProductLineInfo.CreateNew(
-      //   command.ProductLineInfo.DescriptionShort,
-      //   command.ProductLineInfo.DescriptionLong,
-      //   command.ProductLineInfo.SuggestedUse,
-      //   command.ProductLineInfo.Benefit1,
-      //   command.ProductLineInfo.Benefit2,
-      //   command.ProductLineInfo.Benefit3,
-      //   command.ProductLineInfo.IsMuscleGain,
-      //   command.ProductLineInfo.IsWeightLoss,
-      //   command.ProductLineInfo.IsHealthWellness
-      // ).Value,
       nutritionFactsResult.Value
-    // NutritionFacts.CreateNew(
-    //   command.NutritionFacts.CaloriesPer100Grams,
-    //   command.NutritionFacts.FatPer100Grams,
-    //   command.NutritionFacts.SaturatedFatPer100Grams,
-    //   command.NutritionFacts.CarbohydratesPer100Grams,
-    //   command.NutritionFacts.SugarPer100Grams,
-    //   command.NutritionFacts.ProteinPer100Grams,
-    //   command.NutritionFacts.SaltPer100Grams
-    // ).Value
     );
 
     if (productLineResult.IsError)
@@ -104,9 +83,10 @@ internal sealed class CreateProductLineCommandHandler
       return productLineResult.Errors;
     }
 
-    // _productLineRepository.Add(productLineResult.Value);
+    // 2. persist
+    _productLineRepository.Add(productLineResult.Value);
 
-    // return productLineResult.Value;
+    // 3. return
     return productLineResult.Value;
   }
 }
