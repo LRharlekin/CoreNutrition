@@ -32,6 +32,7 @@ public sealed class ProductLinesController
     var command = _mapper.Map<CreateProductLineCommand>(request);
     ErrorOr<ProductLine> createProductLineResult = await _mediator.Send(command);
     Console.WriteLine("Controller: BEFOREEEE matching result");
+    Console.WriteLine($"num ratings: {createProductLineResult.Value.AverageRating.NumRatings}");
     Console.WriteLine($"average rating: {createProductLineResult.Value.AverageRating.Score}");
     return createProductLineResult.Match(
       productLine => CreatedAtAction(

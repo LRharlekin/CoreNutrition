@@ -16,7 +16,7 @@ public record ProductLineResponse(
 );
 
 public record AverageRatingResponse(
-  double Score,
+  double? Score,
   int NumRatings
 );
 

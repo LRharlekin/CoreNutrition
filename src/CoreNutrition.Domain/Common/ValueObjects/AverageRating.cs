@@ -9,20 +9,20 @@ public sealed class AverageRating : ValueObject
 {
   public static class Constraints
   {
-    public const decimal MinScore = 1;
-    public const decimal MaxScore = 5;
+    public const double MinScore = 1;
+    public const double MaxScore = 5;
     public const int MinNumRatings = 0;
   }
 
-  private decimal? _score;
+  private double? _score;
 
-  private AverageRating(decimal? score, int numRatings)
+  private AverageRating(double? score, int numRatings)
   {
     Score = score;
     NumRatings = numRatings;
   }
 
-  public decimal? Score
+  public double? Score
   {
     get => NumRatings > 0 ? _score : null;
     // private set => _score = value!.Value; }
@@ -40,7 +40,7 @@ public sealed class AverageRating : ValueObject
   }
   public int NumRatings { get; private set; }
 
-  public static ErrorOr<AverageRating> CreateNew(decimal? rating = null, int numRatings = 0)
+  public static ErrorOr<AverageRating> CreateNew(double? rating = null, int numRatings = 0)
   {
     var averageRating = new AverageRating(rating, numRatings);
 
@@ -50,6 +50,9 @@ public sealed class AverageRating : ValueObject
     {
       return errors;
     }
+
+    Console.WriteLine("Before returning averageRating from inside fctory");
+    Console.WriteLine($"average rating: {averageRating.Score}");
 
     return averageRating;
   }
