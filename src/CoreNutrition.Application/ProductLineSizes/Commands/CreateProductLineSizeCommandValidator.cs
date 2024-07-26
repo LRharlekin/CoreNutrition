@@ -19,8 +19,8 @@ public class CreateProductLineSizeCommandValidator
       .NotNull()
       .GreaterThan(0);
     RuleFor(command => command.SizeVariant.Name)
-      .MinimumLength(SizeVariant.MinNameLength)
-      .MaximumLength(SizeVariant.MaxNameLength);
+      .MinimumLength(SizeVariant.Constraints.MinNameLength)
+      .MaximumLength(SizeVariant.Constraints.MaxNameLength);
     RuleFor(command => command.SizeVariant.Units) // not null, greater than 0
       .NotNull()
       .GreaterThan(0);

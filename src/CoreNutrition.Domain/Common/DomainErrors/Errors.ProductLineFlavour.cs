@@ -10,7 +10,7 @@ public static partial class Errors
     {
         public static Error InvalidName => Error.Validation(
         code: "Flavour.InvalidName",
-        description: $"The name for a Flavour must be between {ProductLineFlavourAggregate.ProductLineFlavour.MinNameLength} and {ProductLineFlavourAggregate.ProductLineFlavour.MaxNameLength} characters long.");
+        description: $"The name for a Flavour must be between {ProductLineFlavourAggregate.ProductLineFlavour.Constraints.MinNameLength} and {ProductLineFlavourAggregate.ProductLineFlavour.Constraints.MaxNameLength} characters long.");
 
         public static Error InvalidProductLineFlavourId => Error.Validation(
             code: "ProductLineFlavour.InvalidId",

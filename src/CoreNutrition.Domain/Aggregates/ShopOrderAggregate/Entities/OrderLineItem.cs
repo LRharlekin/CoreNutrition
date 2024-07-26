@@ -1,0 +1,1 @@
+namespace CoreNutrition.Domain.ShopOrderAggregate.Entities;

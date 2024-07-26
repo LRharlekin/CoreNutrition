@@ -5,14 +5,19 @@ public record ProductLineResponse(
   string Name,
   string CategoryId,
   bool IsPublished,
-  double AverageRating,
-  ProductLineInfoRequest ProductLineInfo,
-  NutritionFactsRequest NutritionFacts,
+  AverageRatingResponse AverageRating,
+  ProductLineInfoResponse ProductLineInfo,
+  NutritionFactsResponse NutritionFacts,
   List<string> ProductLineSizeIds,
   List<string> ProductLineFlavourIds,
   List<string> ProductIds,
   DateTime CreatedDateTime,
   DateTime UpdatedDateTime
+);
+
+public record AverageRatingResponse(
+  double? Score,
+  int NumRatings
 );
 
 public record ProductLineInfoResponse(

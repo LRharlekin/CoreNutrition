@@ -32,7 +32,8 @@ public class UpdateCategoryCommandValidator
     {
       RuleFor(command => command.CategoryImageUrl)
         .NotEmpty()
-        .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
+        .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
+        .WithMessage("The Category Image URL is not a valid URL.");
     });
   }
 }

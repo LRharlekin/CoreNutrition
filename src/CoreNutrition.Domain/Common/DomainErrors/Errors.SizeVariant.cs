@@ -11,7 +11,7 @@ public static partial class Errors
     {
         public static Error InvalidUnits => Error.Validation(
             code: "SizeVariant.InvalidUnits",
-            description: $"Size Variant must contain at least {ProductLineSizeAggregate.Entities.SizeVariant.MinUnits} unit(s).");
+            description: $"Size Variant must contain at least {ProductLineSizeAggregate.Entities.SizeVariant.Constraints.MinUnits} unit(s).");
 
         public static Error MissingSingleSizeReference => Error.Validation(
             code: "SizeVariant.MissingSingleSizeVariantId",
@@ -27,15 +27,16 @@ public static partial class Errors
 
         public static Error MissingWeightOrVolume => Error.Validation(
             code: "SizeVariant.MissingWeightOrVolume",
-            description: "Either \"Unit Weight in Grams\" or \"Unit Volume in Milliliters\" are required to specify the size variant.");
+            description: "Unit Weight in Grams or Unit Volume in Milliliters are required. Please set one of these fields to specify the size variant.");
 
         public static Error InvalidName => Error.Validation(
         code: "SizeVariant.InvalidName",
-        description: $"Size Variant name must be between {ProductLineSizeAggregate.Entities.SizeVariant.MinNameLength} and {ProductLineSizeAggregate.Entities.SizeVariant.MaxNameLength} characters long.");
+        description: $"Size Variant name must be between {ProductLineSizeAggregate.Entities.SizeVariant.Constraints.MinNameLength} and {ProductLineSizeAggregate.Entities.SizeVariant.Constraints.MaxNameLength} characters long.");
 
         public static Error InvalidDescription => Error.Validation(
         code: "SizeVariant.InvalidUnitAmount",
-        description: $"Size Variant must contain at least {ProductLineSizeAggregate.Entities.SizeVariant.MinUnits} unit.");
+        description: $"Size Variant must contain at least {ProductLineSizeAggregate.Entities.SizeVariant.Constraints.MinUnits} unit.");
+
         public static Error InvalidSizeVariantId => Error.Validation(
             code: "SizeVariant.InvalidId",
             description: "Size Variant ID is invalid");

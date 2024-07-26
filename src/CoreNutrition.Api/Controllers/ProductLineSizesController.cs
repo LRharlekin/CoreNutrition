@@ -43,7 +43,6 @@ public sealed class ProductLineSizesController : ApiControllerBase
         value: _mapper.Map<ProductLineSizeResponse>(productLineSize)),
       errors => ResolveProblems(errors)
     );
-    // return Ok(createProductLineSizeResult);
   }
 
   // [HttpPut(ApiRoutes.ProductLineSizes.Update)]

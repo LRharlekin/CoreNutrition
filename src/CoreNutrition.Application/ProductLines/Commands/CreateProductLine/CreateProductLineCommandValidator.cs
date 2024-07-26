@@ -13,7 +13,7 @@ public class CreateProductLineCommandValidator
     RuleFor(command => command.Name)
       .NotNull()
       .NotEmpty()
-      .Length(ProductLine.MinNameLength, ProductLine.MaxNameLength);
+      .Length(ProductLine.Constraints.MinNameLength, ProductLine.Constraints.MaxNameLength);
     RuleFor(command => command.CategoryId)
       .NotNull()
       .NotEmpty()
