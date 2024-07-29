@@ -8,8 +8,12 @@ namespace CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 public sealed class NutritionFacts : ValueObject
 {
   // invariant constants:
-  public const double MinPer100Grams = 0;
-  public const double MaxPer100Grams = 100;
+  public static class Constraints
+  {
+    public const double MinPer100Grams = 0;
+    public const double MaxPer100Grams = 100;
+  }
+  
 
   public double CaloriesPer100Grams { get; private set; }
   public double FatPer100Grams { get; private set; }
@@ -82,11 +86,12 @@ public sealed class NutritionFacts : ValueObject
   {
   }
 #pragma warning restore CS8618
+
   private List<Error> EnforceInvariants()
   {
     var errors = new List<Error>();
 
-    if (this.CaloriesPer100Grams <= MinPer100Grams)
+    if (this.CaloriesPer100Grams <= Constraints.MinPer100Grams)
     {
       errors.Add(Errors.NutritionFacts.InvalidCalories);
     }
@@ -107,12 +112,12 @@ public sealed class NutritionFacts : ValueObject
 
     static bool IsValidMacro(double value)
     {
-      return value >= 0 && value <= 100;
+      return value >= Constraints.MinPer100Grams && value <= Constraints.MaxPer100Grams;
     }
 
     static bool IsValidOfWhichMacro(double value, double macroValue)
     {
-      return value >= 0 && value <= macroValue;
+      return value >= Constraints.MinPer100Grams && value <= macroValue;
     }
 
     return errors;

@@ -7,7 +7,10 @@ namespace CoreNutrition.Domain.UserAggregate.ValueObjects;
 
 public sealed class FirstName : ValueObject
 {
-  public const int MaxLength = 100;
+  public static class Constraints
+  {
+    public const int MaxLength = 100;
+  }
 
   private FirstName(string value) => Value = value;
 
@@ -17,21 +20,38 @@ public sealed class FirstName : ValueObject
 
   public static ErrorOr<FirstName> CreateNew(string firstName)
   {
-    if (string.IsNullOrWhiteSpace(firstName))
+    var firstName = new FirstName(firstName);
+
+    var errors = firstName.EnforceInvariants();
+
+    if (errors.Count > 0)
     {
-      return Errors.FirstName.NullOrEmpty;
-    }
-    if (firstName.Length > MaxLength)
-    {
-      return Errors.FirstName.LongerThanAllowed;
+      return errors;
     }
 
-    return new FirstName(firstName);
+    return firstName;
   }
   public override string ToString() => Value;
 
   public override IEnumerable<object> GetEqualityComponents()
   {
     yield return Value;
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (string.IsNullOrWhiteSpace(this.Value))
+    {
+      errors.Add(Errors.FirstName.NullOrEmpty);
+    }
+
+    if (this.Value.Length > Constraints.MaxLength)
+    {
+      errors.Add(Errors.FirstName.LongerThanAllowed);
+    }
+
+    return errors;
   }
 }

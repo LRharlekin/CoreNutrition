@@ -12,11 +12,11 @@ namespace CoreNutrition.Domain.UserAggregate.ValueObjects;
 
 public sealed class Password : ValueObject
 {
-  private const int MinPasswordLength = 8;
-  private static readonly Func<char, bool> IsLower = c => c >= 'a' && c <= 'z';
-  private static readonly Func<char, bool> IsUpper = c => c >= 'A' && c <= 'Z';
-  private static readonly Func<char, bool> IsDigit = c => c >= '0' && c <= '9';
-  private static readonly Func<char, bool> IsNonAlphaNumeric = c => !(IsLower(c) || IsUpper(c) || IsDigit(c));
+  public static class Constraints
+  {
+    private const int MinPasswordLength = 8;
+  }
+
 
   private Password(string value)
   {
@@ -29,38 +29,17 @@ public sealed class Password : ValueObject
 
   public static ErrorOr<Password> CreateNew(string password)
   {
-    // perform validation on all conditions before returning an ErrorOr object that contains all errors than apply
-    List<Error> errors = [];
-    if (string.IsNullOrWhiteSpace(password))
-    {
-      errors.Add(Errors.Password.NullOrEmpty);
-    }
-    if (password.Length < MinPasswordLength)
-    {
-      errors.Add(Errors.Password.TooShort);
-    }
-    if (!password.Any(IsLower))
-    {
-      errors.Add(Errors.Password.MissingLowercaseLetter);
-    }
-    if (!password.Any(IsUpper))
-    {
-      errors.Add(Errors.Password.MissingUppercaseLetter);
-    }
-    if (!password.Any(IsDigit))
-    {
-      errors.Add(Errors.Password.MissingDigit);
-    }
-    if (!password.Any(IsNonAlphaNumeric))
-    {
-      errors.Add(Errors.Password.MissingNonAlphaNumeric);
-    }
+    var password = new Password(password);
+
+    password.EnforceInvariants();
+
     if (errors.Count > 0)
     {
       return errors;
     }
 
-    return new Password(password);
+    // return new Password(password);
+    return password;
   }
 
   public override string ToString() => Value;
@@ -68,5 +47,42 @@ public sealed class Password : ValueObject
   public override IEnumerable<object> GetEqualityComponents()
   {
     yield return Value;
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (string.IsNullOrWhiteSpace(this.Value))
+    {
+      errors.Add(Errors.Password.NullOrEmpty);
+    }
+    if (this.Value.Length < Constraints.MinPasswordLength)
+    {
+      errors.Add(Errors.Password.TooShort);
+    }
+    if (!this.Value.Any(IsLower))
+    {
+      errors.Add(Errors.Password.MissingLowercaseLetter);
+    }
+    if (!this.Value.Any(IsUpper))
+    {
+      errors.Add(Errors.Password.MissingUppercaseLetter);
+    }
+    if (!this.Value.Any(IsDigit))
+    {
+      errors.Add(Errors.Password.MissingDigit);
+    }
+    if (!this.Value.Any(IsNonAlphaNumeric))
+    {
+      errors.Add(Errors.Password.MissingNonAlphaNumeric);
+    }
+    
+    private static readonly Func<char, bool> IsLower = c => c >= 'a' && c <= 'z';
+    private static readonly Func<char, bool> IsUpper = c => c >= 'A' && c <= 'Z';
+    private static readonly Func<char, bool> IsDigit = c => c >= '0' && c <= '9';
+    private static readonly Func<char, bool> IsNonAlphaNumeric = c => !(IsLower(c) || IsUpper(c) || IsDigit(c));
+
+    return errors;
   }
 }

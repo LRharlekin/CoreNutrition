@@ -12,7 +12,7 @@ using CoreNutrition.Domain.Services; // FK, and related / referencing entities
   FK 
   - ...
 
-  Compleks value objects:
+  Complex value objects:
   - Email
   - Password
   - FirstName
@@ -29,6 +29,10 @@ namespace CoreNutrition.Domain.UserAggregate;
 
 public sealed class User : AggregateRoot<UserId, Guid>
 {
+  public static class Constraints
+  {
+
+  }
   private string _passwordHash;
 
   private List<CustomerAddressId> _customerAddressIds = new List<CustomerAddressId>();
