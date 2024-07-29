@@ -23,11 +23,11 @@ public class ProductRepository : IProductRepository
 
   public List<Product> GetAll()
   {
-    // return _products;
+    return _products;
   }
 
   public Product? GetById(ProductId productId)
   {
-    // return _products.SingleOrDefault(c => c.Id == productId);
+    return _products.SingleOrDefault(p => p.Id == productId);
   }
 }
