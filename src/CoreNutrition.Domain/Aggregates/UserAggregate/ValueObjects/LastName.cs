@@ -18,9 +18,9 @@ public sealed class LastName : ValueObject
 
   public static implicit operator string(LastName lastName) => lastName.Value;
 
-  public static ErrorOr<LastName> CreateNew(string lastName)
+  public static ErrorOr<LastName> CreateNew(string lastNameString)
   {
-    var lastName = new LastName(lastName);
+    var lastName = new LastName(lastNameString);
 
     var errors = lastName.EnforceInvariants();
 
@@ -43,11 +43,11 @@ public sealed class LastName : ValueObject
   {
     var errors = new List<Error>();
     
-    if (string.IsNullOrWhiteSpace(lastName))
+    if (string.IsNullOrWhiteSpace(this.Value))
     {
       errors.Add(Errors.LastName.NullOrEmpty);
     }
-    if (lastName.Length > MaxLength)
+    if (this.Value.Length > Constraints.MaxLength)
     {
       errors.Add(Errors.LastName.LongerThanAllowed);
     }

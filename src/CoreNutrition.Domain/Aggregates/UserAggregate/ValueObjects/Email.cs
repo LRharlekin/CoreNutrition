@@ -29,9 +29,9 @@ public sealed class Email : ValueObject
 
   public static implicit operator string(Email email) => email.Value;
 
-  public static ErrorOr<Email> CreateNew(string email)
+  public static ErrorOr<Email> CreateNew(string emailString)
   {
-    var email = new Email(email);
+    var email = new Email(emailString);
 
     var errors = email.EnforceInvariants();
 

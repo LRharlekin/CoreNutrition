@@ -14,7 +14,7 @@ public sealed class Password : ValueObject
 {
   public static class Constraints
   {
-    private const int MinPasswordLength = 8;
+    public const int MinPasswordLength = 8;
   }
 
 
@@ -27,18 +27,17 @@ public sealed class Password : ValueObject
 
   public static implicit operator string(Password password) => password?.Value ?? string.Empty;
 
-  public static ErrorOr<Password> CreateNew(string password)
+  public static ErrorOr<Password> CreateNew(string passwordString)
   {
-    var password = new Password(password);
+    var password = new Password(passwordString);
 
-    password.EnforceInvariants();
+    var errors = password.EnforceInvariants();
 
     if (errors.Count > 0)
     {
       return errors;
     }
 
-    // return new Password(password);
     return password;
   }
 
@@ -78,11 +77,11 @@ public sealed class Password : ValueObject
       errors.Add(Errors.Password.MissingNonAlphaNumeric);
     }
     
-    private static readonly Func<char, bool> IsLower = c => c >= 'a' && c <= 'z';
-    private static readonly Func<char, bool> IsUpper = c => c >= 'A' && c <= 'Z';
-    private static readonly Func<char, bool> IsDigit = c => c >= '0' && c <= '9';
-    private static readonly Func<char, bool> IsNonAlphaNumeric = c => !(IsLower(c) || IsUpper(c) || IsDigit(c));
-
     return errors;
   }
+
+  private static readonly Func<char, bool> IsLower = c => c >= 'a' && c <= 'z';
+  private static readonly Func<char, bool> IsUpper = c => c >= 'A' && c <= 'Z';
+  private static readonly Func<char, bool> IsDigit = c => c >= '0' && c <= '9';
+  private static readonly Func<char, bool> IsNonAlphaNumeric = c => !(IsLower(c) || IsUpper(c) || IsDigit(c));
 }

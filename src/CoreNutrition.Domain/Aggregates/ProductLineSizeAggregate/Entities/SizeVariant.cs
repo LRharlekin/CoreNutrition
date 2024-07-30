@@ -134,4 +134,10 @@ public sealed class SizeVariant : Entity<SizeVariantId>
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private SizeVariant()
+  {
+  }
+#pragma warning restore CS8618
 }

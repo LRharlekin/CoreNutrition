@@ -18,9 +18,9 @@ public sealed class FirstName : ValueObject
 
   public static implicit operator string(FirstName firstName) => firstName.Value;
 
-  public static ErrorOr<FirstName> CreateNew(string firstName)
+  public static ErrorOr<FirstName> CreateNew(string firstNameString)
   {
-    var firstName = new FirstName(firstName);
+    var firstName = new FirstName(firstNameString);
 
     var errors = firstName.EnforceInvariants();
 

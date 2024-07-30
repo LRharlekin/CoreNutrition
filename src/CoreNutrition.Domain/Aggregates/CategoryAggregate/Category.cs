@@ -10,10 +10,14 @@ namespace CoreNutrition.Domain.CategoryAggregate;
 
 public sealed class Category : AggregateRoot<CategoryId, Guid>
 {
-  public const int MinNameLength = 3;
-  public const int MaxNameLength = 50;
-  public const int MinDescriptionLength = 20;
-  public const int MaxDescriptionLength = 800;
+  public static class Constraints
+  {
+
+    public const int MinNameLength = 3;
+    public const int MaxNameLength = 50;
+    public const int MinDescriptionLength = 20;
+    public const int MaxDescriptionLength = 800;
+  }
 
 
   private List<ProductLineId> _productLineIds = new();
@@ -78,12 +82,12 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
   {
     var errors = new List<Error>();
 
-    if (this.Name.Length < MinNameLength || this.Name.Length > MaxNameLength)
+    if (this.Name.Length < Constraints.MinNameLength || this.Name.Length > Constraints.MaxNameLength)
     {
       errors.Add(Errors.Category.InvalidName);
     }
 
-    if (this.Description.Length < MinDescriptionLength || this.Description.Length > MaxDescriptionLength)
+    if (this.Description.Length < Constraints.MinDescriptionLength || this.Description.Length > Constraints.MaxDescriptionLength)
     {
       errors.Add(Errors.Category.InvalidDescription);
     }

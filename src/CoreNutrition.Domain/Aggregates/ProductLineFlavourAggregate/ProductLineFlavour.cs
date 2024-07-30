@@ -17,7 +17,8 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
     public const int MaxNameLength = 40;
   }
 
-  private List<ProductId> _productIds = new List<ProductId>();
+  private List<ProductId> _productIds = new();
+  // private List<ProductId> _productIds = new List<ProductId>();
 
   public ProductLineId ProductLineId { get; private set; }
   public string Flavour { get; private set; }
@@ -70,11 +71,11 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
   }
 
   // TODO: invoked by relevant domain events, e.g. ProductCreated, ProductDeleted, ProductUpdated
-  public void AddProductId(ProductId productId)
-  {
-    _productIds.Add(productId);
-    // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
-  }
+  // public void AddProductId(ProductId productId)
+  // {
+  //   _productIds.Add(productId);
+  //   // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  // }
 
   private List<Error> EnforceInvariants()
   {
@@ -87,4 +88,10 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private ProductLineFlavour()
+  {
+  }
+#pragma warning restore CS8618
 }

@@ -7,7 +7,7 @@ public interface IProductRepository
 {
   void Add(Product product);
 
-  Product? GetById(ProductId productId);
+  // Product? GetById(ProductId productId);
 
-  List<Product> GetAll();
+  // List<Product> GetAll();
 }
