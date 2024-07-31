@@ -20,7 +20,7 @@ public sealed class Category : AggregateRoot<CategoryId, Guid>
   }
 
 
-  private List<ProductLineId> _productLineIds = new();
+  private readonly List<ProductLineId> _productLineIds = new();
 
   public string Name { get; private set; }
   public string Description { get; private set; }
