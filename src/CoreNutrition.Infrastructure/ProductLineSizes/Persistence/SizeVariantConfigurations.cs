@@ -55,12 +55,8 @@ public class SizeVariantConfigurations
     builder.Property(sv => sv.SingleSizeVariantId)
       .ValueGeneratedNever()
       .HasConversion(
-        id => id.Value,
-        value => value == null ? (SizeVariantId?)null : SizeVariantId.Create(value)
-      // id => (Guid?)id.Value,
-      // value => value.HasValue ? SizeVariantId.Create(value.Value) : null
-      // value => value == null ? (SizeVariantId?)null : SizeVariantId.Create(value)
-      // value => SizeVariantId.Create(value)
+        id => id != null ? id.Value : default(Guid?),
+        value => value.HasValue ? SizeVariantId.Create(value.Value) : default
       )
       .IsRequired(false)
       .HasColumnName(Names.SingleSizeVariantIdColumn);

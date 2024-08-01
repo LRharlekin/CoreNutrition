@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using CoreNutrition.Domain.CategoryAggregate;
 using CoreNutrition.Domain.ProductLineSizeAggregate;
 using CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
+using CoreNutrition.Domain.ProductLineAggregate;
 
 using CoreNutrition.Infrastructure.Categories.Persistence;
 using CoreNutrition.Infrastructure.ProductLineSizes.Persistence;
+using CoreNutrition.Infrastructure.ProductLines.Persistence;
 
 namespace CoreNutrition.Infrastructure.Common.Persistence;
 
@@ -19,8 +21,9 @@ public class CoreNutritionDbContext : DbContext
   }
 
   public DbSet<Category> Categories { get; set; } = null!;
-  // public DbSet<ProductLineSize> ProductLineSizes { get; set; } = null!;
-  // public DbSet<SizeVariant> SizeVariants { get; set; } = null!;
+  public DbSet<ProductLineSize> ProductLineSizes { get; set; } = null!;
+  public DbSet<SizeVariant> SizeVariants { get; set; } = null!;
+  public DbSet<ProductLine> ProductLines { get; set; } = null!;
   // public DbSet<Product> Products { get; set; } = null!;
   // public DbSet<Product> Products { get; set; } = null!;
   // public DbSet<Product> Products { get; set; } = null!;
@@ -33,8 +36,9 @@ public class CoreNutritionDbContext : DbContext
     // modelBuilder
     // .ApplyConfigurationsFromAssembly(typeof(CoreNutritionDbContext).Assembly);
     modelBuilder.ApplyConfiguration(new CategoryConfigurations());
-    // modelBuilder.ApplyConfiguration(new ProductLineSizeConfigurations());
-    // modelBuilder.ApplyConfiguration(new SizeVariantConfigurations());
+    modelBuilder.ApplyConfiguration(new ProductLineSizeConfigurations());
+    modelBuilder.ApplyConfiguration(new SizeVariantConfigurations());
+    modelBuilder.ApplyConfiguration(new ProductLineConfigurations());
 
     modelBuilder.Model
       .GetEntityTypes()

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using CoreNutrition.Domain.ProductLineSizeAggregate;
 using CoreNutrition.Domain.ProductLineSizeAggregate.ValueObjects;
-using CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
-
 
 using CoreNutrition.Domain.ProductLineAggregate;
 using CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
@@ -19,12 +17,11 @@ public class ProductLineSizeConfigurations
   public void Configure(EntityTypeBuilder<ProductLineSize> builder)
   {
     ConfigureProductLineSizesTable(builder);
-    // ConfigureSizeVariantsTable(builder);
   }
 
   private void ConfigureProductLineSizesTable(EntityTypeBuilder<ProductLineSize> builder)
   {
-    builder.ToTable(Names.PLS.Table);
+    builder.ToTable(Names.Table);
 
     builder.HasKey(pls => pls.Id);
 
@@ -49,9 +46,7 @@ public class ProductLineSizeConfigurations
         value => ProductLineId.Create(value)
       )
       .IsRequired()
-      .HasColumnName(Names.PLS.ProductLineIdColumn);
-
-    builder.HasIndex(pls => pls.ProductLineId);
+      .HasColumnName(Names.ProductLineIdColumn);
 
     // FK with navigation property ProductLineSize.SizeVariant
     builder.HasOne(pls => pls.SizeVariant)
@@ -68,24 +63,23 @@ public class ProductLineSizeConfigurations
         value => SizeVariantId.Create(value)
       )
       .IsRequired()
-      .HasColumnName(Names.PLS.SizeVariantIdColumn);
-
-    builder.HasIndex(Names.ShadowProps.SizeVariantId);
-    // builder.HasIndex(pls => pls.SizeVariant.Id);
+      .HasColumnName(Names.SizeVariantIdColumn);
 
     builder.ComplexProperty(pls => pls.RecommendedRetailPrice, rrpBuilder =>
     {
       rrpBuilder.Property(rrp => rrp.Amount)
         .IsRequired()
-        .HasColumnName(Names.PLS.RecommendedRetailPriceAmountColumn);
+        .HasColumnName(Names.RecommendedRetailPrice.AmountColumn);
+
       rrpBuilder.Property(rrp => rrp.CurrencyCode)
         .IsRequired()
         .HasMaxLength(CurrencyAmount.Constraints.CodeLength)
-        .HasColumnName(Names.PLS.RecommendedRetailPriceCurrencyCodeColumn);
+        .HasColumnName(Names.RecommendedRetailPrice.CurrencyCodeColumn);
     });
 
 
-    // builder.HasIndex(pls => new { pls.RecommendedRetailPrice.Amount });
+    builder.HasIndex(nameof(ProductLineSize.RecommendedRetailPrice) + "." + nameof(CurrencyAmount.Amount))
+      .HasDatabaseName(Names.RecommendedRetailPrice.AmountColumn);
 
     builder.Property(pls => pls.CreatedDateTime)
       .IsRequired()
@@ -98,86 +92,25 @@ public class ProductLineSizeConfigurations
     builder.Ignore(pls => pls.ProductIds);
   }
 
-  // private void ConfigureSizeVariantsTable(EntityTypeBuilder<ProductLineSize> builder)
-  // {
-  //   builder.OwnsOne(pls => pls.SizeVariant, svBuilder =>
-  //   {
-  //     svBuilder.ToTable(Names.SV.Table);
-
-  //     svBuilder.HasKey(sv => sv.Id);
-
-  //     svBuilder.Property(sv => sv.Id)
-  //       .ValueGeneratedNever()
-  //       .HasConversion(
-  //         id => id.Value,
-  //         value => SizeVariantId.Create(value)
-  //       )
-  //       .HasColumnName(Names.IdColumn);
-
-  //     svBuilder.Property(sv => sv.Name)
-  //       .HasMaxLength(SizeVariant.Constraints.MaxNameLength)
-  //       .IsRequired()
-  //       .HasColumnName(Names.SV.NameColumn);
-
-  //     svBuilder.Property(sv => sv.Units)
-  //       .IsRequired()
-  //       .HasColumnName(Names.SV.UnitsColumn);
-
-  //     svBuilder.Property(sv => sv.UnitWeightInGrams)
-  //       .HasColumnName(Names.SV.UnitWeightInGramsColumn);
-
-  //     svBuilder.Property(sv => sv.UnitVolumeInMilliliters)
-  //       .HasColumnName(Names.SV.UnitVolumeInMillilitersColumn);
-
-  //     // FK without navigation property present
-  //     svBuilder.HasOne<SizeVariant>()
-  //       .WithMany()
-  //       .HasForeignKey(sv => sv.SingleSizeVariantId)
-  //       .OnDelete(DeleteBehavior.Restrict);
-
-  //     svBuilder.Property(sv => sv.SingleSizeVariantId)
-  //       .ValueGeneratedNever()
-  //       .HasConversion(
-  //         id => (Guid?)id.Value,
-  //         value => value.HasValue ? SizeVariantId.Create(value.Value) : null
-  //         // value => value == null ? (SizeVariantId?)null : SizeVariantId.Create(value)
-  //         // value => SizeVariantId.Create(value)
-  //       )
-  //       .IsRequired(false)
-  //       .HasColumnName(Names.SV.SingleSizeVariantIdColumn);
-
-  //     svBuilder.Ignore(sv => sv.ProductLineSizeIds);
-  //   });
-  // }
-
   private static class Names
   {
+    public const string Table = "product_line_sizes";
     public const string IdColumn = "id";
+    public const string ProductLineIdColumn = "product_line_id";
+    public const string SizeVariantIdColumn = "size_variant_id";
+
+    public static class RecommendedRetailPrice
+    {
+      public const string AmountColumn = "recommended_retail_price_amount";
+      public const string CurrencyCodeColumn = "recommended_retail_price_currency_code";
+    }
+
     public const string CreatedDateTimeColumn = "created_date_time";
     public const string UpdatedDateTimeColumn = "updated_date_time";
 
     public static class ShadowProps
     {
       public const string SizeVariantId = "SizeVariantId";
-    }
-
-    public static class PLS
-    {
-      public const string Table = "product_line_sizes";
-      public const string ProductLineIdColumn = "product_line_id";
-      public const string SizeVariantIdColumn = "size_variant_id";
-      public const string RecommendedRetailPriceAmountColumn = "recommended_retail_price_amount";
-      public const string RecommendedRetailPriceCurrencyCodeColumn = "recommended_retail_price_currency_code";
-    }
-
-    public static class SV
-    {
-      public const string Table = "size_variants";
-      public const string NameColumn = "name";
-      public const string UnitsColumn = "units";
-      public const string UnitWeightInGramsColumn = "unit_weight_in_grams";
-      public const string UnitVolumeInMillilitersColumn = "unit_volume_in_milliliters";
-      public const string SingleSizeVariantIdColumn = "single_size_variant_id";
     }
   }
 }

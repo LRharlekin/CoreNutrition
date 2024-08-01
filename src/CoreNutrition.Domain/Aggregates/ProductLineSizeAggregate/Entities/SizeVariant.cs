@@ -68,7 +68,6 @@ public sealed class SizeVariant : Entity<SizeVariantId>
       return errors;
     }
 
-    // emit domain events
     sizeVariant.AddDomainEvent(new SizeVariantCreated(sizeVariant));
 
     return sizeVariant;
