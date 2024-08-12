@@ -37,7 +37,9 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
       .HasColumnName(Names.IdColumn);
 
     builder.Property(p => p.Name)
-      .HasMaxLength(Product.Constraints.MaxNameLength);
+      .IsRequired()
+      .HasMaxLength(Product.Constraints.MaxNameLength)
+      .HasColumnName(Names.NameColumn);
 
     builder.Property(p => p.IsPublished)
       .IsRequired()
