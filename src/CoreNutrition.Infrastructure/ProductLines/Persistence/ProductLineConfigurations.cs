@@ -65,7 +65,7 @@ public class ProductLineConfigurations : IEntityTypeConfiguration<ProductLine>
     builder.Property<double?>(Names.ShadowProps.AR_Score)
       .HasColumnName(Names.AverageRating.ScoreColumn);
 
-      builder.HasIndex(Names.ShadowProps.AR_Score)
+    builder.HasIndex(Names.ShadowProps.AR_Score)
       .HasDatabaseName(Names.AverageRating.ScoreColumn);
 
     builder.ComplexProperty(pl => pl.ProductLineInfo, pliBuilder =>
