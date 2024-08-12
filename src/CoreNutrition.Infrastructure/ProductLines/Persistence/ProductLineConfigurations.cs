@@ -62,6 +62,12 @@ public class ProductLineConfigurations : IEntityTypeConfiguration<ProductLine>
         .HasColumnName(Names.AverageRating.NumRatingsColumn);
     });
 
+    builder.Property<double?>(Names.ShadowProps.AR_Score)
+      .HasColumnName(Names.AverageRating.ScoreColumn);
+
+      builder.HasIndex(Names.ShadowProps.AR_Score)
+      .HasDatabaseName(Names.AverageRating.ScoreColumn);
+
     builder.ComplexProperty(pl => pl.ProductLineInfo, pliBuilder =>
     {
       pliBuilder.Property(pli => pli.DescriptionShort)
@@ -178,5 +184,10 @@ public class ProductLineConfigurations : IEntityTypeConfiguration<ProductLine>
 
     public const string CreatedDateTimeColumn = "created_date_time";
     public const string UpdatedDateTimeColumn = "updated_date_time";
+
+    public static class ShadowProps
+    {
+      public const string AR_Score = "AverageRating_Score";
+    }
   }
 }

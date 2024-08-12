@@ -56,7 +56,6 @@ public class ProductLineSizeConfigurations
       .OnDelete(DeleteBehavior.Restrict);
 
     builder.Property<SizeVariantId>(Names.ShadowProps.SizeVariantId)
-    // builder.Property(pls => pls.SizeVariant.Id)
       .ValueGeneratedNever()
       .HasConversion(
         id => id.Value,
@@ -77,8 +76,12 @@ public class ProductLineSizeConfigurations
         .HasColumnName(Names.RecommendedRetailPrice.CurrencyCodeColumn);
     });
 
+    // Define shadow property explicitly
+    builder.Property<decimal>(Names.ShadowProps.RRP_Amount)
+      .HasColumnName(Names.RecommendedRetailPrice.AmountColumn);
 
-    builder.HasIndex(nameof(ProductLineSize.RecommendedRetailPrice) + "." + nameof(CurrencyAmount.Amount))
+    // Use the shadow property to define the index
+    builder.HasIndex(Names.ShadowProps.RRP_Amount)
       .HasDatabaseName(Names.RecommendedRetailPrice.AmountColumn);
 
     builder.Property(pls => pls.CreatedDateTime)
@@ -111,6 +114,7 @@ public class ProductLineSizeConfigurations
     public static class ShadowProps
     {
       public const string SizeVariantId = "SizeVariantId";
+      public const string RRP_Amount = "RecommendedRetailPrice_Amount";
     }
   }
 }
