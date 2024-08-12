@@ -18,7 +18,6 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
   }
 
   private List<ProductId> _productIds = new();
-  // private List<ProductId> _productIds = new List<ProductId>();
 
   public ProductLineId ProductLineId { get; private set; }
   public string Flavour { get; private set; }
