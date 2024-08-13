@@ -15,10 +15,4 @@ public abstract class EntityId<TId> : ValueObject
   }
 
   public override string? ToString() => Value?.ToString() ?? base.ToString();
-
-#pragma warning disable CS8618
-  protected EntityId()
-  {
-  }
-#pragma warning restore CS8618
 }

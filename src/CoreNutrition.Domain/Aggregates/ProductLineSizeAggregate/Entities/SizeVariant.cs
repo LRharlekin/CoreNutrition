@@ -68,7 +68,6 @@ public sealed class SizeVariant : Entity<SizeVariantId>
       return errors;
     }
 
-    // emit domain events
     sizeVariant.AddDomainEvent(new SizeVariantCreated(sizeVariant));
 
     return sizeVariant;
@@ -134,4 +133,10 @@ public sealed class SizeVariant : Entity<SizeVariantId>
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private SizeVariant()
+  {
+  }
+#pragma warning restore CS8618
 }

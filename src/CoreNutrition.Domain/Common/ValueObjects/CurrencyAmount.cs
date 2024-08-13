@@ -4,6 +4,11 @@ namespace CoreNutrition.Domain.Common.ValueObjects;
 
 public sealed class CurrencyAmount : ValueObject
 {
+    public static class Constraints
+    {
+        public const int CodeLength = 3;
+    }
+
     public decimal Amount { get; private set; }
     public string CurrencyCode { get; private set; }
 

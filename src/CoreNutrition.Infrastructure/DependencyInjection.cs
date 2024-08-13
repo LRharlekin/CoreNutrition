@@ -1,8 +1,12 @@
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 using CoreNutrition.Infrastructure.Security.TokenGenerator;
 using CoreNutrition.Application.Common.Interfaces.Cryptography;
@@ -12,6 +16,7 @@ using CoreNutrition.Domain.Services;
 using CoreNutrition.Application.Common.Interfaces.Authentication;
 using CoreNutrition.Domain.Common.Interfaces.Services;
 
+using CoreNutrition.Infrastructure.Common.Persistence;
 using CoreNutrition.Domain.Common.Interfaces.Persistence;
 using CoreNutrition.Infrastructure.Users.Persistence;
 using CoreNutrition.Infrastructure.Categories.Persistence;
@@ -20,7 +25,6 @@ using CoreNutrition.Infrastructure.ProductLineFlavours.Persistence;
 using CoreNutrition.Infrastructure.ProductLines.Persistence;
 using CoreNutrition.Infrastructure.Products.Persistence;
 
-using Microsoft.IdentityModel.Tokens;
 
 namespace CoreNutrition.Infrastructure;
 
@@ -43,6 +47,11 @@ public static class DependencyInjection
     this IServiceCollection services
   )
   {
+    services.AddDbContext<CoreNutritionDbContext>(options =>
+      options
+        .UseNpgsql("connection string") // TODO: add connection string
+        .LogTo(Console.WriteLine, LogLevel.Debug));
+
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<ICategoryRepository, CategoryRepository>();
     services.AddScoped<IProductLineRepository, ProductLineRepository>();

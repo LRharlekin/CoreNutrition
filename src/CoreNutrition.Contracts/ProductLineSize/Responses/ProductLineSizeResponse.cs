@@ -2,8 +2,8 @@ namespace CoreNutrition.Contracts.ProductLineSize;
 
 public record ProductLineSizeResponse(
   string Id,
-  SizeVariantResponse SizeVariant,
   string ProductLineId,
+  SizeVariantResponse SizeVariant,
   RecommendedRetailPriceResponse RecommendedRetailPrice,
   DateTime CreatedDateTime,
   DateTime UpdatedDateTime
@@ -15,7 +15,7 @@ public record SizeVariantResponse(
   int Units,
   int? UnitWeightInGrams,
   int? UnitVolumeInMilliliters,
-  string SingleSizeId
+  string? SingleSizeVariantId
 );
 
 public record RecommendedRetailPriceResponse(

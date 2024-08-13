@@ -13,6 +13,7 @@ public static partial class Errors
         public static Error NotFound => Error.NotFound(
             code: "User.NotFound",
             description: "User with given ID does not exist");
+            
         public static Error DuplicateEmail => Error.Conflict(
             code: "User.DuplicateEmail",
             description: "Email is already in use.");

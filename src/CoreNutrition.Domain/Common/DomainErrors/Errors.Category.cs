@@ -10,11 +10,11 @@ public static partial class Errors
     {
         public static Error InvalidName => Error.Validation(
         code: "Category.InvalidName",
-        description: $"Category name must be between {CategoryAggregate.Category.MinNameLength} and {CategoryAggregate.Category.MaxNameLength} characters long.");
+        description: $"Category name must be between {CategoryAggregate.Category.Constraints.MinNameLength} and {CategoryAggregate.Category.Constraints.MaxNameLength} characters long.");
 
         public static Error InvalidDescription => Error.Validation(
         code: "Category.InvalidDescription",
-        description: $"Category description must be between {CategoryAggregate.Category.MinDescriptionLength} and {CategoryAggregate.Category.MaxDescriptionLength} characters long.");
+        description: $"Category description must be between {CategoryAggregate.Category.Constraints.MinDescriptionLength} and {CategoryAggregate.Category.Constraints.MaxDescriptionLength} characters long.");
 
         public static Error InvalidCategoryId => Error.Validation(
         code: "Category.InvalidId",
