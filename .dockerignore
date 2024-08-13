@@ -4,6 +4,10 @@ logs
 # Compiled binary addons
 build/Release
 
+# Build results
+**/[b|B]in/
+**/[o|O]bj/
+
 # Dependency directories
 node_modules
 jspm_packages
