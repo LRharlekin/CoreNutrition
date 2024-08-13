@@ -15,17 +15,11 @@ namespace CoreNutrition.Domain.ProductLineAggregate;
 
 public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
 {
-  // invariant constants
-  public const int MinNameLength = 3;
-  public const int MaxNameLength = 100;
-
-
-  private List<ProductId> _productIds = new List<ProductId>();
-  private List<ProductLineSizeId> _productLineSizeIds = new List<ProductLineSizeId>();
-  private List<ProductLineFlavourId> _productLineFlavourIds = new List<ProductLineFlavourId>();
-  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
-  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();
-  public IReadOnlyList<ProductLineFlavourId> ProductLineFlavourIds => _productLineFlavourIds.AsReadOnly();
+  public static class Constraints
+  {
+    public const int MinNameLength = 3;
+    public const int MaxNameLength = 100;
+  }
 
   public string Name { get; private set; }
   public bool IsPublished { get; private set; }
@@ -34,6 +28,13 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   public ProductLineInfo ProductLineInfo { get; private set; }
   public NutritionFacts NutritionFacts { get; private set; }
 
+  private List<ProductId> _productIds = new();
+  // private List<ProductId> _productIds = new List<ProductId>();
+  private List<ProductLineSizeId> _productLineSizeIds = new List<ProductLineSizeId>();
+  private List<ProductLineFlavourId> _productLineFlavourIds = new List<ProductLineFlavourId>();
+  public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
+  public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();
+  public IReadOnlyList<ProductLineFlavourId> ProductLineFlavourIds => _productLineFlavourIds.AsReadOnly();
 
   public DateTime CreatedDateTime { get; private set; }
   public DateTime UpdatedDateTime { get; private set; }
@@ -47,10 +48,10 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     AverageRating averageRating,
     ProductLineInfo productLineInfo,
     NutritionFacts nutritionFacts,
-    DateTime createdDateTime,
-    List<ProductId>? productIds,
-    List<ProductLineSizeId>? productLineSizeIds,
-    List<ProductLineFlavourId>? productLineFlavourIds
+    DateTime createdDateTime
+    // List<ProductId>? productIds,
+    // List<ProductLineSizeId>? productLineSizeIds,
+    // List<ProductLineFlavourId>? productLineFlavourIds
     )
     : base(productLineId)
   {
@@ -62,9 +63,9 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     NutritionFacts = nutritionFacts;
     CreatedDateTime = createdDateTime;
     UpdatedDateTime = createdDateTime;
-    _productIds = productIds;
-    _productLineSizeIds = productLineSizeIds;
-    _productLineFlavourIds = productLineFlavourIds;
+    // _productIds = productIds;
+    // _productLineSizeIds = productLineSizeIds;
+    // _productLineFlavourIds = productLineFlavourIds;
   }
 
   // public factory method
@@ -74,13 +75,12 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
     CategoryId categoryId,
     AverageRating averageRating,
     ProductLineInfo productLineInfo,
-    NutritionFacts nutritionFacts,
-    List<ProductId>? productIds = null,
-    List<ProductLineSizeId>? productLineSizeIds = null,
-    List<ProductLineFlavourId>? productLineFlavourIds = null
+    NutritionFacts nutritionFacts
+    // List<ProductId>? productIds = null,
+    // List<ProductLineSizeId>? productLineSizeIds = null,
+    // List<ProductLineFlavourId>? productLineFlavourIds = null
     )
   {
-    // TODO: Enforce invariants
     var productLine = new ProductLine(
       ProductLineId.CreateUnique(),
       name,
@@ -89,10 +89,10 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
       averageRating,
       productLineInfo,
       nutritionFacts,
-      DateTime.UtcNow,
-      productIds ?? new List<ProductId>(),
-      productLineSizeIds ?? new List<ProductLineSizeId>(),
-      productLineFlavourIds ?? new List<ProductLineFlavourId>()
+      DateTime.UtcNow
+    // productIds ?? new List<ProductId>(),
+    // productLineSizeIds ?? new List<ProductLineSizeId>(),
+    // productLineFlavourIds ?? new List<ProductLineFlavourId>()
     );
 
     var errors = productLine.EnforceInvariants();
@@ -108,11 +108,11 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   }
 
   // TODO: invoked by relevant domain events
-  public void AddProductId(ProductId productId)
-  {
-    _productIds.Add(productId);
-    // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
-  }
+  // public void AddProductId(ProductId productId)
+  // {
+  //   _productIds.Add(productId);
+  //   // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  // }
 
   public void AddProductLineSizeId(ProductLineSizeId productLineSizeId)
   {
@@ -130,7 +130,7 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   {
     var errors = new List<Error>();
 
-    if (this.Name.Length is < MinNameLength or > MaxNameLength)
+    if (this.Name.Length is < Constraints.MinNameLength or > Constraints.MaxNameLength)
     {
       errors.Add(Errors.ProductLine.InvalidNameLength);
     }
@@ -147,4 +147,10 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private ProductLine()
+  {
+  }
+#pragma warning restore CS8618
 }

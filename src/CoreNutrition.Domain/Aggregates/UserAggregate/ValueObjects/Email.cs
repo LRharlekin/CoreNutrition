@@ -10,7 +10,10 @@ namespace CoreNutrition.Domain.UserAggregate.ValueObjects;
 
 public sealed class Email : ValueObject
 {
-  public const int MaxLength = 256;
+  public static class Constraints
+  {
+    public const int MaxLength = 255;
+  }
 
   private const string EmailRegexPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
 
@@ -26,22 +29,18 @@ public sealed class Email : ValueObject
 
   public static implicit operator string(Email email) => email.Value;
 
-  public static ErrorOr<Email> CreateNew(string email)
+  public static ErrorOr<Email> CreateNew(string emailString)
   {
-    if (string.IsNullOrWhiteSpace(email))
+    var email = new Email(emailString);
+
+    var errors = email.EnforceInvariants();
+
+    if (errors.Count > 0)
     {
-      return Errors.Email.NullOrEmpty;
-    }
-    if (email.Length > MaxLength)
-    {
-      return Errors.Email.LongerThanAllowed;
-    }
-    if (!EmailFormatRegex.Value.IsMatch(email))
-    {
-      return Errors.Email.InvalidFormat;
+      return errors;
     }
 
-    return new Email(email);
+    return email;
   }
 
   public override string ToString() => Value;
@@ -49,5 +48,27 @@ public sealed class Email : ValueObject
   public override IEnumerable<object> GetEqualityComponents()
   {
     yield return Value;
+  }
+
+  private List<Error> EnforceInvariants()
+  {
+    var errors = new List<Error>();
+
+    if (string.IsNullOrWhiteSpace(this.Value))
+    {
+      errors.Add(Errors.Email.NullOrEmpty);
+    }
+
+    if (this.Value.Length > Constraints.MaxLength)
+    {
+      errors.Add(Errors.Email.LongerThanAllowed);
+    }
+
+    if (!EmailFormatRegex.Value.IsMatch(this.Value))
+    {
+      errors.Add(Errors.Email.InvalidFormat);
+    }
+
+    return errors;
   }
 }

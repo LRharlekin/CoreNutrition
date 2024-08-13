@@ -12,7 +12,7 @@ using CoreNutrition.Domain.Services; // FK, and related / referencing entities
   FK 
   - ...
 
-  Compleks value objects:
+  Complex value objects:
   - Email
   - Password
   - FirstName

@@ -10,11 +10,14 @@ namespace CoreNutrition.Domain.ProductLineSizeAggregate.Entities;
 public sealed class SizeVariant : Entity<SizeVariantId>
 {
   // invariant constants:
-  public const int MinNameLength = 1;
-  public const int MaxNameLength = 20;
-  public const int MinUnits = 1;
-  public const int MinUnitWeightInGrams = 1;
-  public const int MinUnitVolumeInMilliliters = 1;
+  public static class Constraints
+  {
+    public const int MinNameLength = 1;
+    public const int MaxNameLength = 20;
+    public const int MinUnits = 1;
+    public const int MinUnitWeightInGrams = 1;
+    public const int MinUnitVolumeInMilliliters = 1;
+  }
 
   private List<ProductLineSizeId> _productLineSizeIds = new();
   public IReadOnlyList<ProductLineSizeId> ProductLineSizeIds => _productLineSizeIds.AsReadOnly();  // related / referenced entities
@@ -52,8 +55,10 @@ public sealed class SizeVariant : Entity<SizeVariantId>
     var sizeVariant = new SizeVariant(
       name,
       units,
-      unitWeightInGrams ?? new(),
-      unitVolumeInMilliliters ?? new(),
+      unitWeightInGrams,
+      // unitWeightInGrams ?? new(),
+      unitVolumeInMilliliters,
+      // unitVolumeInMilliliters ?? new(),
       singleSizeVariantId);
 
     var errors = sizeVariant.EnforceInvariants();
@@ -63,7 +68,6 @@ public sealed class SizeVariant : Entity<SizeVariantId>
       return errors;
     }
 
-    // emit domain events
     sizeVariant.AddDomainEvent(new SizeVariantCreated(sizeVariant));
 
     return sizeVariant;
@@ -79,36 +83,60 @@ public sealed class SizeVariant : Entity<SizeVariantId>
   {
     var errors = new List<Error>();
 
-    if (this.Name.Length is < MinNameLength or > MaxNameLength)
+    if (this.Name.Length is < Constraints.MinNameLength or > Constraints.MaxNameLength)
     {
       errors.Add(Errors.SizeVariant.InvalidName);
     }
 
-    if (this.Units < MinUnits)
+    if (this.Units < Constraints.MinUnits)
     {
       errors.Add(Errors.SizeVariant.InvalidUnits);
     }
 
-    if (this.Units > 1 && this.SingleSizeVariantId is null)
+    if (
+      this.Units > 1
+      && this.SingleSizeVariantId is null)
     {
       errors.Add(Errors.SizeVariant.MissingSingleSizeReference);
     }
 
-    if (this.UnitWeightInGrams is null && this.UnitVolumeInMilliliters is null)
+    if (
+      this.UnitWeightInGrams is null
+      && this.UnitVolumeInMilliliters is null)
     {
       errors.Add(Errors.SizeVariant.MissingWeightOrVolume);
     }
 
-    if (this.UnitWeightInGrams is not null && this.UnitVolumeInMilliliters is not null)
+    if (
+      this.UnitWeightInGrams.HasValue
+      && this.UnitVolumeInMilliliters.HasValue)
     {
+      Console.WriteLine("ERROR: Weight and Volume not allowed");
+      Console.WriteLine("GRAMS:");
+      Console.WriteLine(this.UnitWeightInGrams.ToString());
+      Console.WriteLine("MILLILITERS:");
+      Console.WriteLine(this.UnitVolumeInMilliliters.ToString());
       errors.Add(Errors.SizeVariant.WeightAndVolumeNotAllowed);
     }
 
-    if (this.UnitWeightInGrams < MinUnitWeightInGrams || this.UnitVolumeInMilliliters < MinUnitVolumeInMilliliters)
+    if (
+      (this.UnitWeightInGrams.HasValue && this.UnitWeightInGrams < Constraints.MinUnitWeightInGrams)
+      || (this.UnitVolumeInMilliliters.HasValue && this.UnitVolumeInMilliliters < Constraints.MinUnitVolumeInMilliliters))
     {
+      Console.WriteLine("ERROR: Invalid Weight or Volume");
+      Console.WriteLine("GRAMS:");
+      Console.WriteLine(this.UnitWeightInGrams.ToString());
+      Console.WriteLine("MILLILITERS:");
+      Console.WriteLine(this.UnitVolumeInMilliliters.ToString());
       errors.Add(Errors.SizeVariant.InvalidWeightOrVolume);
     }
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private SizeVariant()
+  {
+  }
+#pragma warning restore CS8618
 }

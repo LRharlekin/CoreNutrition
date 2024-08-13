@@ -15,12 +15,12 @@ class ProductLineSize
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "productLineId": "00000000-0000-0000-0000-000000000000",
-  "sizeId": {
+  "sizeVariant": {
     "id": "00000000-0000-0000-0000-000000000000",
     "name": "1 Bar (60g)",
+    "units": 1,
     "unitWeightInGrams": 60,
     "unitVolumeInMilliliters": null,
-    "units": 1,
     "singleSizeId": null
   },
   "recommendedRetailPrice": {
@@ -31,3 +31,30 @@ class ProductLineSize
   "updatedDateTime": "2024-01-01T00:00:00.0000000Z"
 }
 ```
+
+## Tables
+
+**ProductLineSizes**
+
+- Id
+- ProductLineId (FK, not null)
+- SizeVariantId (FK, not null)
+- RecommendedRetailPrice_Amount (not null)
+- RecommendedRetailPrice_CurrencyCode (not null)
+- CreatedDateTime
+- UpdatedDateTime
+
+**SizeVariants**
+
+- Id (PK, not null)
+- Name (not null, nvarchar(200))
+- Units (not null, int)
+- UnitWeightInGrams ()
+- UnitVolumeInMilliliters
+- SingleSizeVariantId (FK)
+
+**PlsProductIds**
+
+- ProductId
+- ProductLineSizeId
+- Id

@@ -7,14 +7,16 @@ namespace CoreNutrition.Domain.ProductLineAggregate.ValueObjects;
 
 public sealed class ProductLineInfo : ValueObject
 {
-    // invariant constants
-    public const int MinDescriptionShortLength = 50;
-    public const int MaxDescriptionShortLength = 200;
-    public const int MinDescriptionLongLength = 200;
-    public const int MaxDescriptionLongLength = 1000;
-    public const int MinSuggestedUseLength = 20;
-    public const int MaxSuggestedUseLength = 400;
-    public const int MaxBenefitLength = 150;
+    public static class Constraints
+    {
+        public const int MinDescriptionShortLength = 50;
+        public const int MaxDescriptionShortLength = 200;
+        public const int MinDescriptionLongLength = 200;
+        public const int MaxDescriptionLongLength = 1000;
+        public const int MinSuggestedUseLength = 20;
+        public const int MaxSuggestedUseLength = 400;
+        public const int MaxBenefitLength = 150;
+    }
 
     public string DescriptionShort { get; private set; }
     public string DescriptionLong { get; private set; }
@@ -103,25 +105,25 @@ public sealed class ProductLineInfo : ValueObject
     {
         var errors = new List<Error>();
 
-        if (this.DescriptionShort.Length is < MinDescriptionShortLength or > MaxDescriptionShortLength)
+        if (this.DescriptionShort.Length is < Constraints.MinDescriptionShortLength or > Constraints.MaxDescriptionShortLength)
         {
             errors.Add(Errors.ProductLineInfo.InvalidShortDescription);
         }
 
-        if (this.DescriptionLong.Length is < MinDescriptionLongLength or > MaxDescriptionLongLength)
+        if (this.DescriptionLong.Length is < Constraints.MinDescriptionLongLength or > Constraints.MaxDescriptionLongLength)
         {
             errors.Add(Errors.ProductLineInfo.InvalidLongDescription);
         }
 
-        if (this.SuggestedUse.Length is < MinSuggestedUseLength or > MaxSuggestedUseLength)
+        if (this.SuggestedUse.Length is < Constraints.MinSuggestedUseLength or > Constraints.MaxSuggestedUseLength)
         {
             errors.Add(Errors.ProductLineInfo.InvalidSuggestedUse);
         }
 
         if (
-            this.Benefit1.Length > MaxBenefitLength ||
-            this.Benefit2.Length > MaxBenefitLength ||
-            this.Benefit3.Length > MaxBenefitLength)
+            this.Benefit1.Length > Constraints.MaxBenefitLength ||
+            this.Benefit2.Length > Constraints.MaxBenefitLength ||
+            this.Benefit3.Length > Constraints.MaxBenefitLength)
         {
             errors.Add(Errors.ProductLineInfo.InvalidBenefitLength);
         }

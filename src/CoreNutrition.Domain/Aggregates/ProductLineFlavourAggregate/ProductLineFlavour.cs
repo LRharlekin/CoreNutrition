@@ -11,13 +11,16 @@ namespace CoreNutrition.Domain.ProductLineFlavourAggregate;
 
 public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Guid>
 {
-  public const int MinNameLength = 3;
-  public const int MaxNameLength = 40;
+  public static class Constraints
+  {
+    public const int MinNameLength = 3;
+    public const int MaxNameLength = 40;
+  }
 
-  private List<ProductId> _productIds = new List<ProductId>();
+  private List<ProductId> _productIds = new();
 
-  public string Flavour { get; private set; }
   public ProductLineId ProductLineId { get; private set; }
+  public string Flavour { get; private set; }
   public Uri FlavourImageUrl { get; private set; }
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
@@ -67,21 +70,27 @@ public sealed class ProductLineFlavour : AggregateRoot<ProductLineFlavourId, Gui
   }
 
   // TODO: invoked by relevant domain events, e.g. ProductCreated, ProductDeleted, ProductUpdated
-  public void AddProductId(ProductId productId)
-  {
-    _productIds.Add(productId);
-    // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
-  }
+  // public void AddProductId(ProductId productId)
+  // {
+  //   _productIds.Add(productId);
+  //   // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  // }
 
   private List<Error> EnforceInvariants()
   {
     List<Error> errors = new();
 
-    if (this.Flavour.Length < MinNameLength || this.Flavour.Length > MaxNameLength)
+    if (this.Flavour.Length < Constraints.MinNameLength || this.Flavour.Length > Constraints.MaxNameLength)
     {
       errors.Add(Errors.ProductLineFlavour.InvalidName);
     }
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private ProductLineFlavour()
+  {
+  }
+#pragma warning restore CS8618
 }

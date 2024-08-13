@@ -27,16 +27,13 @@ internal sealed class CreateProductLineCommandHandler
   {
     await Task.CompletedTask; // TODO delete later
 
-    // Uri.TryCreate(command.CategoryImageUrl, UriKind.Absolute, out var categoryImageUrl);
+    // 0. prepare immutable value objects
     Guid.TryParse(command.CategoryId, out var categoryIdGuid);
     CategoryId categoryId = CategoryId.Create(categoryIdGuid);
 
-    ErrorOr<ProductLine> productLineResult = ProductLine.Create(
-      command.Name,
-      command.IsPublished,
-      categoryId,
-      AverageRating.CreateNew().Value,
-      ProductLineInfo.CreateNew(
+    var averageRating = AverageRating.CreateNew().Value;
+
+    ErrorOr<ProductLineInfo> productLineInfoResult = ProductLineInfo.CreateNew(
         command.ProductLineInfo.DescriptionShort,
         command.ProductLineInfo.DescriptionLong,
         command.ProductLineInfo.SuggestedUse,
@@ -46,16 +43,36 @@ internal sealed class CreateProductLineCommandHandler
         command.ProductLineInfo.IsMuscleGain,
         command.ProductLineInfo.IsWeightLoss,
         command.ProductLineInfo.IsHealthWellness
-      ).Value,
-      NutritionFacts.CreateNew(
-        command.NutritionFacts.CaloriesPer100Grams,
-        command.NutritionFacts.FatPer100Grams,
-        command.NutritionFacts.SaturatedFatPer100Grams,
-        command.NutritionFacts.CarbohydratesPer100Grams,
-        command.NutritionFacts.SugarPer100Grams,
-        command.NutritionFacts.ProteinPer100Grams,
-        command.NutritionFacts.SaltPer100Grams
-      ).Value
+      );
+
+    if (productLineInfoResult.IsError)
+    {
+      return productLineInfoResult.Errors;
+    }
+
+    ErrorOr<NutritionFacts> nutritionFactsResult = NutritionFacts.CreateNew(
+      command.NutritionFacts.CaloriesPer100Grams,
+      command.NutritionFacts.FatPer100Grams,
+      command.NutritionFacts.SaturatedFatPer100Grams,
+      command.NutritionFacts.CarbohydratesPer100Grams,
+      command.NutritionFacts.SugarPer100Grams,
+      command.NutritionFacts.ProteinPer100Grams,
+      command.NutritionFacts.SaltPer100Grams
+    );
+
+    if (nutritionFactsResult.IsError)
+    {
+      return nutritionFactsResult.Errors;
+    }
+
+    // 1. create
+    ErrorOr<ProductLine> productLineResult = ProductLine.Create(
+      command.Name,
+      command.IsPublished,
+      categoryId,
+      averageRating,
+      productLineInfoResult.Value,
+      nutritionFactsResult.Value
     );
 
     if (productLineResult.IsError)
@@ -63,9 +80,10 @@ internal sealed class CreateProductLineCommandHandler
       return productLineResult.Errors;
     }
 
-    // _productLineRepository.Add(productLineResult.Value);
+    // 2. persist
+    _productLineRepository.Add(productLineResult.Value);
 
-    // return productLineResult.Value;
+    // 3. return
     return productLineResult.Value;
   }
 }

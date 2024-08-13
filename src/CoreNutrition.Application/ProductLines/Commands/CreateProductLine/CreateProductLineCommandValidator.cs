@@ -13,7 +13,7 @@ public class CreateProductLineCommandValidator
     RuleFor(command => command.Name)
       .NotNull()
       .NotEmpty()
-      .Length(ProductLine.MinNameLength, ProductLine.MaxNameLength);
+      .Length(ProductLine.Constraints.MinNameLength, ProductLine.Constraints.MaxNameLength);
     RuleFor(command => command.CategoryId)
       .NotNull()
       .NotEmpty()
@@ -25,22 +25,22 @@ public class CreateProductLineCommandValidator
     RuleFor(command => command.ProductLineInfo.DescriptionShort)
       .NotNull()
       .NotEmpty()
-      .Length(ProductLineInfo.MinDescriptionShortLength, ProductLineInfo.MaxDescriptionShortLength);
+      .Length(ProductLineInfo.Constraints.MinDescriptionShortLength, ProductLineInfo.Constraints.MaxDescriptionShortLength);
     RuleFor(command => command.ProductLineInfo.DescriptionLong)
       .NotNull()
       .NotEmpty()
-      .Length(ProductLineInfo.MinDescriptionLongLength, ProductLineInfo.MaxDescriptionLongLength);
+      .Length(ProductLineInfo.Constraints.MinDescriptionLongLength, ProductLineInfo.Constraints.MaxDescriptionLongLength);
     RuleFor(command => command.ProductLineInfo.SuggestedUse)
       .NotNull()
       .NotEmpty()
-      .Length(ProductLineInfo.MinSuggestedUseLength, ProductLineInfo.MaxSuggestedUseLength);
+      .Length(ProductLineInfo.Constraints.MinSuggestedUseLength, ProductLineInfo.Constraints.MaxSuggestedUseLength);
     RuleForEach(command => new List<string> {
       command.ProductLineInfo.Benefit1,
       command.ProductLineInfo.Benefit2,
       command.ProductLineInfo.Benefit3})
       .NotNull()
       .NotEmpty()
-      .MaximumLength(ProductLineInfo.MaxBenefitLength)
+      .MaximumLength(ProductLineInfo.Constraints.MaxBenefitLength)
       .OverridePropertyName("Benefit");
     RuleFor(command => command.ProductLineInfo.IsMuscleGain)
       .NotNull();

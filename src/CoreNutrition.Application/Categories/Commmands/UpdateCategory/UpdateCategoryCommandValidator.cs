@@ -20,19 +20,20 @@ public class UpdateCategoryCommandValidator
     {
       RuleFor(command => command.Name)
         .NotEmpty()
-        .Length(Category.MinNameLength, Category.MaxNameLength);
+        .Length(Category.Constraints.MinNameLength, Category.Constraints.MaxNameLength);
     });
     Unless(command => command.Description == null, () =>
     {
       RuleFor(command => command.Description)
         .NotEmpty()
-        .Length(Category.MinDescriptionLength, Category.MaxDescriptionLength);
+        .Length(Category.Constraints.MinDescriptionLength, Category.Constraints.MaxDescriptionLength);
     });
     Unless(command => command.CategoryImageUrl == null, () =>
     {
       RuleFor(command => command.CategoryImageUrl)
         .NotEmpty()
-        .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _));
+        .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
+        .WithMessage("The Category Image URL is not a valid URL.");
     });
   }
 }
