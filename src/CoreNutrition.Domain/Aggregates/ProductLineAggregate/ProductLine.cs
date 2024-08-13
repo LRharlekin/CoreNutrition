@@ -28,7 +28,8 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   public ProductLineInfo ProductLineInfo { get; private set; }
   public NutritionFacts NutritionFacts { get; private set; }
 
-  private List<ProductId> _productIds = new List<ProductId>();
+  private List<ProductId> _productIds = new();
+  // private List<ProductId> _productIds = new List<ProductId>();
   private List<ProductLineSizeId> _productLineSizeIds = new List<ProductLineSizeId>();
   private List<ProductLineFlavourId> _productLineFlavourIds = new List<ProductLineFlavourId>();
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
@@ -107,11 +108,11 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
   }
 
   // TODO: invoked by relevant domain events
-  public void AddProductId(ProductId productId)
-  {
-    _productIds.Add(productId);
-    // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
-  }
+  // public void AddProductId(ProductId productId)
+  // {
+  //   _productIds.Add(productId);
+  //   // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  // }
 
   public void AddProductLineSizeId(ProductLineSizeId productLineSizeId)
   {
@@ -146,4 +147,10 @@ public sealed class ProductLine : AggregateRoot<ProductLineId, Guid>
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private ProductLine()
+  {
+  }
+#pragma warning restore CS8618
 }

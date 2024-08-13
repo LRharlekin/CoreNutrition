@@ -15,10 +15,13 @@ namespace CoreNutrition.Domain.ProductLineSizeAggregate;
 
 public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
 {
-  // invariant constants:
-  public const decimal MinRRP = 0;
+  public static class Constraints
+  {
+    public const decimal MinRRP = 0;
+  }
 
-  private List<ProductId> _productIds = new List<ProductId>();
+  private List<ProductId> _productIds = new();
+  // private List<ProductId> _productIds = new List<ProductId>();
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
   public ProductLineId ProductLineId { get; private set; }
@@ -71,21 +74,27 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
   }
 
   // TODO: invoked by relevant domain events, e.g. when a Product is updated/created
-  public void AddProductId(ProductId productId)
-  {
-    _productIds.Add(productId);
-    // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
-  }
+  // public void AddProductId(ProductId productId)
+  // {
+  //   _productIds.Add(productId);
+  //   // UpdatedDateTime = DateTime.UtcNow; // Eventual consitency?
+  // }
 
   private List<Error> EnforceInvariants()
   {
     var errors = new List<Error>();
 
-    if (RecommendedRetailPrice.Amount <= MinRRP)
+    if (RecommendedRetailPrice.Amount <= Constraints.MinRRP)
     {
       errors.Add(Errors.ProductLineSize.InvalidRecommendedRetailPrice);
     }
 
     return errors;
   }
+
+#pragma warning disable CS8618
+  private ProductLineSize()
+  {
+  }
+#pragma warning restore CS8618
 }

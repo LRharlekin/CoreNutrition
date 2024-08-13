@@ -1,5 +1,7 @@
 using ErrorOr;
 
+using CoreNutrition.Domain.UserAggregate.ValueObjects;
+
 namespace CoreNutrition.Domain.Common.DomainErrors;
 
 public static partial class Errors
