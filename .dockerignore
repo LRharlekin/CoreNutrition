@@ -16,5 +16,8 @@ bower_components
 .pnp.js
 .env
 
-# Ignore .git
-.git
+# Ignore IDE / CI / CD configs
+.git/
+.github/
+.vscode/
+.idea/

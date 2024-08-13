@@ -28,7 +28,9 @@ RUN dotnet build "CoreNutrition.Api.csproj" -c Release -o /app/build
 
 # Stage 2: Publish stage
 FROM build AS publish
-RUN dotnet publish "CoreNutrition.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "CoreNutrition.Api.csproj" -c Release -o /app/publish --no-restore
+
+###### publish folder is built
 
 # Stage 3: Run stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
