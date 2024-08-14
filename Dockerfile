@@ -28,7 +28,7 @@ RUN dotnet build "CoreNutrition.Api.csproj" -c Release -o /app/build
 
 # Stage 2: Publish stage
 FROM build AS publish
-RUN dotnet publish "CoreNutrition.Api.csproj" -c Release -o /app/publish --no-restore
+RUN dotnet publish "CoreNutrition.Api.csproj" -c Release -o /app/publish
 
 ###### publish folder is built
 

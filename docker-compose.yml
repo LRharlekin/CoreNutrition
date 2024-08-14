@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  # ASP.NET web application
+  backend:
+    container_name: core-nutrition-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5089:5089"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    # depends_on:
+    #   - db
+  # postgreSQL database
+  db:
+    container_name: core-nutrition-db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB: corenutrition
+      - POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD: super-strong-password
