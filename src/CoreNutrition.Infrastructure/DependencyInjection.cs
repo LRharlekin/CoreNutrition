@@ -52,6 +52,8 @@ public static class DependencyInjection
         .UseNpgsql("Database")
         .LogTo(Console.WriteLine, LogLevel.Debug));
 
+    services.AddScoped<PublishDomainEventsInterceptor>();
+
     services.AddScoped<IUserRepository, UserRepository>();
     services.AddScoped<ICategoryRepository, CategoryRepository>();
     services.AddScoped<IProductLineRepository, ProductLineRepository>();

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using CoreNutrition.Domain.Common.Interfaces;
 using CoreNutrition.Domain.CategoryAggregate;
 using CoreNutrition.Domain.ProductAggregate;
 using CoreNutrition.Domain.ProductLineSizeAggregate;
@@ -17,11 +18,14 @@ namespace CoreNutrition.Infrastructure.Common.Persistence;
 
 public class CoreNutritionDbContext : DbContext
 {
+  private readonly PublishDomainEventsInterceptor _publishDomainEventsInterceptor;
   public CoreNutritionDbContext
-  (DbContextOptions<CoreNutritionDbContext> options)
+  (
+    DbContextOptions<CoreNutritionDbContext> options,
+    PublishDomainEventsInterceptor publishDomainEventsInterceptor)
     : base(options)
   {
-    // TODO: Add DbContext
+    _publishDomainEventsInterceptor = publishDomainEventsInterceptor;
   }
 
   public DbSet<Category> Categories { get; set; } = null!;
@@ -40,12 +44,14 @@ public class CoreNutritionDbContext : DbContext
   {
     // modelBuilder
     // .ApplyConfigurationsFromAssembly(typeof(CoreNutritionDbContext).Assembly);
-    modelBuilder.ApplyConfiguration(new CategoryConfigurations());
-    modelBuilder.ApplyConfiguration(new ProductLineSizeConfigurations());
-    modelBuilder.ApplyConfiguration(new SizeVariantConfigurations());
-    modelBuilder.ApplyConfiguration(new ProductConfigurations());
-    modelBuilder.ApplyConfiguration(new ProductLineConfigurations());
-    modelBuilder.ApplyConfiguration(new ProductLineFlavourConfigurations());
+    modelBuilder
+      .Ignore<List<IDomainEvent>>()
+      .ApplyConfiguration(new CategoryConfigurations())
+      .ApplyConfiguration(new ProductLineSizeConfigurations())
+      .ApplyConfiguration(new SizeVariantConfigurations())
+      .ApplyConfiguration(new ProductConfigurations())
+      .ApplyConfiguration(new ProductLineConfigurations())
+      .ApplyConfiguration(new ProductLineFlavourConfigurations());
 
     modelBuilder.Model
       .GetEntityTypes()
@@ -58,5 +64,12 @@ public class CoreNutritionDbContext : DbContext
       });
 
     base.OnModelCreating(modelBuilder);
+  }
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+    optionsBuilder.AddInterceptors(_publishDomainEventsInterceptor);
+
+    base.OnConfiguring(optionsBuilder);
   }
 }
