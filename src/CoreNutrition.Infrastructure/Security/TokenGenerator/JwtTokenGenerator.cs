@@ -52,8 +52,8 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
       signingCredentials: signingCredentials
     );
 
-    Console.WriteLine($"raw token before handler:");
-    Console.WriteLine($"{token}");
+    // Console.WriteLine($"raw token before handler:");
+    // Console.WriteLine($"{token}");
 
     // serialize JWT into compact string format
     /* 

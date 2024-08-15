@@ -17,11 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
     .AddFromApplication()
     .AddFromInfrastructure(builder.Configuration);
 
-  // builder.Services.AddAuthentication();
-  // builder.Services.AddAuthorization();
-
   builder.Services.AddEndpointsApiExplorer();
-  // builder.Services.AddSwaggerGen();
   builder.Services.AddSwaggerGen(options =>
   // configs for enable Authorization: header when using SwaggerUI
     {
