@@ -1,0 +1,23 @@
+logs
+*.logs
+
+# Compiled binary addons
+build/Release
+
+# Build results
+**/[b|B]in/
+**/[o|O]bj/
+
+# Dependency directories
+node_modules
+jspm_packages
+bower_components
+.pnp
+.pnp.js
+.env
+
+# Ignore IDE / CI / CD configs
+.git/
+.github/
+.vscode/
+.idea/
