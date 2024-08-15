@@ -50,9 +50,6 @@ public static class DependencyInjection
     services.AddDbContext<CoreNutritionDbContext>(options =>
       options
         .UseNpgsql("Database")
-        // see connection string in appsettings:
-        // Host = service name in docker-compose.yml file
-        // Database, Username, Password = env vars in docker-compose.yml file
         .LogTo(Console.WriteLine, LogLevel.Debug));
 
     services.AddScoped<IUserRepository, UserRepository>();
