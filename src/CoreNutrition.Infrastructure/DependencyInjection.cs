@@ -49,7 +49,7 @@ public static class DependencyInjection
   {
     services.AddDbContext<CoreNutritionDbContext>(options =>
       options
-        .UseNpgsql("connection string") // TODO: add connection string
+        .UseNpgsql("Database")
         .LogTo(Console.WriteLine, LogLevel.Debug));
 
     services.AddScoped<IUserRepository, UserRepository>();

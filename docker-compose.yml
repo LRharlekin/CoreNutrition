@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  # ASP.NET web application
+  corenutrition.api:
+    container_name: core-nutrition-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5089:5089"
+      - "5099:5099"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5089
+      - ASPNETCORE_HTTPS_PORTS=5099
+    depends_on:
+      corenutrition.database:
+        condition: service_healthy
+  # postgreSQL database
+  corenutrition.database:
+    container_name: core-nutrition-db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB: corenutrition
+      - POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD: super-strong-password
+    volumes:
+      # map between volume and container
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d corenutrition"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+# named volume to persist data
+volumes:
+  postgres_data:
