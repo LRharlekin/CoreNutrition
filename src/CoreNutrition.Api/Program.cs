@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 
   builder.Services.AddEndpointsApiExplorer();
   builder.Services.AddSwaggerGen(options =>
-  // configs for enable Authorization: header when using SwaggerUI
+  // configs to enable Authorization: header when using SwaggerUI
     {
       options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
       {
