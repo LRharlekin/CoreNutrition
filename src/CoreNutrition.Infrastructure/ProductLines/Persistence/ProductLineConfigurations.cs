@@ -46,6 +46,7 @@ public class ProductLineConfigurations : IEntityTypeConfiguration<ProductLine>
       .OnDelete(DeleteBehavior.Restrict);
 
     builder.Property(pl => pl.CategoryId)
+      .ValueGeneratedNever()
       .HasConversion(
         id => id.Value,
         value => CategoryId.Create(value))
