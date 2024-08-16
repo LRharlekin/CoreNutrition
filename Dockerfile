@@ -35,8 +35,14 @@ RUN dotnet publish "CoreNutrition.Api.csproj" -c Release -o /app/publish
 # Stage 3: Run stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 ENV ASPNETCORE_HTTP_PORTS=5089
-EXPOSE 5089
+ENV ASPNETCORE_HTTPS_PORTS=5090
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/aspnetapp.pfx
+
+EXPOSE 5089 5090
 WORKDIR /app
 COPY --from=publish /app/publish .
+# copy ssl cert
+RUN mkdir -p /app/certs
+COPY ["certs/aspnetapp.pfx", "app/certs/"]
 # run artifacts from publish folder
 ENTRYPOINT [ "dotnet", "CoreNutrition.Api.dll" ]

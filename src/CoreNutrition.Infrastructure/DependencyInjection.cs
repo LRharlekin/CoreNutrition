@@ -37,19 +37,27 @@ public static class DependencyInjection
   {
     services
       .AddAuth(configuration)
-      .AddPersistence();
+      .AddPersistence(configuration); // NEW
+                                      // .AddPersistence();
     services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
     return services;
   }
 
   public static IServiceCollection AddPersistence(
-    this IServiceCollection services
+    this IServiceCollection services,
+    ConfigurationManager configuration // NEW
   )
   {
+    var databaseSettings = new DatabaseSettings(); // NEW
+    configuration.Bind(DatabaseSettings.SectionName, databaseSettings); // NEW
+
+    services.AddSingleton(Options.Create(databaseSettings)); // NEW
+
     services.AddDbContext<CoreNutritionDbContext>(options =>
       options
-        .UseNpgsql("Database")
+        // .UseNpgsql("Database")
+        .UseNpgsql(databaseSettings.DefaultConnection) // NEW
         .LogTo(Console.WriteLine, LogLevel.Debug));
 
     services.AddScoped<PublishDomainEventsInterceptor>();

@@ -82,6 +82,7 @@ frontend/coverage
 frontend/build
 
 # env files
+.env
 frontend/.env
 
 frontend/npm-debug.log*
