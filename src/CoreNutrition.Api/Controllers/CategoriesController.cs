@@ -16,6 +16,7 @@ using CoreNutrition.Domain.CategoryAggregate;
 
 namespace CoreNutrition.Api.Controllers;
 
+
 public sealed class CategoriesController
   : ApiControllerBase
 {

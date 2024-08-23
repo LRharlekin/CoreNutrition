@@ -21,7 +21,6 @@ public sealed class ProductLineSize : AggregateRoot<ProductLineSizeId, Guid>
   }
 
   private List<ProductId> _productIds = new();
-  // private List<ProductId> _productIds = new List<ProductId>();
   public IReadOnlyList<ProductId> ProductIds => _productIds.AsReadOnly();
 
   public ProductLineId ProductLineId { get; private set; }

@@ -19,8 +19,22 @@ var builder = WebApplication.CreateBuilder(args);
 
   builder.Services.AddEndpointsApiExplorer();
   builder.Services.AddSwaggerGen(options =>
-  // configs for enable Authorization: header when using SwaggerUI
+  // configs to enable Authorization: header when using SwaggerUI
     {
+      options.EnableAnnotations();
+
+      options.SwaggerDoc("v1", new OpenApiInfo
+      {
+        Version = "v1",
+        Title = "Core Nutrition API",
+        Description = "API for interacting with and managing the online shop for the (completely fictitious) Core Nutrition brand of health supplements.",
+        Contact = new OpenApiContact
+        {
+          Name = "Lukas Rappen",
+          Url = new Uri("https://www.github.com/LRharlekin")
+        }
+      });
+
       options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
       {
         In = ParameterLocation.Header,
@@ -38,9 +52,9 @@ var app = builder.Build();
 
 {
   // Configure the HTTP request pipeline.
+  app.UseSwagger();
   // if (app.Environment.IsDevelopment())
   // {
-  app.UseSwagger();
   app.UseSwaggerUI(options =>
   {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");

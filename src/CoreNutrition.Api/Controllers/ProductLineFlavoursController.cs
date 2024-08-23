@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using ErrorOr;
 using MediatR;
 using MapsterMapper;
+using Swashbuckle.AspNetCore.Annotations;
 
 using CoreNutrition.Api.Infrastructure;
 using CoreNutrition.Api.Contracts;
@@ -17,7 +18,6 @@ using CoreNutrition.Application.ProductLineFlavours.Queries.GetProductLineFlavou
 
 namespace CoreNutrition.Api.Controllers;
 
-
 public sealed class ProductLineFlavoursController : ApiControllerBase
 {
   private readonly ISender _mediator;
@@ -30,6 +30,9 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
   }
 
   [HttpPost(ApiRoutes.ProductLineFlavours.Create)]
+  [SwaggerOperation(Summary = "Create a new product line flavour", Description = "Creates a new product line flavour with the provided details.")]
+  [SwaggerResponse(StatusCodes.Status201Created, "Product line flavour created successfully", typeof(ProductLineFlavourResponse))]
+  [SwaggerResponse(StatusCodes.Status400BadRequest, "Invalid input")]
   public async Task<IActionResult> CreateProductLineFlavour(CreateProductLineFlavourRequest request)
   {
     var command = _mapper.Map<CreateProductLineFlavourCommand>(request);
@@ -73,6 +76,9 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
   // }
 
   [HttpGet(ApiRoutes.ProductLineFlavours.GetById)]
+  [SwaggerOperation(Summary = "Get a product line flavour by ID", Description = "Retrieves a specific product line flavour by its unique identifier.")]
+  [SwaggerResponse(StatusCodes.Status200OK, "Product line flavour retrieved successfully", typeof(ProductLineFlavourResponse))]
+  [SwaggerResponse(StatusCodes.Status404NotFound, "Product line flavour not found")]
   public async Task<IActionResult> GetProductLineFlavourById(Guid productLineFlavourId)
   {
     await Task.CompletedTask; // TODO delete later
@@ -87,6 +93,9 @@ public sealed class ProductLineFlavoursController : ApiControllerBase
   }
 
   [HttpGet(ApiRoutes.ProductLineFlavours.List)]
+  [SwaggerOperation(Summary = "List all product line flavours", Description = "Retrieves a list of all product line flavours.")]
+  [SwaggerResponse(StatusCodes.Status200OK, "Product line flavours retrieved successfully", typeof(List<ProductLineFlavourResponse>))]
+  [SwaggerResponse(StatusCodes.Status204NoContent, "No product line flavours found")]
   public async Task<IActionResult> ListProductLineFlavours()
   {
     var query = new ListProductLineFlavoursQuery(); // TODO: add sorting

@@ -10,10 +10,13 @@ services:
     ports:
       - "5089:5089"
       - "5099:5099"
+    env_file:
+      - .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=5089
       - ASPNETCORE_HTTPS_PORTS=5099
+      - ASPNETCORE_Kestrel__Certificates__Default__Password
     depends_on:
       corenutrition.database:
         condition: service_healthy
